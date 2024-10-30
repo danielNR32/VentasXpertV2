@@ -1,0 +1,42 @@
+ /* Contenedor principal que alinea las cajas de información */
+ .info-boxes {
+    display: flex;                /* Establece un layout flexible para los elementos internos */
+    justify-content: flex-start;  /* Alinea los elementos al comienzo del contenedor */
+    padding: 2%;                  /* Añade padding alrededor del contenedor para evitar que los elementos toquen los bordes */
+    flex-wrap: wrap;              /* Permite que los elementos se envuelvan en múltiples líneas si no caben en una sola */
+    gap: 20px;                    /* Espacio entre elementos y filas en un contenedor flex */
+}
+
+/* Estilo para cada caja de información individual */
+.box {
+    display: flex;
+    align-items: center;          /* Centra los elementos verticalmente */
+    justify-content: flex-start;  /* Alinea los elementos al inicio */
+    padding: 10px;                /* Agrega padding adecuado */
+    background-color: #007BFF;    /* Color de fondo */
+    border-radius: 20px;          /* Bordes redondeados */
+    color: white;                 /* Color de texto */
+    width: auto; /* Ajusta el ancho según el contenido */
+    height: 100px;
+}
+
+
+.box img {
+    height: 50px;                 /* Altura fija para la imagen */
+    width: auto;                  /* Anchura automática para mantener la proporción */
+    display: block;               /* Asegura que la imagen no agregue espacio extra abajo */
+}
+
+.text {
+    white-space: nowrap;          /* Evita que el texto se envuelva */
+    margin-right: 10px;           /* Espacio entre el texto y la imagen */
+}
+
+
+
+/* Colores específicos para cada tipo de caja de información */
+.blue { background-color: #007BFF; } /* Azul para información general */
+.yellow { background-color: #FFC107; } /* Amarillo para alertas o atención especial */
+.red { background-color: #DC3545; } /* Rojo para problemas o errores */
+.green { background-color: #28A745; } /* Verde para éxito o confirmación */
+.purple { background-color: #6F42C1; } /* Púrpura para procesos o acciones especiales */

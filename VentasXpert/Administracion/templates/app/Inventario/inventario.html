@@ -1,0 +1,331 @@
+{% extends 'base.html' %}
+{% load static %}
+<html lang="en">
+
+
+{% block title %}Administrador inventario información - VentasXpert{% endblock %}
+{% block submenu1 %}Informacion{% endblock %}
+{% block submenu2 %}Inventario{% endblock %}
+{% block submenu3 %}Administrar{% endblock %}
+{% block submenu4 %}HOLAAAA{% endblock %}
+
+
+
+
+<body>
+    {% block content %}
+
+
+    <!-- Estilos -->
+    {% block extrahead %}
+    <link rel="stylesheet" href="{% static 'css/inventario_inventario.css' %}">
+    {% endblock %}
+
+
+
+
+
+
+    <div class="inventory-header">
+
+        <h1>Inventario</h1>
+
+        <di class="orden_div2">
+
+
+            <div class="custom-select-wrapper" ">
+                    <select class=" custom-select">
+                <option>Filtrar por categoria</option>
+                <option>Pescado</option>
+                <option>Lacteos</option>
+                <option>Refrescos</option>
+                </select>
+            </div>
+
+            <div class="custom-select-wrapper" ">
+                                <select class=" custom-select">
+                <option>Filtrar por estado</option>
+                <option>Suficiente</option>
+                <option>Poca existencia</option>
+                <option>Sin existencia</option>
+                </select>
+            </div>
+            <div class="custom-input-wrapper">
+                <input type="text" class="custom-input" placeholder="Buscar producto">
+            </div>
+
+            <!-- Botón para abrir el modal -->
+            <button id="openAgregarProducto" class="custom-button">Agregar Producto</button>
+            <!-- Aquí cargaremos el contenido del modal dinámicamente -->
+            <div id="modalContainer"></div>
+            <!-- Incluir el archivo JS -->
+
+
+
+
+
+    </div>
+
+
+    <div>
+
+
+        <div class="table-scroll">
+
+
+            <div class="custom-table-wrapper">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Código de barras</th>
+                            <th>Nombre</th>
+                            <th>Categoría</th>
+                            <th>Estado en stock</th>
+                            <th>Cantidad mínima</th>
+                            <th>Cantidad Total</th>
+                        </tr>
+                    </thead>
+                </table>
+
+                <table class="custom-table">
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>0011223344</td>
+                            <td>Producto 1</td>
+                            <td>Categoría A</td>
+                            <td>En stock</td>
+                            <td>10</td>
+                            <td>100</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>0011223344</td>
+                            <td>Producto 1</td>
+                            <td>Categoría A</td>
+                            <td>En stock</td>
+                            <td>10</td>
+                            <td>100</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>0011223344</td>
+                            <td>Producto 1</td>
+                            <td>Categoría A</td>
+                            <td>En stock</td>
+                            <td>10</td>
+                            <td>100</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>0011223344</td>
+                            <td>Producto 1</td>
+                            <td>Categoría A</td>
+                            <td>En stock</td>
+                            <td>10</td>
+                            <td>100</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>0011223344</td>
+                            <td>Producto 1</td>
+                            <td>Categoría A</td>
+                            <td>En stock</td>
+                            <td>10</td>
+                            <td>100</td>
+                        </tr>
+
+                        <tr>
+                            <td>1</td>
+                            <td>0011223344</td>
+                            <td>Producto 1</td>
+                            <td>Categoría A</td>
+                            <td>En stock</td>
+                            <td>10</td>
+                            <td>100</td>
+                        </tr>
+                        <!-- Más filas según necesites -->
+                    </tbody>
+                </table>
+
+            </div>
+
+
+
+
+
+        </div>
+
+
+
+
+
+
+        <div class="inventory-header">
+
+            <h1>Stock bajo</h1>
+
+            <di class="orden_div2">
+
+
+                <div class="custom-select-wrapper" ">
+                        <select class=" custom-select">
+                    <option>Filtrar por categoria</option>
+                    <option>Pescado</option>
+                    <option>Lacteos</option>
+                    <option>Refrescos</option>
+                    </select>
+                </div>
+
+                <div class="custom-select-wrapper" ">
+                                    <select class=" custom-select">
+                    <option>Filtrar por estado</option>
+                    <option>Suficiente</option>
+                    <option>Poca existencia</option>
+                    <option>Sin existencia</option>
+                    </select>
+                </div>
+                <div class="custom-input-wrapper">
+                    <input type="text" class="custom-input" placeholder="Buscar producto">
+                </div>
+
+                <div class="custom-button-wrapper">
+                    <button class="custom-button">Generar reporte</button>
+                </div>
+        </div>
+
+
+
+
+        <div class="table-scroll">
+
+
+            <div class="custom-table-wrapper">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Código de barras</th>
+                            <th>Nombre</th>
+                            <th>Categoría</th>
+                            <th>Estado en stock</th>
+                            <th>Cantidad mínima</th>
+                            <th>Cantidad Total</th>
+                        </tr>
+                    </thead>
+                </table>
+
+                <table class="custom-table">
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>0011223344</td>
+                            <td>Producto 1</td>
+                            <td>Categoría A</td>
+                            <td>En stock</td>
+                            <td>10</td>
+                            <td>100</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>0011223344</td>
+                            <td>Producto 1</td>
+                            <td>Categoría A</td>
+                            <td>En stock</td>
+                            <td>10</td>
+                            <td>100</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>0011223344</td>
+                            <td>Producto 1</td>
+                            <td>Categoría A</td>
+                            <td>En stock</td>
+                            <td>10</td>
+                            <td>100</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>0011223344</td>
+                            <td>Producto 1</td>
+                            <td>Categoría A</td>
+                            <td>En stock</td>
+                            <td>10</td>
+                            <td>100</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>0011223344</td>
+                            <td>Producto 1</td>
+                            <td>Categoría A</td>
+                            <td>En stock</td>
+                            <td>10</td>
+                            <td>100</td>
+                        </tr>
+
+                        <tr>
+                            <td>1</td>
+                            <td>0011223344</td>
+                            <td>Producto 1</td>
+                            <td>Categoría A</td>
+                            <td>En stock</td>
+                            <td>10</td>
+                            <td>100</td>
+                        </tr>
+
+                        <tr>
+                            <td>1</td>
+                            <td>0011223344</td>
+                            <td>Producto 1</td>
+                            <td>Categoría A</td>
+                            <td>En stock</td>
+                            <td>10</td>
+                            <td>100</td>
+                        </tr>
+
+                        <tr>
+                            <td>1</td>
+                            <td>0011223344</td>
+                            <td>Producto 1</td>
+                            <td>Categoría A</td>
+                            <td>En stock</td>
+                            <td>10</td>
+                            <td>100</td>
+                        </tr>
+                        <!-- Más filas según necesites -->
+                    </tbody>
+                </table>
+
+
+            </div>
+
+
+
+
+
+
+        </div>
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+    <script src="{% static 'js/Inventario/inventario.js' %}"></script>
+
+    {% endblock %}
+
+
+
+
+
+</body>
+
+</html>

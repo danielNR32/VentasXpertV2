@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}Administrador inventario información - VentasXpert{% endblock %}
+{% block submenu1 %}Informacion{% endblock %}
+{% block submenu2 %}Inventario{% endblock %}
+{% block submenu3 %}Administrar{% endblock %}
+{% block submenu4 %}Reporte{% endblock %}
+
+
+{% block content %}
+<!-- Estilos -->
+{% block extrahead %}
+<link rel="stylesheet" href="{% static 'css/administrar.css' %}">
+{% endblock %}
+<!-- Contenido -->
+<div class="info-boxes">
+    <div id="openAgregarNuevo" class="box blue">
+        <span class="text">Agregar nuevo producto</span>
+        <img src="{% static 'images/agregar-producto.png' %}" alt="Logo">
+    </div> 
+
+    <div id="openAgregarProducto"  class="box green">
+        <span class="text">Agregar productos al inventario</span>
+        <img src="{% static 'images/abrir-caja.png' %}" alt="Logo">
+    </div>
+
+    <div  id="openActualizarProducto"   class="box purple">
+        <span class="text">Actualizar producto</span>
+        <img src="{% static 'images/actualizar.png' %}" alt="Logo">
+    </div>
+</div>
+<script src="{% static 'js/Inventario/inventario.js' %}"></script>
+{% endblock %}

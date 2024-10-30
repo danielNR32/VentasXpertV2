@@ -1,0 +1,19 @@
+{% load static %}
+{% block extrahead %}
+  <link rel="stylesheet" href="{% static 'css/estilo_modal.css' %}">
+{% endblock %}
+
+<!-- Modal -->
+<div id="confirmModal" class="modal">
+  <div class="modal-content">
+      <!-- Botón de cierre "X" -->
+      <span class="close" id="closeModal">&times;</span>
+
+      <h2 id="modal-title">¿Confirmar acción?</h2> <!-- Título dinámico -->
+
+      <div class="modal-buttons">
+          <button id="confirmBtn" class="confirm-btn">Confirmar</button>
+          <button id="cancelBtn" class="cancel-btn">Cancelar</button>
+      </div>
+  </div>
+</div>

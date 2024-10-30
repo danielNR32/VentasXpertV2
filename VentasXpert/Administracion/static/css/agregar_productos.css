@@ -1,0 +1,130 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    padding: 40px;
+}
+
+.product-form-container {
+    max-width: 100%;
+    max-height: 800px;
+    background-color: rgba(223, 215, 215, 0.577);
+    padding: 40px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    margin: 20px auto;
+}
+
+.product-form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+input[type="text"],
+select {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 2px solid #000; /* Borde negro grueso */
+    border-radius: 20px; /* Bordes redondeados */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input[type="text"]:focus,
+select:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
+}
+
+input[type="text"]:hover,
+select:hover {
+    border-color: #888;
+}
+
+.buttons {
+    text-align: right;
+    padding-top: 20px;
+}
+
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn.green {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.btn.green:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+}
+
+.btn.red {
+    background-color: #f44336;
+    color: white;
+}
+
+.btn.red:hover {
+    background-color: #e63946;
+    transform: scale(1.05);
+}
+
+/* Tamaños y estilos para inputs específicos */
+.codigo, .nombre, .precio, .cantidad, .cantidad-minima, .estado-producto, .precio-total {
+    max-width: 300px;
+    height: 60px; /* Alto fijo */
+    font-size: 16px; /* Tamaño de fuente */
+    padding: 10px; /* Espaciado interno */
+}
+
+
+
+/*Select*/
+.styled-select {
+    padding: 12px; /* Espaciado interno */
+    border-radius: 20px; /* Bordes redondeados */
+    border: 2px solid #000; /* Borde negro grueso */
+    appearance: none; /* Elimina el estilo por defecto del navegador */
+    -webkit-appearance: none; /* Para navegadores webkit */
+    -moz-appearance: none; /* Para navegadores Mozilla */
+    background-color: #fff; /* Fondo blanco */
+    width: 100%; /* Ancho completo */
+    cursor: pointer; /* Cambia el cursor al pasar por encima */
+    font-size: 16px; /* Tamaño de fuente */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+    transition: border-color 0.3s, box-shadow 0.3s; /* Transiciones suaves */
+    height: 60px;
+}
+
+.styled-select:focus {
+    border-color: #4CAF50; /* Color del borde al enfocar */
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.5); /* Sombra al enfocar */
+}
+
+.styled-select:hover {
+    border-color: #888; /* Cambiar el borde al pasar el mouse */
+}
+
+
+.styled-select::after {
+    content: '▼'; /* Flecha hacia abajo */
+    position: absolute;
+    right: 15px; /* Espaciado a la derecha */
+    top: 50%;
+    transform: translateY(-50%); /* Centrar verticalmente */
+    pointer-events: none; /* Ignorar eventos de mouse en el ícono */
+}
+
+.fondoTodo{
+    background-color: white;
+
+
+}

@@ -1,0 +1,290 @@
+.inventory-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px;
+    background-color: #f3f3f3;
+}
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+/*Estilo para barra de filtrado*/
+
+.custom-select-wrapper {
+    position: relative;
+    width: 200px; /* Puedes ajustar el ancho según tus necesidades */
+    font-family: Arial, sans-serif;
+}
+
+.custom-select {
+    padding: 10px;
+    border-radius: 20px;
+    border: 2px solid #000; /* Borde negro grueso */
+    appearance: none; /* Elimina el estilo por defecto del navegador */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: #fff; /* Fondo blanco */
+    width: 100%;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.custom-select-wrapper:after {
+    content: "▼"; /* Agrega un icono de flecha hacia abajo */
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    font-size: 12px;
+    color: #000;
+    pointer-events: none; /* Hace que el icono sea no interactivo */
+}
+/*ORDEN PARA IZQUIERDA A DERECHA*/
+.orden_div{
+
+    display: flex;                /* Establece un layout flexible para los elementos internos */
+    justify-content: flex-start;  /* Alinea los elementos al comienzo del contenedor */
+    padding: 2%;                  /* Añade padding alrededor del contenedor para evitar que los elementos toquen los bordes */
+    flex-wrap: wrap;              /* Permite que los elementos se envuelvan en múltiples líneas si no caben en una sola */
+    gap: 20px;      
+
+}
+
+
+.orden_div2{
+
+    display: flex;                /* Establece un layout flexible para los elementos internos */
+    justify-content: flex-end;  /* Alinea los elementos al comienzo del contenedor */
+    padding: 2%;                  /* Añade padding alrededor del contenedor para evitar que los elementos toquen los bordes */
+    flex-wrap: wrap;              /* Permite que los elementos se envuelvan en múltiples líneas si no caben en una sola */
+    gap: 20px;      
+
+}
+
+
+/*BUSCAR STILO*/
+
+.custom-input-wrapper {
+    position: relative;
+    width: 300px; /* Ajusta este valor según tus necesidades */
+    font-family: Arial, sans-serif;
+}
+
+.custom-input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 20px;
+    border: 2px solid #000; /* Borde negro grueso */
+    background-color: #fff; /* Fondo blanco */
+    outline: none; /* Elimina el contorno al enfocar */
+    font-size: 16px;
+}
+
+.custom-input::placeholder {
+    color: #666; /* Color para el texto del placeholder */
+}
+
+.custom-input-wrapper:after {
+    content: "🔍"; /* Icono de lupa */
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: #000;
+    pointer-events: none; /* Hace que el icono sea no interactivo */
+}
+/*Estilo boton buscar*/
+
+
+.custom-button-wrapper {
+    text-align: center; /* Centra el botón si es necesario */
+}
+
+.custom-button {
+    background-color: #6C63FF; /* Un tono de morado */
+    color: white; /* Texto blanco para contraste */
+    border: none; /* Sin borde */
+    padding: 10px 20px; /* Padding generoso para un toque agradable */
+    border-radius: 20px; /* Bordes redondeados */
+    font-size: 16px; /* Tamaño de texto adecuado */
+    cursor: pointer; /* Cursor de mano al pasar el ratón */
+    transition: background-color 0.3s; /* Transición suave para el hover */
+    outline: none; /* Elimina el contorno al hacer clic */
+}
+
+.custom-buttonRechazar{
+    background-color: #fb001d; /* Un tono de morado */
+    color: white; /* Texto blanco para contraste */
+    border: none; /* Sin borde */
+    padding: 10px 20px; /* Padding generoso para un toque agradable */
+    border-radius: 20px; /* Bordes redondeados */
+    font-size: 16px; /* Tamaño de texto adecuado */
+    cursor: pointer; /* Cursor de mano al pasar el ratón */
+    transition: background-color 0.3s; /* Transición suave para el hover */
+    outline: none; /* Elimina el contorno al hacer clic */
+}
+
+.custom-button:hover {
+    background-color: #5a52d8; /* Un morado ligeramente más oscuro para el hover */
+}
+
+
+
+/*Estilo tabla*/
+.custom-table {
+
+    width: 100%;
+    border-collapse: separate; /* Importante para mantener los bordes separados */
+    border-spacing: 0; /* Elimina el espacio entre celdas */
+    border-radius: 10px; /* Bordes redondeados para la tabla */
+    overflow: hidden; /* Mantiene todo dentro de los bordes redondeados */
+ 
+}
+
+.custom-table td {
+    padding: 8px; /* Asegura un espacio interior adecuado */
+    text-align: left; /* Alineación del texto */
+
+    overflow: hidden; /* Esconde cualquier contenido que sobrepase el tamaño de la celda */
+    text-overflow: ellipsis; /* Añade puntos suspensivos si el texto es demasiado largo */
+    white-space: nowrap; /* Evita que el texto se ajuste a una nueva línea */
+    max-width: 200px; /* Define un ancho máximo para las celdas */
+   
+}
+
+
+.custom-table thead th {
+    background-color:  #6C63FF;
+    color: rgb(0, 0, 0);
+    padding-right: 50px; /* Aumenta el padding en el último `th` del `thead` */
+   
+
+}
+
+.custom-table tbody {
+    display: block;
+    height: 260px; /* Ajusta esta altura basada en la altura de tus filas para mostrar solo 5 filas */
+    background-color: rgba(223, 215, 215, 0.577);
+    overflow-y: auto;
+}
+
+
+/*
+.table-scroll {
+    display: block;  Mantener el bloque para el desplazamiento 
+    overflow-y: auto;
+    height: 260px;
+    max-height: 400px; ;  Altura ajustable según el número de filas que quieras mostrar 
+}*/
+.table-scroll2 {
+    overflow-y: auto;
+    height: 100px; ; /* Altura ajustable según el número de filas que quieras mostrar */
+}
+
+
+
+.custom-table thead, .custom-table tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed; /* Esto ayuda a mantener la estructura de la tabla incluso con el cuerpo desplazable */
+}
+
+.custom-table th, .custom-table td {
+    padding: 8px;
+
+    text-align: left;
+}
+
+
+
+.custom-table thead th:first-child {
+    padding: 8px;
+    border-top: 1px solid#6C63FF; /* Solo borde superior */
+    border-bottom: 1px solid #6C63FF; /* Solo borde inferior */
+    background-color:#6C63FF; /* Fondo blanco, ajusta según tu diseño */
+    vertical-align: middle; /* Alinea el texto verticalmente en el centro */
+}
+
+.custom-table thead th:last-child {
+    border-top-right-radius: 10px; /* Redondea la esquina superior derecha del encabezado */
+    padding-right: 30px; /* Ajusta según la medida exacta de la barra de desplazamiento de tu navegador */
+
+}
+
+.custom-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 10px; /* Redondea la esquina inferior izquierda de la última fila */
+}
+
+.custom-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 10px; /* Redondea la esquina inferior derecha de la última fila */
+}
+
+.custom-table th, .custom-table td {
+    padding: 8px;
+    border: 1px solid #000000; /* Opcional, depende de tu diseño actual */
+}
+
+
+/* Asegúrate de que las celdas del cuerpo y los encabezados coincidan en el ancho */
+.custom-table th:nth-child(1), .custom-table td:nth-child(1) { width: 5%; }
+.custom-table th:nth-child(2), .custom-table td:nth-child(2) { width: 10%; }
+.custom-table th:nth-child(3), .custom-table td:nth-child(3) { width: 20%; }
+.custom-table th:nth-child(4), .custom-table td:nth-child(4) { width: 15%; }
+.custom-table th:nth-child(5), .custom-table td:nth-child(5) { width: 10%; }
+.custom-table th:nth-child(6), .custom-table td:nth-child(6) { width: 10%; }
+.custom-table th:nth-child(7), .custom-table td:nth-child(7) { width: 10%; }
+
+
+
+
+/*Responsivo*/
+
+@media (max-width: 768px) {
+    .inventory-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .controls {
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .custom-select-wrapper, .custom-input-wrapper, .custom-button-wrapper {
+        flex: 1 1 100%;
+        margin-left: 0;
+        margin-top: 10px;
+    }
+
+    h1 {
+        width: 100%;
+    }
+}
+
+/*Espacio */
+.espacioSubmenu{
+    margin-right: 10px;
+
+
+}
+

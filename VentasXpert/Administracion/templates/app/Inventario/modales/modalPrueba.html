@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}Administrador inventario información - VentasXpert{% endblock %}
+{% block submenu1 %}Informacion{% endblock %}
+{% block submenu2 %}Inventario{% endblock %}
+{% block submenu3 %}Administrar{% endblock %}
+{% block submenu4 %}Reporte{% endblock %}
+
+
+{% block content %}
+<!-- Estilos -->
+{% block extrahead %}
+<link rel="stylesheet" href="{% static 'css/inventario_informacion.css' %}">
+{% endblock %}
+<!-- Contenido -->
+<div class="info-boxes">
+    <div class="box blue">
+        <span class="text">Total de productos: 200</span>
+        <img src="{% static 'images/caja-fragil.png' %}" alt="Logo">
+    </div>
+
+    <div class="box yellow">
+        <span class="text">Productos con poca cantidad: 200</span>
+        <img src="{% static 'images/productos_cantidad.png' %}" alt="Logo">
+    </div>
+    <div class="box red">
+        <span class="text">Productos falta de stock: 200</span>
+        <img src="{% static 'images/productos-faltaStock.png' %}" alt="Logo">
+    </div>
+    <div class="box green">
+        <span class="text">Valor en tienda en productos: 200</span>
+        <img src="{% static 'images/bolsa-de-dinero.png' %}" alt="Logo">
+    </div>
+    <div class="box purple">
+        <span class="text">Reinversion en stock: 200</span>
+        <img src="{% static 'images/reinversion.png' %}" alt="Logo">
+    </div>
+</div>
+{% endblock %}

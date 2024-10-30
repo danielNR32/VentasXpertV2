@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Producto</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        .product-form-container {
+            width: 100%;
+            max-width: 800px;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            margin: 20px auto;
+            position: relative;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 999;
+            pointer-events: none;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .product-form {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .product-form>div {
+            flex: 1 1 200px;
+            /* Flex-grow, Flex-shrink, Flex-basis */
+        }
+
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .buttons {
+            text-align: right;
+            width: 100%;
+            padding-top: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .btn.green {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .btn.red {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .modal-header {
+            cursor: move;
+            /* Cambia el cursor para indicar que se puede mover */
+            background-color: #f4f4f4;
+            /* Un color de fondo para el encabezado */
+            padding: 10px;
+            /* Un poco de padding */
+            border-top-left-radius: 8px;
+            /* Asume que tu modal tiene bordes redondeados */
+            border-top-right-radius: 8px;
+        }
+
+        .product-form-container {
+            position: absolute;
+            /* Importante para que el modal sea movible */
+            width: 100%;
+            /* Ancho fijo */
+            max-width: 800px;
+            /* Ancho máximo */
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            margin: 20px auto;
+            top: 50px;
+            /* Posición inicial en la página */
+            left: calc(50% - 400px);
+            /* Centrado horizontal */
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Overlay que cubrirá el fondo -->
+    
+
+    <!-- Contenedor del formulario del modal -->
+    <div class="product-form-container" id="modalAgregarProducto">
+        <div class="modal-header">
+
+            <!-- Botón de cierre -->
+            <span class="close-button" id="closeModal">&times;</span>
+            <h2>Agregar Producto</h2>
+
+
+        </div>
+
+        <form class="product-form">
+            <div><input type="text" placeholder="Código"></div>
+            <div><input type="text" placeholder="Nombre"></div>
+            <div><input type="text" placeholder="Categoría"></div>
+            <div><input type="text" placeholder="Precio"></div>
+            <div><input type="text" placeholder="Cantidad"></div>
+            <div><input type="text" placeholder="Cantidad mínima"></div>
+            <div><input type="text" placeholder="Estado"></div>
+            <div><input type="text" placeholder="Precio total"></div>
+            <div class="buttons">
+                <button type="button" class="btn green">Agregar Producto</button>
+                <button type="button" class="btn red">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</body>
+
+
+<script>
+    function makeDraggable(element, handle) {
+        let offsetX = 0;
+        let offsetY = 0;
+        let drag = false;
+
+        const onMouseMove = (event) => {
+            if (drag) {
+                element.style.left = `${event.clientX - offsetX}px`;
+                element.style.top = `${event.clientY - offsetY}px`;
+            }
+        };
+
+        handle.addEventListener('mousedown', (event) => {
+            drag = true;
+            offsetX = event.clientX - element.getBoundingClientRect().left;
+            offsetY = event.clientY - element.getBoundingClientRect().top;
+            document.addEventListener('mousemove', onMouseMove);
+        });
+
+        document.addEventListener('mouseup', () => {
+            drag = false;
+            document.removeEventListener('mousemove', onMouseMove);
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const modal = document.getElementById('modalAgregarProducto');
+        const header = modal.querySelector('.modal-header'); // Asumiendo que tu modal tiene un 'header'
+        makeDraggable(modal, header);
+    });
+
+
+</script>
+
+</html>

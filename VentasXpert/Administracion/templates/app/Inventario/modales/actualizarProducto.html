@@ -1,0 +1,305 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Administrador inventario información - VentasXpert{% endblock %}
+{% block submenu1 %}Informacion{% endblock %}
+{% block submenu2 %}Inventario{% endblock %}
+{% block submenu3 %}Administrar{% endblock %}
+{% block submenu4 %}HOLAAAA{% endblock %}
+
+{% block content %}
+
+{% include 'app/Inventario/modales/modal-confirmar.html' %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Producto</title>
+
+    {% block extrahead %}
+
+    <link rel="stylesheet" href="{% static 'css/agregar_productos.css' %}">
+    <link rel="stylesheet" href="{% static 'css/inventario_inventario.css' %}">
+    {% endblock %}
+</head>
+<div class="fondoTodo">
+
+
+
+
+    <body>
+        <!-- Contenedor del formulario del modal -->
+        <div class="product-form-container" id="modalAgregarProducto">
+            <form class="product-form">
+                <div class="orden_div">
+                    <div><input type="text" class="codigo" placeholder="Código"></div>
+                    <div><input type="text" class="nombre" placeholder="Nombre"></div>
+                   
+                    <div class="custom-select-wrapper">
+                        <select class=" styled-select">
+                            <option>Categoria</option>
+                            <option>Suficiente</option>
+                            <option>Poca existencia</option>
+                            <option>Sin existencia</option>
+                        </select>
+                    </div>
+
+                    <div><input type="text" class="precio" placeholder="Precio"></div>
+                    <div><input type="text" class="estado-producto" placeholder="Estado"></div>
+                    <div><input type="text" class="precio-total" placeholder="Precio tienda"></div>
+                    <div><input type="text" class="precio-total" placeholder="Ganancia%"></div>
+                    <div><input type="text" class="precio-total" placeholder="Ganancia$"></div>
+                    <div><input type="text" class="cantidad" placeholder="Cantidad "></div>
+                    <div><input type="text" class="cantidad-minima" placeholder="Cantidad mínima"></div>
+                    <div>
+                        <div class="custom-button-wrapper"></div>
+                        <button class="custom-button">Actualizar inventario</button>
+                        <button class="custom-buttonRechazar">Cancelar</button>
+                    </div>
+                </div>
+
+                
+
+
+            </form>
+        </div>
+    </body>
+
+
+
+
+
+
+
+    <div class="inventory-header orden_div">
+
+        <h1>Productos añadidos</h1>
+
+
+
+
+        <div class="custom-select-wrapper" ">
+                    <select class=" custom-select">
+            <option>Filtrar por categoria</option>
+            <option>Pescado</option>
+            <option>Lacteos</option>
+            <option>Refrescos</option>
+            </select>
+        </div>
+
+
+        <div class="custom-input-wrapper">
+            <input type="text" class="custom-input" placeholder="Buscar producto">
+        </div>
+
+
+    </div>
+
+
+
+
+    <div class="table-scroll">
+
+
+        <div class="custom-table-wrapper">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Código de barras</th>
+                        <th>Nombre</th>
+                        <th>Categoría</th>
+                        <th>Estado en stock</th>
+                        <th>Cantidad mínima</th>
+                        <th>Cantidad Total</th>
+                        <th>editar</th>
+                        <th>Eliminar</th>
+
+                    </tr>
+                </thead>
+            </table>
+
+            <table class="custom-table">
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>0011223344</td>
+                        <td>Producto 1</td>
+                        <td>Categoría A</td>
+                        <td>En stock</td>
+                        <td>10</td>
+                        <td>100</td>
+
+                        <td>
+                            <button class="btn-edit custom-button"><i class="bi bi-pencil"></i> Editar</button>
+                        </td>
+                        <td>
+                            <button class="btn-delete custom-buttonRechazar"><i class="bi bi-trash3-fill"></i> Eliminar</button>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>0011223344</td>
+                        <td>Producto 1</td>
+                        <td>Categoría A</td>
+                        <td>En stock</td>
+                        <td>10</td>
+                        <td>100</td>
+                        <td>
+                            <button class="btn-edit custom-button"><i class="bi bi-pencil"></i> Editar</button>
+                        </td>
+                        <td>
+                            <button class="btn-delete custom-buttonRechazar"><i class="bi bi-trash3-fill"></i> Eliminar</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>0011223344</td>
+                        <td>Producto 1</td>
+                        <td>Categoría A</td>
+                        <td>En stock</td>
+                        <td>10</td>
+                        <td>100</td>
+                        <td>
+                            <button class="btn-edit custom-button"><i class="bi bi-pencil"></i> Editar</button>
+                        </td>
+                        <td>
+                            <button class="btn-delete custom-buttonRechazar"><i class="bi bi-trash3-fill"></i> Eliminar</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>0011223344</td>
+                        <td>Producto 1</td>
+                        <td>Categoría A</td>
+                        <td>En stock</td>
+                        <td>10</td>
+                        <td>100</td>
+                        <td>
+                            <button class="btn-edit custom-button"><i class="bi bi-pencil"></i> Editar</button>
+                        </td>
+                        <td>
+                            <button class="btn-delete custom-buttonRechazar"><i class="bi bi-trash3-fill"></i> Eliminar</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>0011223344</td>
+                        <td>Producto 1</td>
+                        <td>Categoría A</td>
+                        <td>En stock</td>
+                        <td>10</td>
+                        <td>100</td>
+                        <td>
+                            <button class="btn-edit custom-button"><i class="bi bi-pencil"></i> Editar</button>
+                        </td>
+                        <td>
+                            <button class="btn-delete custom-buttonRechazar"><i class="bi bi-trash3-fill"></i> Eliminar</button>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td>1</td>
+                        <td>0011223344</td>
+                        <td>Producto 1</td>
+                        <td>Categoría A</td>
+                        <td>En stock</td>
+                        <td>10</td>
+                        <td>100</td>
+                        <td>
+                            <button class="btn-edit custom-button"><i class="bi bi-pencil"></i> Editar</button>
+                        </td>
+                        <td>
+                            <button class="btn-delete custom-buttonRechazar"><i class="bi bi-trash3-fill"></i> Eliminar</button>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>1</td>
+                        <td>0011223344</td>
+                        <td>Producto 1</td>
+                        <td>Categoría A</td>
+                        <td>En stock</td>
+                        <td>10</td>
+                        <td>100</td>
+                        <td>
+                            <button class="btn-edit custom-button"><i class="bi bi-pencil"></i> Editar</button>
+                        </td>
+                        <td>
+                            <button class="btn-delete custom-buttonRechazar"><i class="bi bi-trash3-fill"></i> Eliminar</button>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>1</td>
+                        <td>0011223344</td>
+                        <td>Producto 1</td>
+                        <td>Categoría A</td>
+                        <td>En stock</td>
+                        <td>10</td>
+                        <td>100</td>
+                        <td>
+                            <button class="btn-edit custom-button"><i class="bi bi-pencil"></i> Editar</button>
+                        </td>
+                        <td>
+                            <button class="btn-delete custom-buttonRechazar"><i class="bi bi-trash3-fill"></i> Eliminar</button>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td>7</td>
+                        <td>0011223344</td>
+                        <td>Producto 1</td>
+                        <td>Categoría A</td>
+                        <td>En stock</td>
+                        <td>10</td>
+                        <td>100</td>
+                        <td>
+                            <button class="btn-edit custom-button"><i class="bi bi-pencil"></i> Editar</button>
+                        </td>
+                        <td>
+                            <button class="btn-delete custom-buttonRechazar"><i class="bi bi-trash3-fill"></i> Eliminar</button>
+                        </td>
+                    </tr>
+
+
+
+                    
+                    <!-- Más filas según necesites -->
+                </tbody>
+            </table>
+
+
+        </div>
+
+
+
+
+
+
+
+
+    </div>
+    <div class="orden_div2">
+
+
+        <div class="custom-button-wrapper">
+            <button id="openModal" class="custom-button" type="button">Actualizar inventario</button>
+            <button id="openModal2" class="custom-buttonRechazar">Cancelar</button>
+
+        </div>
+        
+    </div>
+
+
+</div>
+
+
+
+</div>
+
+<script src="{% static 'js/Inventario/agregar-producto.js' %}"></script>
+{% endblock %}

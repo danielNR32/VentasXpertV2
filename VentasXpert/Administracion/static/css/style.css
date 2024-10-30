@@ -176,27 +176,3 @@ a:hover {
 .content {
     padding: 20px;
 }
-
-
-
-/* Estilo básico para el sidebar */
-.sidebar {
-    position: fixed;
-    left: -250px; /* Oculto por defecto */
-    top: 0;
-    width: 250px;
-    height: 100%;
-    background-color: #efefef;
-    color: white;
-    transition: left 0.3s ease;
-    z-index: 10;
-}
-
-/* Estilo para hacer visible el sidebar */
-.sidebar.active {
-    left: 0; /* Muestra el sidebar cuando se activa */
-}
-
-.backdrop.active {
-    display: block; /* Muestra el fondo oscuro cuando el sidebar está activo */
-}
