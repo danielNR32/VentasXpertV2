@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Catalogo de productos - VentasXpert{% endblock %}
+
+{% block content %}
+<!-- Estilos -->
+{% block extrahead %}
+<link rel="stylesheet" href="{% static 'css/catalogoClientes.css' %}">
+{% endblock %}
+<!-- Contenido -->
+
+<style>
+    .store-details {
+        display: flex;
+        align-items: center;
+    }
+    .store-logo {
+        order: 1;
+        margin-right: 20px;
+    }
+    .store-description {
+        order: 2;
+        margin-left: 20px;
+    }
+</style>
+
+<div class="store-info">
+    <div class="store-details">
+        <img src="https://via.placeholder.com/150" alt="Logo de la tienda" class="store-logo">
+        <div class="store-description">
+            <h2>Nombre de tienda</h2>
+            <p>Descripción: Aquí va una breve descripción de la tienda.</p>
+            <p>Dirección: Calle Falsa 123</p>
+            <p>Contactos: +52 1234567890</p>
+        </div>
+    </div>
+</div>
+
+<div class="TituloTablaC">
+    <h2 style="flex: 1;">Productos disponibles</h2>
+    <form class="BuscarProducto-cajero">
+        <div class="buscarProductoInput">
+            <input type="text" name="q" placeholder="Buscar producto...">
+            <button type="submit"><i class="bi bi-search"></i></button>
+        </div>
+    </form>
+</div>
+
+<div class="catalog-container">
+    <div class="store-card">
+        <img src="https://via.placeholder.com/150" alt="Imagen de producto">
+        <h3>Producto 1</h3>
+        <p>Descripción del producto</p>
+    </div>
+    <div class="store-card">
+        <img src="https://via.placeholder.com/150" alt="Imagen de producto">
+        <h3>Producto 2</h3>
+        <p>Descripción del producto</p>
+    </div>
+    <div class="store-card">
+        <img src="https://via.placeholder.com/150" alt="Imagen de producto">
+        <h3>Producto 3</h3>
+        <p>Descripción del producto</p>
+    </div>
+    <div class="store-card">
+        <img src="https://via.placeholder.com/150" alt="Imagen de producto">
+        <h3>Producto 4</h3>
+        <p>Descripción del producto</p>
+    </div>
+    <div class="store-card">
+        <img src="https://via.placeholder.com/150" alt="Imagen de producto">
+        <h3>Producto 1</h3>
+        <p>Descripción del producto</p>
+    </div>
+    <div class="store-card">
+        <img src="https://via.placeholder.com/150" alt="Imagen de producto">
+        <h3>Producto 2</h3>
+        <p>Descripción del producto</p>
+    </div>
+    <div class="store-card">
+        <img src="https://via.placeholder.com/150" alt="Imagen de producto">
+        <h3>Producto 3</h3>
+        <p>Descripción del producto</p>
+    </div>
+    <div class="store-card">
+        <img src="https://via.placeholder.com/150" alt="Imagen de producto">
+        <h3>Producto 4</h3>
+        <p>Descripción del producto</p>
+    </div>
+    <div class="store-card">
+        <img src="https://via.placeholder.com/150" alt="Imagen de producto">
+        <h3>Producto 1</h3>
+        <p>Descripción del producto</p>
+    </div>
+    <div class="store-card">
+        <img src="https://via.placeholder.com/150" alt="Imagen de producto">
+        <h3>Producto 2</h3>
+        <p>Descripción del producto</p>
+    </div>
+    <div class="store-card">
+        <img src="https://via.placeholder.com/150" alt="Imagen de producto">
+        <h3>Producto 3</h3>
+        <p>Descripción del producto</p>
+    </div>
+    <div class="store-card">
+        <img src="https://via.placeholder.com/150" alt="Imagen de producto">
+        <h3>Producto 4</h3>
+        <p>Descripción del producto</p>
+    </div>
+    <div class="store-card">
+        <img src="https://via.placeholder.com/150" alt="Imagen de producto">
+        <h3>Producto 1</h3>
+        <p>Descripción del producto</p>
+    </div>
+    <div class="store-card">
+        <img src="https://via.placeholder.com/150" alt="Imagen de producto">
+        <h3>Producto 2</h3>
+        <p>Descripción del producto</p>
+    </div>
+    <div class="store-card">
+        <img src="https://via.placeholder.com/150" alt="Imagen de producto">
+        <h3>Producto 3</h3>
+        <p>Descripción del producto</p>
+    </div>
+    <div class="store-card">
+        <img src="https://via.placeholder.com/150" alt="Imagen de producto">
+        <h3>Producto 4</h3>
+        <p>Descripción del producto</p>
+    </div>
+</div>
+{% endblock %}

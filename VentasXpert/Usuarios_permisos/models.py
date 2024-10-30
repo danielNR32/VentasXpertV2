@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User,Permission
+from django.contrib.auth.models import User, Permission
 
 class Persona(models.Model):
     GENERO_CHOICES = [
@@ -7,7 +7,6 @@ class Persona(models.Model):
         ('F', 'Femenino'),
         ('N', 'Prefiero no decirlo'),
         ('D', 'Desconocido'),
-        
     ]
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="persona")
@@ -16,31 +15,25 @@ class Persona(models.Model):
     apPaterno = models.CharField(max_length=100)
     apMaterno = models.CharField(max_length=100)
     genero = models.CharField(max_length=1, choices=GENERO_CHOICES, default='D')
-    correo = models.CharField(max_length=200)
+    correo = models.EmailField(max_length=200)
     telefono = models.CharField(max_length=15)
+    rfc=models.CharField(max_length=100)
+    curp=models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        """
-        permissions = [
-            ('ver_persona', 'Puede ver el perfil de persona'),
-            ('editar_persona', 'Puede editar el perfil de persona'),
-            ('actualizar_persona', 'Puede actualizar el perfil de persona'),
-            ('borrar_persona', 'Puede borrar el perfil de persona'),
-              
-        ]
-        """
         db_table = 'Persona'
         verbose_name_plural = 'Personas'
        
     def __str__(self):
         return f"{self.nombre} {self.apPaterno} {self.apMaterno}"
 
-
 class Rol(models.Model):
     nombre = models.CharField(max_length=50, unique=True)
-    permisos = models.ManyToManyField(Permission, blank=True)  # Un rol tiene varios permisos
+    permisos = models.ManyToManyField(Permission, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         db_table = 'Roles'
@@ -52,31 +45,118 @@ class Rol(models.Model):
 class UsuarioRol(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     rol = models.ForeignKey(Rol, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         db_table = 'Usuarios_Roles'
         verbose_name_plural = 'Usuarios Roles'
     
     def __str__(self):
-        return f"{self.user.username} - {self.rol.nombre}"        
-    
+        return f"{self.user.username} - {self.rol.nombre}"
 
-
-        
 class UsuarioPermiso(models.Model): 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     permisos = models.ManyToManyField(Permission, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         db_table = 'Usuario_Permisos'
         verbose_name_plural = 'Usuarios Permisos'
 
     def __str__(self):
-        # Muestra una lista de nombres de permisos
         permisos_nombres = ", ".join([perm.name for perm in self.permisos.all()])
-        return f"{self.user.username} - Permisos: {permisos_nombres}"     
+        return f"{self.user.username} - Permisos: {permisos_nombres}"
+
+class Categoria(models.Model):
+    nombre = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'Categoria'
+        verbose_name_plural = 'Categorias'
 
 
+class Proveedor(models.Model):
+    nombre = models.CharField(max_length=255)
+    telefono = models.CharField(max_length=15)
+    correo = models.EmailField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'Proveedor'
+        verbose_name_plural = 'Proveedores'
 
 
-        
+class Producto(models.Model):
+    nombre = models.CharField(max_length=255)
+    codigo = models.CharField(max_length=100)
+    precio_Proveedor = models.DecimalField(max_digits=10, decimal_places=2)
+    precio_Tienda = models.DecimalField(max_digits=10, decimal_places=2)
+    stock_Inventario = models.IntegerField()
+    stock_Minimo = models.IntegerField()
+    categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
+    proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'Producto'
+        verbose_name_plural = 'Productos'
+
+class Caja(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    saldo_actual = models.DecimalField(max_digits=10, decimal_places=2)
+    corte_caja = models.DecimalField(max_digits=10, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'Caja'
+        verbose_name_plural = 'Cajas'
+
+
+class Carrito(models.Model):
+    precio_total = models.DecimalField(max_digits=10, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'Carrito'
+        verbose_name_plural = 'Carritos'
+
+
+class CarritoProducto(models.Model):
+    carrito = models.ForeignKey(Carrito, on_delete=models.CASCADE)
+    producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
+    cantidad = models.IntegerField()
+    subtotal = models.DecimalField(max_digits=10, decimal_places=2)
+
+    class Meta:
+        db_table = 'Carrito_x_Producto'
+        verbose_name_plural = 'Carritos por Productos'
+
+
+class Venta(models.Model):
+    carrito = models.ForeignKey(Carrito, on_delete=models.CASCADE)  # Relación con Carrito
+    caja = models.ForeignKey('Caja', on_delete=models.CASCADE)  # Relación con Caja
+    finanzas = models.ForeignKey('Finanzas', on_delete=models.CASCADE)  # Relación con Finanzas
+    total = models.DecimalField(max_digits=10, decimal_places=2)
+    fecha = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
+    class Meta:
+        db_table = 'Venta'
+        verbose_name_plural = 'Ventas'
+
+class Finanzas(models.Model):
+    fecha = models.DateField()
+    hora = models.TimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
+    class Meta:
+        db_table = 'Finanza'
+        verbose_name_plural = 'Finanzas'

@@ -6,10 +6,6 @@
 <h1>Bienvenido al Panel de SuperUsuario</h1>
 <p>Aquí puedes gestionar usuarios, permisos y más.</p>
 
-<!-- Formulario para cerrar sesión -->
-<form action="{% url 'logout' %}" method="post">
-    {% csrf_token %}
-    <button type="submit">Cerrar Sesión</button>
-</form>
+
 
 {% endblock %}

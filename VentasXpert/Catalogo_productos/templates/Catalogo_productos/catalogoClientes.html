@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Catalogo de productos - VentasXpert{% endblock %}
+
+{% block content %}
+<!-- Estilos -->
+{% block extrahead %}
+<link rel="stylesheet" href="{% static 'css/catalogoClientes.css' %}">
+{% endblock %}
+<!-- Contenido -->
+<div class="TituloTablaC">
+    <h2 style="flex: 1;">Tiendas disponibles</h2>
+    <form class="BuscarProducto-cajero">
+        <div class="buscarProductoInput">
+            <input type="text" name="q" placeholder="Buscar producto...">
+            <button type="submit"><i class="bi bi-search"></i></button>
+        </div>
+    </form>
+</div>
+<div class="catalog-container">
+    <a href="{% url 'infoTienda' %}" class="store-card">
+        <img src="https://via.placeholder.com/150" alt="Imagen de la tienda">
+        <h3>Tienda 1</h3>
+        <p>Descripción</p>
+    </a>
+    <a href="{% url 'infoTienda' %}" class="store-card">
+        <img src="https://via.placeholder.com/150" alt="Imagen de la tienda">
+        <h3>Tienda 2</h3>
+        <p>Descripción</p>
+    </a>
+    <a href="{% url 'infoTienda' %}" class="store-card">
+        <img src="https://via.placeholder.com/150" alt="Imagen de la tienda">
+        <h3>Tienda 3</h3>
+        <p>Descripción</p>
+    </a>
+    <a href="{% url 'infoTienda' %}" class="store-card">
+        <img src="https://via.placeholder.com/150" alt="Imagen de la tienda">
+        <h3>Tienda 4</h3>
+        <p>Descripción</p>
+    </a>
+    <a href="{% url 'infoTienda' %}" class="store-card">
+        <img src="https://via.placeholder.com/150" alt="Imagen de la tienda">
+        <h3>Tienda 1</h3>
+        <p>Descripción</p>
+    </a>
+    <a href="{% url 'infoTienda' %}" class="store-card">
+        <img src="https://via.placeholder.com/150" alt="Imagen de la tienda">
+        <h3>Tienda 2</h3>
+        <p>Descripción</p>
+    </a>
+    <a href="{% url 'infoTienda' %}" class="store-card">
+        <img src="https://via.placeholder.com/150" alt="Imagen de la tienda">
+        <h3>Tienda 3</h3>
+        <p>Descripción</p>
+    </a>
+    <a href="{% url 'infoTienda' %}" class="store-card">
+        <img src="https://via.placeholder.com/150" alt="Imagen de la tienda">
+        <h3>Tienda 4</h3>
+        <p>Descripción</p>
+    </a>
+    <!-- Añade más tiendas según sea necesario -->
+</div>
+
+{% endblock %}
