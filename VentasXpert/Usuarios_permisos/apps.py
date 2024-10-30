@@ -1,6 +1,9 @@
+# Usuarios_permisos/apps.py
+
 from django.apps import AppConfig
 
-
 class UsuariosPermisosConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
     name = 'Usuarios_permisos'
+
+    #def ready(self):
+    #    import Usuarios_permisos.signals

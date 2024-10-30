@@ -22,6 +22,7 @@ class Persona(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        """
         permissions = [
             ('ver_persona', 'Puede ver el perfil de persona'),
             ('editar_persona', 'Puede editar el perfil de persona'),
@@ -29,6 +30,7 @@ class Persona(models.Model):
             ('borrar_persona', 'Puede borrar el perfil de persona'),
               
         ]
+        """
         db_table = 'Persona'
         verbose_name_plural = 'Personas'
        
@@ -57,3 +59,24 @@ class UsuarioRol(models.Model):
     
     def __str__(self):
         return f"{self.user.username} - {self.rol.nombre}"        
+    
+
+
+        
+class UsuarioPermiso(models.Model): 
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    permisos = models.ManyToManyField(Permission, blank=True)
+
+    class Meta:
+        db_table = 'Usuario_Permisos'
+        verbose_name_plural = 'Usuarios Permisos'
+
+    def __str__(self):
+        # Muestra una lista de nombres de permisos
+        permisos_nombres = ", ".join([perm.name for perm in self.permisos.all()])
+        return f"{self.user.username} - Permisos: {permisos_nombres}"     
+
+
+
+
+        

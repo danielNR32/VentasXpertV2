@@ -3,7 +3,15 @@
 {% block title %}Panel de Administrador{% endblock %}
 
 {% block content %}
-<h1>Bienvenido al Panel de Administrador</h1>
+
+{% if user_role == 'Administrador' %}
+    <p>Bienvenido, Administrador.</p>
+{% endif %}
+
+{% if 'add_persona' in user_permissions %}
+    <p>Tienes permiso para ver los reportes.</p>
+{% endif %}
+
 <p>Accede a las opciones de administración y gestiona la tienda.</p>
 <p>Rol del usuario: {{ user_role }}</p>
 
