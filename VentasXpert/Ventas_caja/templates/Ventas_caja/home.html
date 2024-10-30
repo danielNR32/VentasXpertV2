@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Panel de Cajero{% endblock %}
+
+{% block content %}
+<h1>Bienvenido al Panel de Cajero</h1>
+<p>Aquí puedes gestionar las ventas.</p>
+<!-- Formulario para cerrar sesión -->
+<form action="{% url 'logout' %}" method="post">
+    {% csrf_token %}
+    <button type="submit">Cerrar Sesión</button>
+</form>
+
+{% endblock %}

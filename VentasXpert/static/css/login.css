@@ -1,0 +1,80 @@
+/* Fondo de pantalla completo */
+body {
+    background-color: #3700b3;
+    /*background-image: url('path/to/your/background-image.jpg'); /* Puedes cambiar la imagen de fondo */
+    background-size: cover;
+    background-position: center;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Contenedor del formulario de login */
+.login-container {
+    width: 100%;
+    max-width: 400px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    position: relative;
+    z-index: 1;
+}
+
+/* Header de login */
+.login-header h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.login-header p {
+    margin-bottom: 1.5rem;
+}
+
+/* Estilos para los campos de formulario */
+.form-control {
+    border-radius: 30px;
+    padding-left: 15px;
+    padding-right: 15px;
+    height: 45px;
+}
+
+.btn-primary {
+    background-color: #6200ea; /* Puedes cambiar el color del botón */
+    border: none;
+    border-radius: 30px;
+    padding: 10px;
+    font-size: 1rem;
+}
+
+.btn-primary:hover {
+    background-color: #3700b3; /* Color al pasar el cursor */
+}
+
+/* Footer */
+.footer {
+    color: white;
+    margin-top: 20px;
+}
+
+/* Texto centrado en los enlaces */
+.text-center a {
+    font-size: 0.9rem;
+    color: #6200ea; /* Color de los enlaces */
+}
+
+.text-center a:hover {
+    text-decoration: underline;
+}
+
+/* Estilo para el toggle de contraseña */
+.input-group-text {
+    cursor: pointer;
+}

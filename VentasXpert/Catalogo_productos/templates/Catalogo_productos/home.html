@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Catálogo de Productos{% endblock %}
+
+{% block content %}
+<h1>Catálogo de Productos</h1>
+<p>Consulta el listado de productos disponibles en la tienda.</p>
+<!-- Formulario para cerrar sesión -->
+<form action="{% url 'logout' %}" method="post">
+    {% csrf_token %}
+    <button type="submit">Cerrar Sesión</button>
+</form>
+
+{% endblock %}

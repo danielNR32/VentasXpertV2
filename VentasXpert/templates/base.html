@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es-mx">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Mi Aplicación{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <h2>Menú</h2>
+            <ul>
+                <li><a href="{% url 'catalogo_home' %}">Catálogo</a></li>
+
+                {% if user.is_authenticated %}
+                    {% if user_role == 'SU' %}
+                        <li><a href="{% url 'superusuario_home' %}">Panel de SuperUsuario</a></li>
+                    {% elif user_role == 'Administrador' %}
+                        <li><a href="{% url 'administrador_home' %}">Panel de Administrador</a></li>
+                    {% elif user_role == 'Cajero' %}
+                        <li><a href="{% url 'cajero_home' %}">Panel de Cajero</a></li>
+                    {% endif %}
+                    <li>
+                        <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" style="background: none; border: none; color: blue; cursor: pointer; text-decoration: underline; padding: 0;">
+                                Cerrar Sesión
+                            </button>
+                        </form>
+                    </li>
+                {% else %}
+                    <li><a href="{% url 'login' %}">Iniciar Sesión</a></li>
+                {% endif %}
+            </ul>
+        </aside>
+        
+        <main class="content">
+            {% block content %}
+            {% endblock %}
+        </main>
+    </div>
+</body>
+</html>

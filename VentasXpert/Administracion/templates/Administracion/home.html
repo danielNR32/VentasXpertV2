@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Panel de Administrador{% endblock %}
+
+{% block content %}
+<h1>Bienvenido al Panel de Administrador</h1>
+<p>Accede a las opciones de administración y gestiona la tienda.</p>
+<p>Rol del usuario: {{ user_role }}</p>
+
+<!-- Formulario para cerrar sesión -->
+<form action="{% url 'logout' %}" method="post">
+    {% csrf_token %}
+    <button type="submit">Cerrar Sesión</button>
+</form>
+{% endblock %}
