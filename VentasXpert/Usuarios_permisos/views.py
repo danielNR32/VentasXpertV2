@@ -15,11 +15,14 @@ def logout_view(request):
     logout(request)
     return redirect('login')  # Redirect to the login page or another page
 
+@login_required
 def usuarios(request):
     return render(request, 'app/usuarios.html')
 
+@login_required
 def permisos(request):
     return render(request, 'app/permisos.html')
 
+@login_required
 def roles(request):
     return render(request, 'app/roles.html')
