@@ -1,0 +1,100 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+/* Estilo para el modal */
+.modal {
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4); /* Fondo semitransparente */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 600px;
+    max-width: 90%;
+    box-sizing: border-box;
+}
+
+h2 {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+/* Contenedor para cada sección */
+.section {
+    background-color: #d3d3d3;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.section h3 {
+    margin: 0 0 10px 0;
+    font-size: 18px;
+}
+
+.section input {
+    padding: 10px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Botón "Guardar" dentro de la sección */
+.section .guardar {
+    background-color: #6a5acd;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 20px;
+}
+
+.section .guardar:hover {
+    opacity: 0.9;
+}
+
+/* Botón "Cancelar" al final */
+.cancelar {
+    background-color: #e74c3c;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    display: block;
+    width: 150px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.cancelar:hover {
+    opacity: 0.9;
+}
+
+/* Botón para abrir el modal */
+.open-modal-btn {
+    padding: 10px 20px;
+    background-color: #a020f0;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}

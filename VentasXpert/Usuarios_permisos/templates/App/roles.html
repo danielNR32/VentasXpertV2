@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+
+{% block title %}Usuarios roles- VentasXpert{% endblock %}
+{% block submenu1 %}
+    <a href="{% url 'usuarios' %}">Usuarios</a>
+{% endblock %}
+
+{% block submenu2 %}
+    <a href="{% url 'permisos' %}">Permisos</a>
+{% endblock %}
+
+{% block submenu3 %}
+    <a href="{% url 'roles' %}">Roles</a>
+{% endblock %}
+{% block submenu4 %}{% endblock %}
+
+
+
+{% block content %}
+
+
+{% block extrahead %}
+    <link rel="stylesheet" href="{% static 'css/roles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/modal_roles.css' %}">
+    {% endblock %}
+
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>VentasXpert - Roles</title>
+    </head>
+    <body>
+    
+        <button class="button" onclick="openModal()">Nuevo Rol</button>
+
+                    <!-- Modal -->
+                    <div id="rolesPermisosModal" class="modal">
+                        <div class="modal-content">
+                            <h2>Roles y permisos de Usuarios</h2>
+                            
+                            <!-- Sección para Rol -->
+                            <div class="section">
+                                <div>
+                                    <h3>Rol</h3>
+                                    <input type="text" placeholder="Rol*">
+                                </div>
+                                <button class="guardar">Guardar</button>
+                            </div>
+        
+                            <!-- Sección para Permiso -->
+                            <div class="section">
+                                <div>
+                                    <h3>Permiso</h3>
+                                    <input type="text" placeholder="Permiso*">
+                                </div>
+                                <button class="guardar">Guardar</button>
+                            </div>
+        
+                            <!-- Botón Cancelar al final -->
+                            <button class="cancelar" onclick="closeModal()">Cancelar</button>
+                        </div>
+                    </div>
+    
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" placeholder="Buscar rol">
+                <button><i class="fa fa-search"></i></button>
+            </div>
+    
+            <div class="filter-container">
+                <button onclick="toggleDropdown()" class="filter-button">Filtrar <i class="fa fa-chevron-down"></i></button>
+                <div id="myDropdown" class="dropdown-content">
+                    <a href="#">Opción 1</a>
+                    <a href="#">Opción 2</a>
+                    <a href="#">Opción 3</a>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Tabla de roles con 5 filas -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Editar y Borrar</th>
+                    <th>Rol</th>
+                    <th>Permisos asignados</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="table-icons">
+                            <button class="edit-button">
+                                <i class="fa fa-pencil button-icon"></i> Editar
+                            </button>
+                            <button class="delete-button">
+                                <i class="fa fa-trash button-icon"></i> Borrar
+                            </button>
+                        </div>
+                    </td>
+                    <td>Rol 1</td>
+                    <td>Permisos 1</td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="table-icons">
+                            <button class="edit-button">
+                                <i class="fa fa-pencil button-icon"></i> Editar
+                            </button>
+                            <button class="delete-button">
+                                <i class="fa fa-trash button-icon"></i> Borrar
+                            </button>
+                        </div>
+                    </td>
+                    <td>Rol 2</td>
+                    <td>Permisos 2</td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="table-icons">
+                            <button class="edit-button">
+                                <i class="fa fa-pencil button-icon"></i> Editar
+                            </button>
+                            <button class="delete-button">
+                                <i class="fa fa-trash button-icon"></i> Borrar
+                            </div>
+                        </td>
+                        <td>Rol 3</td>
+                        <td>Permisos 3</td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="table-icons">
+                            <button class="edit-button">
+                                <i class="fa fa-pencil button-icon"></i> Editar
+                            </button>
+                            <button class="delete-button">
+                                <i class="fa fa-trash button-icon"></i> Borrar
+                            </div>
+                        </td>
+                        <td>Rol 4</td>
+                        <td>Permisos 4</td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="table-icons">
+                            <button class="edit-button">
+                                <i class="fa fa-pencil button-icon"></i> Editar
+                            </button>
+                            <button class="delete-button">
+                                <i class="fa fa-trash button-icon"></i> Borrar
+                            </div>
+                        </td>
+                        <td>Rol 5</td>
+                        <td>Permisos 5</td>
+                </tr>
+            </tbody>
+        </table>
+    
+        <div class="info-text">
+            Apartado para ver Roles e información
+        </div>
+    
+    
+    </body>
+    </html>
+    
+
+
+
+<script src="{% static 'js/roles.js' %}"></script>
+<script src="{% static 'js/modal_roles.js' %}"></script>
+
+
+{% endblock %}

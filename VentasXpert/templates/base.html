@@ -29,7 +29,8 @@
             
             {% if user.is_authenticated %}
                 <!-- Opciones visibles según el rol del usuario -->
-                
+                <li><a href="{% url 'catalogo' %}"><i class="fas fa-store"></i> Catálogo</a></li>
+
                 {% if user_role == 'Cajero' or user_role == 'Gerente' or user_role == 'Administrador' or user_role == 'SU' %}
                     <li><a href="{% url 'cajero_home' %}"><i class="bi bi-cash-coin" style="font-size: 1.5em;"></i> Caja</a></li>
                 {% endif %}
@@ -47,7 +48,7 @@
                 {% endif %}
                 
                 {% if user_role == 'SU' %}
-                    <li><a href="{% url 'superusuario_home' %}"><i class="bi bi-shield-lock" style="font-size: 1.5em;"></i>Permisos y roles</a></li>
+                    <li><a href="{% url 'usuarios' %}"><i class="bi bi-shield-lock" style="font-size: 1.5em;"></i>Permisos y roles</a></li>
                 {% endif %}
                 
                 <!-- Cerrar sesión -->

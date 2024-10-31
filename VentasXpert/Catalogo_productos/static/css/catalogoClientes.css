@@ -1,0 +1,190 @@
+/*Estilos para catalogo de clientes*/
+
+.TituloTablaC{
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    width: 100%;
+}
+
+.BuscarProducto-cajero{
+    flex: 1; 
+    display: flex; 
+    justify-content: 
+    flex-end;
+}
+
+.BuscarProducto-cajero input{
+    border: none;
+}
+
+.BuscarProducto-cajero input:focus {
+    outline: none;
+}
+
+.BuscarProducto-cajero button{
+    border: none;
+    background-color: transparent;
+}
+
+.buscarProductoInput{ 
+    padding: 5px; 
+    border-radius: 10px; 
+    border: 1px solid #464646;
+}
+
+/* Contenedor de las tarjetas de las tiendas */
+.catalog-container {
+    display: flex;
+    flex-wrap: wrap; /* Permite que las tarjetas se ajusten automáticamente en varias filas */
+    justify-content: flex-start; /* Distribuye el espacio entre las tarjetas */
+    padding: 20px;
+    gap: 20px;
+}
+
+/* Tarjeta individual para cada tienda */
+.store-card {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    text-align: center;
+    width: 200px;
+    
+    margin-bottom: 20px; /* Espacio inferior entre las filas */
+    transition: transform 0.3s ease;
+}
+
+.store-card:hover {
+    transform: scale(1.05);
+}
+
+/* Imagen dentro de la tarjeta */
+.store-card img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+
+/* Título y descripción */
+.store-card h3 {
+    margin: 10px 0;
+    font-size: 18px;
+    color: #333;
+}
+
+.store-card p {
+    font-size: 14px;
+    color: #666;
+}
+
+/* Estilos responsivos para pantallas más pequeñas */
+@media (max-width: 768px) {
+    .store-card {
+        width: 150px;
+    }
+
+    .store-card h3 {
+        font-size: 16px;
+    }
+
+    .store-card p {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .catalog-container {
+        justify-content: center; /* Centra las tarjetas en dispositivos más pequeños */
+    }
+
+    .store-card {
+        width: 120px;
+    }
+
+    .store-card h3 {
+        font-size: 14px;
+    }
+
+    .store-card p {
+        font-size: 11px;
+    }
+}
+
+.store-info {
+    display: flex;
+    align-items: flex-start;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.store-details {
+    display: flex;
+    gap: 20px;
+}
+
+.store-details img {
+    width: 150px;
+    height: 150px;
+    border-radius: 10px;
+}
+
+.store-description {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.store-description h2 {
+    margin: 0 0 10px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.store-description p {
+    margin: 5px 0;
+    font-size: 16px;
+}
+
+/* Reutilización de estilos para los productos */
+.catalog-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    padding: 20px;
+    gap: 20px;
+}
+
+.store-card {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    text-align: center;
+    width: 200px;
+    transition: transform 0.3s ease;
+}
+
+.store-card:hover {
+    transform: scale(1.05);
+}
+
+.store-card img {
+    width: 150px;
+    height: 150px;
+    margin-bottom: 10px;
+}
+
+.store-card h3 {
+    margin: 10px 0;
+    font-size: 18px;
+}
+
+.store-card p {
+    font-size: 14px;
+    color: #666;
+}

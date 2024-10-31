@@ -1,0 +1,179 @@
+/* Estilo para base.html */	
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+a {
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+}
+
+a:hover {
+    color: #4400cd;
+    text-decoration: underline;
+}
+
+.sidebar {
+    width: 250px;
+    position: fixed;
+    left: -270px; /* Inicia fuera de la vista */
+    top: 0;
+    bottom: 0;
+    background-color: #ffffff;
+    color: black;
+    padding: 10px;
+    z-index: 10; /* Asegúrate de que está sobre el backdrop */
+    transition: left 0.5s; /* Transición suave */
+    overflow-y: auto; /* Permite el desplazamiento vertical si es necesario */
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar li {
+    padding: 10px 5px; /* Espacio alrededor del texto */
+    display: flex;
+    align-items: center; /* Centra los íconos con el texto */
+    border-radius: 10px;
+}
+
+.sidebar li:hover {
+    background-color: #f2f2f2; /* Fondo gris claro al pasar el mouse */
+}
+
+.sidebar li:hover a {
+    color: #4400cd; /* Color morado para el texto al pasar el mouse */
+}
+
+.sidebar li:hover i {
+    color: #4701bf; /* Color morado para el ícono al pasar el mouse */
+}
+
+.sidebar li a {
+    color: black; /* Color del texto */
+    text-decoration: none; /* Elimina el subrayado del texto */
+    font-size: 18px; /* Tamaño del texto */
+    width: 100%; /* Asegura que el enlace cubra el área completa para clics */
+    display: flex;
+    align-items: center; /* Centra el contenido del enlace */
+}
+
+
+.sidebar li a i {
+    margin-right: 10px; /* Espacio entre el ícono y el texto */
+}
+
+.barra-sidebar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #ffffff; /* Fondo blanco */
+    border-bottom: 1px solid #dddddd90; /* Línea inferior */
+}
+
+.logo-sidebar {
+    display: flex;
+    align-items: center;
+}
+
+.close-sidebar {
+    display: flex;
+    align-items: center;
+}
+
+
+/* Estilo para oscurecer el fondo */
+.backdrop {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparente */
+    z-index: 5;
+}
+
+.main-content {
+    margin-left: 0;
+    transition: margin-left 0.5s;
+}
+
+.main-content.expanded {
+    margin-left: 250px;
+}
+
+.menu-bar {
+    background-color: transparent;
+    color: white;
+    display: flex;
+    align-items: center;
+    margin-left: 10px; 
+    margin-right: 10px;
+    justify-content: space-between;
+}
+
+.menu-bar .options a {
+    margin-right: 30px;
+    color: black;
+    font-size: 18px; /* Tamaño del texto */
+    text-decoration: none;
+    
+}
+
+.menu-bar .options a:hover {
+    color: #4400cd;
+}
+
+.menu-bar a {
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+    font-size: 18px; /* Tamaño del texto */
+}
+
+.menu-bar .user-info {
+    color: black;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+}
+
+.menu-bar .user-info a {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+    color: black;
+    text-decoration: none;
+}
+
+.menu-bar .user-info a:hover {
+    color: black;
+    text-decoration: none;
+}
+
+.menu-bar .user-info i {
+    margin-left: 5px;
+    font-size: 1.5em;
+}
+
+.dropdown-menu {
+    position: absolute;
+    right: 0;
+    left: auto;
+}
+
+
+.options{
+    margin-left: 40px;
+}
+
+
+.content {
+    padding: 20px;
+}
