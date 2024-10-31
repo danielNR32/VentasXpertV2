@@ -2,6 +2,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login,logout  
 from Usuarios_permisos.models import UsuarioRol
+from django.contrib.auth.decorators import login_required
 
 def login_view(request):
     if request.method == 'POST':
@@ -32,7 +33,7 @@ def login_view(request):
 
     return render(request, 'login.html')
 
-
+@login_required
 def administrador_home(request):
     user_role = request.user.usuario_rol.rol.nombre if hasattr(request.user, 'usuario_rol') else None
     return render(request, 'Administracion/home.html', {'user_role': user_role})

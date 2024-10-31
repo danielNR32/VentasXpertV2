@@ -29,7 +29,7 @@
             
             {% if user.is_authenticated %}
                 <!-- Opciones visibles según el rol del usuario -->
-                <li><a href="{% url 'catalogo' %}"><i class="fas fa-store"></i> Catálogo</a></li>
+                <li><a href="{% url 'catalogo' %}"><i class="bi bi-bag-heart" style="font-size: 1.5em;"></i> Catálogo</a></li>
 
                 {% if user_role == 'Cajero' or user_role == 'Gerente' or user_role == 'Administrador' or user_role == 'SU' %}
                     <li><a href="{% url 'cajero_home' %}"><i class="bi bi-cash-coin" style="font-size: 1.5em;"></i> Caja</a></li>
@@ -53,12 +53,9 @@
                 
                 <!-- Cerrar sesión -->
                 <li>
-                    <form action="{% url 'logout' %}" method="post" style="display: inline;">
-                        {% csrf_token %}
-                        <button type="submit" style="background: none; border: none; color: blue; cursor: pointer; text-decoration: underline; padding: 0;">
-                            <i class="bi bi-box-arrow-right" style="font-size: 1.5em;"></i> Cerrar sesión
-                        </button>
-                    </form>
+                    <a href="{% url 'logout' %}">
+                        <i class="bi bi-box-arrow-right" style="font-size: 1.5em;"></i> Cerrar sesión
+                    </a>
                 </li>
             {% else %}
                 <!-- Enlace de inicio de sesión cuando el usuario no está autenticado -->
@@ -74,18 +71,20 @@
                 <a href="#" onclick="toggleSidebar()"><i class="bi bi-list" style="font-size: 1.5em;"></i></a>
                 <a><img src="{% static 'images/Logo_completo.png' %}" alt="Logo" style="height: 40px; margin: 10px;"></a>
                 <div class="options">
-                    <a href="#">Información</a>
-                    <a href="#">Inventario</a>
-                    <a href="#">Administrar</a>
-                    <a href="#">Reporte</a>
+                    {% block options %}
+                        <a href="#">Información</a>
+                        <a href="#">Inventario</a>
+                        <a href="#">Administrar</a>
+                        <a href="#">Reporte</a>
+                    {% endblock %}
                 </div>
                 <div class="user-info dropdown">
                     <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="margin-right: 10px;">
-                        Nombre del usuario <i class="bi bi-person-circle" style="font-size: 1.5em;"></i>
+                        {{ user.username }} <i class="bi bi-person-circle" style="font-size: 1.5em;"></i>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                         <li><a class="dropdown-item" href="#"><i class="bi bi-info-circle-fill" style="margin-right: 10px"></i> Información</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right" style="margin-right: 10px"></i> Cerrar sesión</a></li>
+                        <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="bi bi-box-arrow-right" style="margin-right: 10px"></i> Cerrar sesión</a></li>
                     </ul>
                 </div>
             </div>
