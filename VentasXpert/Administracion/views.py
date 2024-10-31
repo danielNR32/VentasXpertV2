@@ -28,7 +28,7 @@ def inventario_actualizarProducto(request):
 @login_required
 def home(request):
     return render(request, 'Administracion/home.html')
-@login_required
+
 def logout_view(request):
     logout(request)
     return redirect('login')  # Redirect to the login page or another page

@@ -14,7 +14,7 @@ def home(request):
 @login_required
 def caja2(request):
     return render(request, 'Ventas_caja/caja.html')
-@login_required
+
 def logout_view(request):
     logout(request)
     return redirect('login')  # Redirect to the login page or another page
