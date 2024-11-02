@@ -1,6 +1,14 @@
 {% extends 'base.html' %}
 
-{% block title %}Panel de Reportes{% endblock %}
+{% block title %}Reportes inventario- VentasXpert{% endblock %}
+{% block options %}
+    <a href="{% url 'informacionInventario' %}">Informacion</a>
+    <a href="{% url 'inventarioInventario' %}">Inventario</a>
+    <a href="{% url ' inventario_administrar' %}">Administrar</a>
+    <a href="{% url 'reportes_home' %}">Reporte</a>
+
+{% endblock %}
+
 
 {% block content %}
 
