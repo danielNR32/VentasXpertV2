@@ -13,6 +13,7 @@
 
 {% block content %}
 
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,6 +23,7 @@
     <link rel="stylesheet" href="{% static 'css/agregar_productos.css' %}?v={{ timestamp }}">
     <link rel="stylesheet" href="{% static 'css/inventario_inventario.css' %}?v={{ timestamp }}">
     {% endblock %}
+
 </head>
 
 <div class="fondoTodo">
@@ -59,7 +61,7 @@
                         <!-- Grupo para el Precio proveedor -->
                         <div>
                             <label for="precio_proveedor" style="font-weight: bold;">Precio proveedor</label><br>
-                            <input type="text" name="precio_proveedor" class="precio" placeholder="Precio proveedor"
+                            <input type="number" name="precio_proveedor" class="precio" placeholder="Precio proveedor"
                                 required id="precio_proveedor" step="0.01" min="0"
                                 value="{{ form.precio_proveedor.value|default:'0' }}">
                         </div>
@@ -82,7 +84,7 @@
 
                         <div>
                             <label for="cantidad_ingresar" style="font-weight: bold;">Precio tienda</label>
-                            <input type="text" name="precio_tienda" class="precio-total" placeholder="Precio tienda"
+                            <input type="number" name="precio_tienda" class="precio-total" placeholder="Precio tienda"
                                 required id="precio_tienda" step="0.01" min="0"
                                 value="{{ form.precio_tienda.value|default:'0' }}">
                         </div>
@@ -98,16 +100,17 @@
                     <div>
 
                         <div style="margin-bottom: 20px;">
-                            <label for="cantidad_ingresar" style="font-weight: bold;">Stock ingresado</label>
-                            <input type="text" name="stock_Inventario" class="cantidad" required
-                                placeholder="Cantidad a ingresar" value="{{ form.stock_Inventario.value|default:'0' }}">
+                            <label for="stock_Inventario" style="font-weight: bold;">Stock ingresado</label><br>
+                            <input type="number" name="stock_Inventario" class="cantidad" placeholder="Stock ingresado"
+                                required id="stock_Inventario" min="0"
+                                value="{{ form.stock_Inventario.value|default:'0' }}">
                         </div>
 
 
                         <div>
-                            <label for="cantidad_ingresar" style="font-weight: bold;">Stock minimo</label>
-                            <input type="text" name="stock_Minimo" class="cantidad-minima" placeholder="Cantidad mínima"
-                                required value="{{ form.stock_Minimo.value|default:'0' }}">
+                            <label for="stock_Minimo" style="font-weight: bold;">Stock mínimo</label><br>
+                            <input type="number" name="stock_Minimo" class="cantidad-minima" placeholder="Stock mínimo"
+                                required id="stock_Minimo" min="0" value="{{ form.stock_Minimo.value|default:'0' }}">
                         </div>
 
 
@@ -180,6 +183,7 @@
 
         <!-- Tabla con los productos temporales -->
         <div class="table-scroll">
+            <!-- Tabla con los productos temporales -->
             <div class="custom-table-wrapper">
                 <table class="custom-table">
                     <thead>
@@ -192,9 +196,6 @@
                             <th>Stock Mínimo</th>
                             <th>Precio Proveedor</th>
                             <th>Precio Tienda</th>
-                            <th>Ganancia (%)</th>
-                            <th>Ganancia ($)</th>
-                            <th>Eliminar</th>
                             <th>Editar</th>
                         </tr>
                     </thead>
@@ -207,17 +208,10 @@
                             <td class="editable" data-field="proveedor">{{ producto.proveedor }}</td>
                             <td class="editable" data-field="stock_Inventario">{{ producto.stock_Inventario }}</td>
                             <td class="editable" data-field="stock_Minimo">{{ producto.stock_Minimo }}</td>
-                            <td class="editable" data-field="precio_proveedor">${{ producto.precio_proveedor }}</td>
-                            <td class="editable" data-field="precio_tienda">${{ producto.precio_tienda }}</td>
-                            <td>{{ producto.ganancia_porcentaje }}%</td>
-                            <td>${{ producto.ganancia_pesos }}</td>
+                            <td class="editable" data-field="precio_proveedor">{{ producto.precio_proveedor }}</td>
+                            <td class="editable" data-field="precio_tienda">{{ producto.precio_tienda }}</td>
                             <td>
-                                <a href="{% url 'eliminar_producto_temporal' forloop.counter0 %}">
-                                    <i class="bi bi-trash" style="font-size: 2.5em;"></i>
-                                </a>
-                            </td>
-                            <td>
-                                <a href="{% url 'eliminar_producto_temporal' forloop.counter0 %}">
+                                <a href="#" onclick="editCell(this)">
                                     <i class="bi bi-pencil-square" style="font-size: 2.5em;"></i>
                                 </a>
                             </td>
@@ -230,6 +224,7 @@
                     </tbody>
                 </table>
             </div>
+
         </div>
 
         <!-- Botones para actualizar inventario -->
@@ -243,6 +238,15 @@
 </div>
 
 <!-- Script to handle autocomplete and force input recognition -->
+<!-- Formulario oculto que usaremos para enviar los cambios -->
+<form id="editCellForm" method="POST" action="">
+    {% csrf_token %}
+    <input type="hidden" id="editFieldName" name="field">
+    <input type="hidden" id="editFieldValue" name="value">
+    <input type="hidden" id="editRowIndex" name="index">
+</form>
+
+
 
 
 
@@ -312,63 +316,37 @@
 
                 // Guardar cambios cuando se presiona Enter o se pierde el foco
                 input.addEventListener('blur', function () {
-                    saveChanges(target, input.value, rowIndex, fieldName);
+                    submitChanges(target, input.value, rowIndex, fieldName);
                 });
 
                 input.addEventListener('keydown', function (e) {
                     if (e.key === 'Enter') {
-                        saveChanges(target, input.value, rowIndex, fieldName);
+                        submitChanges(target, input.value, rowIndex, fieldName);
                     }
                 });
             }
         });
 
-        function saveChanges(cell, newValue, rowIndex, fieldName) {
+        function submitChanges(cell, newValue, rowIndex, fieldName) {
             // Actualizar el valor visualmente
             cell.textContent = newValue;
 
-            // Llamar a la función que actualiza la sesión en el servidor
-            updateSession(rowIndex, fieldName, newValue);
+            // Actualizar el formulario oculto con los nuevos datos
+            document.getElementById('editFieldName').value = fieldName;
+            document.getElementById('editFieldValue').value = newValue;
+            document.getElementById('editRowIndex').value = rowIndex;
+
+            // Actualizar la acción del formulario con el índice correcto
+            const form = document.getElementById('editCellForm');
+            form.action = `/administracion/editar_producto_temporal/${rowIndex}/`;
+
+            // Enviar el formulario automáticamente
+            form.submit();
         }
 
-        function updateSession(rowIndex, fieldName, newValue) {
-            // Enviar una solicitud AJAX para actualizar la sesión
-            fetch(`/editar_producto_temporal/${rowIndex}/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token }}'
-                },
-                body: JSON.stringify({
-                    field: fieldName,
-                    value: newValue
-                })
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Producto actualizado:', data);
-                })
-                .catch(error => {
-                    console.error('Error al actualizar el producto:', error);
-                });
-
-
-        }
     });
 
-    document.addEventListener('DOMContentLoaded', function () {
-        const categoryFilter = document.getElementById('filter-category');
-        if (categoryFilter) {
-            categoryFilter.addEventListener('change', function () {
-                // Tu lógica aquí
-            });
-        }
-    });
+
 
 
 

@@ -58,6 +58,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'Usuarios_permisos.context_processors.user_role',       # Context processor para el rol
                 'Usuarios_permisos.context_processors.user_permissions', # Context processor para los permisos
+                'Administracion.context_processors.add_timestamp',  # Aquí agregas tu context processor
          
             ],
         },
