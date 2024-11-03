@@ -2,10 +2,14 @@
 {% load static %}
 
 {% block title %}Administrador inventario información - VentasXpert{% endblock %}
-{% block submenu1 %}Informacion{% endblock %}
-{% block submenu2 %}Inventario{% endblock %}
-{% block submenu3 %}Administrar{% endblock %}
-{% block submenu4 %}HOLAAAA{% endblock %}
+
+{% block options %}
+    <a href="{% url 'informacionInventario' %}">Informacion</a>
+    <a href="{% url 'inventarioInventario' %}">Inventario</a>
+    <a href="{% url ' inventario_administrar' %}">Administrar</a>
+    <a href="{% url 'reportes_home' %}">Reporte</a>
+
+{% endblock %}
 
 
 {% block content %}

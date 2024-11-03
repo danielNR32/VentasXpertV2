@@ -128,3 +128,35 @@ select:hover {
 
 
 }
+
+.btn-no-bootstrap {
+    /* Sobrescribir los estilos de Bootstrap si los está afectando */
+    background-color: inherit; /* Si tienes algún color específico */
+    border-radius: inherit; /* Para mantener el diseño original */
+    padding: inherit; /* Mantén el relleno original */
+    font-size: inherit; /* Asegúrate de que use el tamaño de fuente original */
+    box-shadow: none; /* Evitar sombras de Bootstrap */
+}
+
+/* Estilos personalizados, si los tienes definidos */
+.custom-button {
+    background-color: #6c63ff; /* Por ejemplo, color personalizado */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+}
+
+.custom-buttonRechazar {
+    background-color: red;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+}
+
+.custom-table th:last-child, .custom-table td:last-child {
+    width: 100px; /* Ajusta según tus necesidades */
+}

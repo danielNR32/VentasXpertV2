@@ -107,19 +107,30 @@ def confirmar_inventario(request):
 ## funcionalidad de AgregarNuevoProducto.html
 
 from decimal import Decimal
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from Usuarios_permisos.models import Producto, Categoria  # Asegúrate de importar tus modelos correctamente
+from .forms import ProductoForm  # Asegúrate de tener el formulario correcto
+
 def agregar_nuevo_producto(request):
     if request.method == 'POST':
         form = ProductoForm(request.POST)
+        
         if form.is_valid():
-            # Check if the product already exists in the database
-            if Producto.objects.filter(codigo=form.cleaned_data['codigo']).exists():
-                messages.error(request, "El producto con este código ya existe.")
-                return redirect('vista_inventario2')
+            messages.success(request, "Formulario válido, procediendo a verificar existencia del producto.")
+            # Verificar si el producto ya está en la base de datos
+            producto_existente = Producto.objects.filter(codigo=form.cleaned_data['codigo']).exists()
             
+            if producto_existente:
+                messages.error(request, "El producto con este código ya existe.")  # Mensaje si existe
+                return redirect('inventario_admiministrarAgregarProducto')
+
+            # Si el producto no existe, procesarlo como nuevo
             producto = form.save(commit=False)
             producto.ganancia_pesos = producto.precio_tienda - producto.precio_proveedor
             producto.ganancia_porcentaje = (producto.ganancia_pesos / producto.precio_proveedor) * 100 if producto.precio_proveedor > 0 else 0
 
+            # Guardar el producto temporalmente en la sesión
             productos_temp = request.session.get('productos_temp', [])
             productos_temp.append({
                 'codigo': producto.codigo,
@@ -135,14 +146,19 @@ def agregar_nuevo_producto(request):
             })
             request.session['productos_temp'] = productos_temp
             messages.success(request, "Producto agregado temporalmente.")
-            return redirect('vista_inventario2')
+            return redirect('inventario_admiministrarAgregarProducto')
+
+        else:
+            # Esto muestra por qué el formulario no es válido, si es el caso
+            messages.error(request, "Formulario no válido: " + str(form.errors))
 
     else:
         form = ProductoForm()
+        messages.success(request, "Formulario inicializado.")
 
     categorias = Categoria.objects.all()
     productos_temp = request.session.get('productos_temp', [])
-    
+
     return render(request, 'app/Inventario/modales/agregarNuevoProducto.html', {
         'form': form,
         'categorias': categorias,
@@ -161,3 +177,43 @@ def eliminar_producto_temporal(request, index):
         messages.error(request, "No se pudo eliminar el producto.")
 
     return redirect('vista_inventario2')
+
+## recargar js
+from datetime import datetime
+
+def tu_vista(request):
+    # Otras lógicas de la vista
+    context = {
+        'timestamp': datetime.now().timestamp(),  # Marca de tiempo actual
+        # Otros contextos
+    }
+    return render(request, 'tu_template.html', context)
+
+
+
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+import json
+def editar_producto_temporal(request, index):
+    if request.method == 'POST':
+        print(f"Recibida solicitud para editar el producto en el índice {index}")
+        productos_temp = request.session.get('productos_temp', [])
+        print(f"Productos temporales en la sesión: {productos_temp}")
+
+        if 0 <= index < len(productos_temp):
+            data = json.loads(request.body)
+            print(f"Datos recibidos: {data}")
+
+            field = data.get('field')
+            value = data.get('value')
+
+            # Actualiza el campo en el producto temporal
+            productos_temp[index][field] = value
+            request.session['productos_temp'] = productos_temp
+
+            return JsonResponse({'status': 'success', 'updated': productos_temp[index]})
+        else:
+            print("Índice fuera de rango")
+            return JsonResponse({'status': 'error', 'message': 'Índice fuera de rango'}, status=400)
+    
+    return JsonResponse({'status': 'error', 'message': 'Método no permitido'}, status=405)

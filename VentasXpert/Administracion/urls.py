@@ -1,6 +1,7 @@
 # Administracion/urls.py
 from django.urls import path
 from . import views
+from .views import editar_producto_temporal
 
 urlpatterns = [
     path('', views.home, name='administrador_home'),  # Ruta para la vista home
@@ -24,5 +25,9 @@ urlpatterns = [
     path('vista_inventario/', views.vista_inventario, name='vista_inventario'),
     path('vista_inventario2/', views.vista_inventario2, name='vista_inventario2'),
     path('eliminar_producto_temporal/<int:index>/', views.eliminar_producto_temporal, name='eliminar_producto_temporal'),
+    ## editar en tabla
+    path('editar_producto_temporal/<int:index>/', views.editar_producto_temporal, name='editar_producto_temporal'),
+
+    
 
 ]
