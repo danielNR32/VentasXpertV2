@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Administrador inventario información - VentasXpert{% endblock %}
+{% block title %}Agregar Nuevo Producto - VentasXpert{% endblock %}
+
 {% block submenu1 %}Informacion{% endblock %}
 {% block submenu2 %}Inventario{% endblock %}
 {% block submenu3 %}Administrar{% endblock %}
 {% block submenu4 %}HOLAAAA{% endblock %}
 
 {% block content %}
-{% include 'app/Inventario/modales/modal-confirmar.html' %}
 
 <head>
     <meta charset="UTF-8">
@@ -16,287 +16,174 @@
     <title>Agregar Producto</title>
 
     {% block extrahead %}
-
     <link rel="stylesheet" href="{% static 'css/agregar_productos.css' %}">
     <link rel="stylesheet" href="{% static 'css/inventario_inventario.css' %}">
     {% endblock %}
 </head>
+
 <div class="fondoTodo">
 
-
-
-
     <body>
-        <!-- Contenedor del formulario del modal -->
+        <!-- Formulario para agregar productos temporalmente -->
         <div class="product-form-container" id="modalAgregarProducto">
-            <form class="product-form">
+            <form class="product-form" method="post" action="{% url 'inventario_admiministrarAgregarProducto' %}">
+                {% csrf_token %}
                 <div class="orden_div">
-                    <div><input type="text" class="codigo" placeholder="Código"></div>
-                    <div><input type="text" class="nombre" placeholder="Nombre"></div>
-                   
+                    <div>
+                        <input type="text" name="codigo" class="codigo" placeholder="Código"
+                            value="{{ form.codigo.value|default:'' }}">
+                    </div>
+                    <div>
+                        <input type="text" name="nombre" class="nombre" placeholder="Nombre"
+                            value="{{ form.nombre.value|default:'' }}">
+                    </div>
+
                     <div class="custom-select-wrapper">
-                        <select class=" styled-select">
-                            <option>Categoria</option>
-                            <option>Suficiente</option>
-                            <option>Poca existencia</option>
-                            <option>Sin existencia</option>
+                        <select name="categoria" class="styled-select">
+                            <option value="">Seleccione una categoría</option>
+                            {% for cat in categorias %}
+                                <option value="{{ cat.id }}" {% if form.categoria.value|stringformat:"s" == cat.id|stringformat:"s" %}selected{% endif %}>
+                                    {{ cat.nombre }}
+                                </option>
+                            {% endfor %}
                         </select>
                     </div>
 
-                    <div><input type="text" class="precio" placeholder="Precio"></div>
-                    <div><input type="text" class="cantidad" placeholder="Cantidad "></div>
-                    <div><input type="text" class="cantidad-minima" placeholder="Cantidad mínima"></div>
-                    <div><input type="text" class="estado-producto" placeholder="Estado"></div>
-                    <div><input type="text" class="precio-total" placeholder="Precio tienda"></div>
-                    <div><input type="text" class="precio-total" placeholder="Ganancia%"></div>
-                    <div><input type="text" class="precio-total" placeholder="Ganancia$"></div>
                     <div>
-                        <div class="custom-button-wrapper"></div>
-                        <button class="custom-button">Actualizar inventario</button>
-                        <button class="custom-buttonRechazar">Cancelar</button>
+                        <input type="text" name="stock_Inventario" class="cantidad" placeholder="Cantidad a ingresar"
+                            value="{{ form.stock_Inventario.value|default:'0' }}">
+                    </div>
+                    <div>
+                        <input type="text" name="stock_Minimo" class="cantidad-minima" placeholder="Cantidad mínima"
+                            value="{{ form.stock_Minimo.value|default:'0' }}">
+                    </div>
+                    <div>
+                        <input type="text" name="precio_proveedor" class="precio" placeholder="Precio proveedor"
+                            value="{{ form.precio_proveedor.value|default:'0' }}">
+                    </div>
+                    <div>
+                        <input type="text" name="precio_tienda" class="precio-total" placeholder="Precio tienda"
+                            value="{{ form.precio_tienda.value|default:'0' }}">
+                    </div>
+
+                    <!-- Estos campos de ganancia son calculados automáticamente y no se editan -->
+                    <div>
+                        <input type="text" class="precio-total" placeholder="Ganancia %"
+                            value="{{ form.ganancia_porcentaje.value|default:'0' }}" disabled>
+                    </div>
+                    <div>
+                        <input type="text" class="precio-total" placeholder="Ganancia $"
+                            value="{{ form.ganancia_pesos.value|default:'0' }}" disabled>
+                    </div>
+
+                    <div class="custom-button-wrapper">
+                        <button type="submit" class="custom-button">Agregar producto temporalmente</button>
+                        <button type="button" class="custom-buttonRechazar">Cancelar</button>
                     </div>
                 </div>
-
-                
-
-
             </form>
         </div>
+
+        <!-- Add this block right after the form to show messages -->
+        {% if messages %}
+        <div class="message-container">
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                        {{ message }}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <!-- Tabla para mostrar los productos añadidos temporalmente -->
+        <div class="inventory-header orden_div">
+            <h1>Productos añadidos</h1>
+            <div class="custom-select-wrapper">
+                <select class="custom-select">
+                    <option>Filtrar por categoría</option>
+                    {% for cat in categorias %}
+                    <option>{{ cat.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="custom-input-wrapper">
+                <input type="text" class="custom-input" placeholder="Buscar producto">
+            </div>
+        </div>
+
+        <!-- Tabla con los productos temporales -->
+        <div class="table-scroll">
+            <div class="custom-table-wrapper">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Nombre</th>
+                            <th>Categoría</th>
+                            <th>Proveedor</th>
+                            <th>Stock Inventario</th>
+                            <th>Stock Mínimo</th>
+                            <th>Precio Proveedor</th>
+                            <th>Precio Tienda</th>
+                            <th>Ganancia (%)</th>
+                            <th>Ganancia ($)</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for producto in productos_temp %}
+                        <tr>
+                            <td>{{ producto.codigo }}</td>
+                            <td>{{ producto.nombre }}</td>
+                            <td>{{ producto.categoria }}</td>
+                            <td>{{ producto.proveedor }}</td>
+                            <td>{{ producto.stock_Inventario }}</td>
+                            <td>{{ producto.stock_Minimo }}</td>
+                            <td>${{ producto.precio_proveedor }}</td>
+                            <td>${{ producto.precio_tienda }}</td>
+                            <td>{{ producto.ganancia_porcentaje }}%</td>
+                            <td>${{ producto.ganancia_pesos }}</td>
+                            <td>
+                                <a href="{% url 'eliminar_producto_temporal' forloop.counter0 %}"
+                                    class="btn-delete custom-buttonRechazar">Eliminar</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="11">No se han agregado productos temporalmente.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Botones para actualizar inventario -->
+        <div class="orden_div2">
+            <div class="custom-button-wrapper">
+                <a href="{% url 'confirmar_inventario' %}" class="custom-button">Actualizar inventario</a>
+                <button type="button" class="custom-buttonRechazar">Cancelar</button>
+            </div>
+        </div>
     </body>
-
-
-
-
-
-
-
-    <div class="inventory-header orden_div">
-
-        <h1>Productos añadidos</h1>
-
-
-
-
-        <div class="custom-select-wrapper" ">
-                    <select class=" custom-select">
-            <option>Filtrar por categoria</option>
-            <option>Pescado</option>
-            <option>Lacteos</option>
-            <option>Refrescos</option>
-            </select>
-        </div>
-
-
-        <div class="custom-input-wrapper">
-            <input type="text" class="custom-input" placeholder="Buscar producto">
-        </div>
-
-
-    </div>
-
-
-
-
-    <div class="table-scroll">
-
-
-        <div class="custom-table-wrapper">
-            <table class="custom-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Código de barras</th>
-                        <th>Nombre</th>
-                        <th>Categoría</th>
-                        <th>Estado en stock</th>
-                        <th>Cantidad mínima</th>
-                        <th>Cantidad Total</th>
-                        <th>editar</th>
-                        <th>Eliminar</th>
-
-                    </tr>
-                </thead>
-            </table>
-
-            <table class="custom-table">
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>0011223344</td>
-                        <td>Producto 1</td>
-                        <td>Categoría A</td>
-                        <td>En stock</td>
-                        <td>10</td>
-                        <td>100</td>
-
-                        <td>
-                            <button class="btn-edit custom-button"><i class="bi bi-pencil"></i> Editar</button>
-                        </td>
-                        <td>
-                            <button class="btn-delete custom-buttonRechazar"><i class="bi bi-trash3-fill"></i> Eliminar</button>
-                        </td>
-
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>0011223344</td>
-                        <td>Producto 1</td>
-                        <td>Categoría A</td>
-                        <td>En stock</td>
-                        <td>10</td>
-                        <td>100</td>
-                        <td>
-                            <button class="btn-edit custom-button"><i class="bi bi-pencil"></i> Editar</button>
-                        </td>
-                        <td>
-                            <button class="btn-delete custom-buttonRechazar"><i class="bi bi-trash3-fill"></i> Eliminar</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>0011223344</td>
-                        <td>Producto 1</td>
-                        <td>Categoría A</td>
-                        <td>En stock</td>
-                        <td>10</td>
-                        <td>100</td>
-                        <td>
-                            <button class="btn-edit custom-button"><i class="bi bi-pencil"></i> Editar</button>
-                        </td>
-                        <td>
-                            <button class="btn-delete custom-buttonRechazar"><i class="bi bi-trash3-fill"></i> Eliminar</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>0011223344</td>
-                        <td>Producto 1</td>
-                        <td>Categoría A</td>
-                        <td>En stock</td>
-                        <td>10</td>
-                        <td>100</td>
-                        <td>
-                            <button class="btn-edit custom-button"><i class="bi bi-pencil"></i> Editar</button>
-                        </td>
-                        <td>
-                            <button class="btn-delete custom-buttonRechazar"><i class="bi bi-trash3-fill"></i> Eliminar</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>0011223344</td>
-                        <td>Producto 1</td>
-                        <td>Categoría A</td>
-                        <td>En stock</td>
-                        <td>10</td>
-                        <td>100</td>
-                        <td>
-                            <button class="btn-edit custom-button"><i class="bi bi-pencil"></i> Editar</button>
-                        </td>
-                        <td>
-                            <button class="btn-delete custom-buttonRechazar"><i class="bi bi-trash3-fill"></i> Eliminar</button>
-                        </td>
-                    </tr>
-
-
-                    <tr>
-                        <td>1</td>
-                        <td>0011223344</td>
-                        <td>Producto 1</td>
-                        <td>Categoría A</td>
-                        <td>En stock</td>
-                        <td>10</td>
-                        <td>100</td>
-                        <td>
-                            <button class="btn-edit custom-button"><i class="bi bi-pencil"></i> Editar</button>
-                        </td>
-                        <td>
-                            <button class="btn-delete custom-buttonRechazar"><i class="bi bi-trash3-fill"></i> Eliminar</button>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>1</td>
-                        <td>0011223344</td>
-                        <td>Producto 1</td>
-                        <td>Categoría A</td>
-                        <td>En stock</td>
-                        <td>10</td>
-                        <td>100</td>
-                        <td>
-                            <button class="btn-edit custom-button"><i class="bi bi-pencil"></i> Editar</button>
-                        </td>
-                        <td>
-                            <button class="btn-delete custom-buttonRechazar"><i class="bi bi-trash3-fill"></i> Eliminar</button>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>1</td>
-                        <td>0011223344</td>
-                        <td>Producto 1</td>
-                        <td>Categoría A</td>
-                        <td>En stock</td>
-                        <td>10</td>
-                        <td>100</td>
-                        <td>
-                            <button class="btn-edit custom-button"><i class="bi bi-pencil"></i> Editar</button>
-                        </td>
-                        <td>
-                            <button class="btn-delete custom-buttonRechazar"><i class="bi bi-trash3-fill"></i> Eliminar</button>
-                        </td>
-                    </tr>
-
-
-                    <tr>
-                        <td>7</td>
-                        <td>0011223344</td>
-                        <td>Producto 1</td>
-                        <td>Categoría A</td>
-                        <td>En stock</td>
-                        <td>10</td>
-                        <td>100</td>
-                        <td>
-                            <button class="btn-edit custom-button"><i class="bi bi-pencil"></i> Editar</button>
-                        </td>
-                        <td>
-                            <button class="btn-delete custom-buttonRechazar"><i class="bi bi-trash3-fill"></i> Eliminar</button>
-                        </td>
-                    </tr>
-
-
-
-                    
-                    <!-- Más filas según necesites -->
-                </tbody>
-            </table>
-
-
-        </div>
-
-
-
-
-
-
-
-
-    </div>
-    <div class="orden_div2">
-
-
-        <div class="custom-button-wrapper">
-            <button id="openModal" class="custom-button" type="button">Actualizar inventario</button>
-            <button id="openModal2" class="custom-buttonRechazar">Cancelar</button>
-
-        </div>
-    </div>
-
-
 </div>
 
+<!-- Script to handle autocomplete and force input recognition -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.querySelector('.product-form');
 
+        // Detect form autocomplete or suggested values
+        form.addEventListener('submit', function () {
+            const inputs = form.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.dispatchEvent(new Event('change'));  // Trigger change event to ensure input is registered
+            });
+        });
+    });
+</script>
 
-</div>
 <script src="{% static 'js/Inventario/agregar-producto.js' %}"></script>
 {% endblock %}

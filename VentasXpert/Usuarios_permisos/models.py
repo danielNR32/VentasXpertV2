@@ -92,20 +92,35 @@ class Proveedor(models.Model):
 
 
 class Producto(models.Model):
-    nombre = models.CharField(max_length=255)
-    codigo = models.CharField(max_length=100)
-    precio_Proveedor = models.DecimalField(max_digits=10, decimal_places=2)
-    precio_Tienda = models.DecimalField(max_digits=10, decimal_places=2)
-    stock_Inventario = models.IntegerField()
-    stock_Minimo = models.IntegerField()
-    categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
-    proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
+    codigo = models.CharField(max_length=100, unique=True)  # Código de barras o SKU
+    nombre = models.CharField(max_length=255)               # Nombre del producto
+    categoria = models.ForeignKey('Categoria', on_delete=models.CASCADE)  # Relación con Categoria
+    proveedor = models.ForeignKey(Proveedor, null=True, blank=True, on_delete=models.SET_NULL)  # Opcional # Relación con Proveedor
+    stock_Inventario = models.IntegerField()                # Cantidad en el inventario
+    stock_Minimo = models.IntegerField()                    # Cantidad mínima para alertas de stock bajo
+    precio_proveedor = models.DecimalField(max_digits=10, decimal_places=2)  # Precio de compra al proveedor
+    precio_tienda = models.DecimalField(max_digits=10, decimal_places=2)     # Precio de venta en tienda
+    ganancia_porcentaje = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)  # % de ganancia (calculado)
+    ganancia_pesos = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)      # Ganancia en pesos (calculado)
     created_at = models.DateTimeField(auto_now_add=True)
-    update_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
+    def save(self, *args, **kwargs):
+        # Calcula la ganancia antes de guardar
+        self.ganancia_pesos = self.precio_tienda - self.precio_proveedor
+        if self.precio_proveedor > 0:
+            self.ganancia_porcentaje = (self.ganancia_pesos / self.precio_proveedor) * 100
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.nombre
+    
     class Meta:
         db_table = 'Producto'
         verbose_name_plural = 'Productos'
+
+
+
 
 class Caja(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
