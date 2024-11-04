@@ -12,6 +12,7 @@
 {% endblock %}
 
 {% block content %}
+<!--Modal confirmar-->
 
 
 <head>
@@ -196,7 +197,7 @@
                             <th>Stock Mínimo</th>
                             <th>Precio Proveedor</th>
                             <th>Precio Tienda</th>
-                            <th>Editar</th>
+                            <th>Eliminar</th>
                         </tr>
                     </thead>
                     <tbody id="productos-tbody">
@@ -211,10 +212,13 @@
                             <td class="editable" data-field="precio_proveedor">{{ producto.precio_proveedor }}</td>
                             <td class="editable" data-field="precio_tienda">{{ producto.precio_tienda }}</td>
                             <td>
-                                <a href="#" onclick="editCell(this)">
-                                    <i class="bi bi-pencil-square" style="font-size: 2.5em;"></i>
+                                <a href="#" class="open-modal-delete" data-url="{% url 'eliminar_producto_temporal' forloop.counter0 %}">
+                                    <i class="bi bi-trash icono-eliminar"></i>
                                 </a>
                             </td>
+                            
+
+
                         </tr>
                         {% empty %}
                         <tr>
@@ -230,15 +234,15 @@
         <!-- Botones para actualizar inventario -->
         <div class="orden_div2">
             <div class="custom-button-wrapper">
-                <a href="{% url 'confirmar_inventario' %}" class="custom-button">Actualizar inventario</a>
-                <button type="button" class="custom-buttonRechazar">Cancelar</button>
+                <!-- Cambiar el botón para que abra el modal de confirmación -->
+                <button id="openModal" class="custom-button" type="button">Actualizar inventario</button>
+                <button id="openModalCancel" class="custom-buttonRechazar" type="button">Cancelar</button>
             </div>
         </div>
     </body>
 </div>
 
-<!-- Script to handle autocomplete and force input recognition -->
-<!-- Formulario oculto que usaremos para enviar los cambios -->
+<!-- Formulario oculto que se usa para enviar los cambios -->
 <form id="editCellForm" method="POST" action="">
     {% csrf_token %}
     <input type="hidden" id="editFieldName" name="field">
@@ -247,111 +251,86 @@
 </form>
 
 
-
-
-
-<script src="{% static 'js/Inventario/agregar-producto.js' %}?v={{ timestamp }}"></script>
-
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const categoryFilter = document.getElementById('filter-category');
-        const searchInput = document.getElementById('search-product');
-        const tableRows = document.querySelectorAll('.custom-table tbody tr');
-
-        // Filtrado por categoría
-        categoryFilter.addEventListener('change', function () {
-            const selectedCategory = this.value.toLowerCase();
-            filterTable();
+    document.getElementById("openModal").addEventListener("click", function () {
+        showGlobalModal("¿Confirmar actualización?", function () {
+            // Acción a ejecutar cuando el usuario confirme
+            window.location.href = "{% url 'confirmar_inventario' %}";
         });
+    });
 
-        // Filtrado por texto
-        searchInput.addEventListener('keyup', function () {
-            filterTable();
-        });
 
-        function filterTable() {
-            const selectedCategory = categoryFilter.value.toLowerCase();
-            const searchTerm = searchInput.value.toLowerCase();
 
-            tableRows.forEach(function (row) {
-                const productName = row.cells[1].textContent.toLowerCase();  // Nombre del producto
-                const productCategory = row.cells[2].textContent.toLowerCase();  // Categoría del producto
+    document.addEventListener("DOMContentLoaded", function () {
+    var modal = document.getElementById("confirmModal");
+    var closeModalBtn = document.getElementById("closeModal");
+    var cancelBtn = document.getElementById("cancelBtn");
+    var confirmBtn = document.getElementById("confirmBtn");
+    var confirmAction = null; // Variable para almacenar la acción de confirmación
+    var currentUrl = '';  // Variable para almacenar la URL que se ejecutará al confirmar
 
-                const matchesCategory = !selectedCategory || productCategory.includes(selectedCategory);
-                const matchesSearch = !searchTerm || productName.includes(searchTerm);
+    // Función global para abrir el modal con diferentes configuraciones
+    function openModal(title, onConfirm) {
+        // Cambiar el título dinámicamente
+        document.getElementById("modal-title").textContent = title || "¿Confirmar acción?";
+        modal.style.display = "block"; // Mostrar el modal
 
-                if (matchesCategory && matchesSearch) {
-                    row.style.display = '';  // Mostrar fila
-                } else {
-                    row.style.display = 'none';  // Ocultar fila
-                }
+        // Asignar la función que se ejecutará cuando el usuario confirme
+        confirmAction = onConfirm;
+    }
+
+    // Cerrar el modal cuando se haga clic en "X" o "Cancelar"
+    closeModalBtn.onclick = function () {
+        modal.style.display = "none";
+    };
+    cancelBtn.onclick = function () {
+        modal.style.display = "none";
+    };
+
+    // Ejecutar la acción de confirmación cuando el usuario haga clic en "Confirmar"
+    confirmBtn.onclick = function () {
+        if (confirmAction) {
+            confirmAction(); // Ejecutar la acción asignada
+        }
+        modal.style.display = "none"; // Cerrar el modal después de confirmar
+    };
+
+    // Cerrar el modal si el usuario hace clic fuera del contenido del modal
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    };
+
+    // Seleccionar todos los enlaces de eliminación con la clase "open-modal-delete"
+    var deleteLinks = document.querySelectorAll(".open-modal-delete");
+
+    // Agregar el evento a cada enlace de eliminación
+    deleteLinks.forEach(function (link) {
+        link.addEventListener('click', function (event) {
+            event.preventDefault();  // Prevenir la acción predeterminada del enlace
+
+            // Obtener la URL del enlace desde el atributo data-url
+            currentUrl = link.getAttribute('data-url');
+
+            // Mostrar el modal con el mensaje de confirmación
+            openModal("¿Estás seguro de eliminar este producto?", function () {
+                // Si el usuario confirma, redirigir a la URL de eliminación
+                window.location.href = currentUrl;
             });
-        }
-    });
-
-
-    document.addEventListener('DOMContentLoaded', function () {
-        const tableBody = document.getElementById('productos-tbody');
-
-        tableBody.addEventListener('dblclick', function (event) {
-            const target = event.target;
-
-            // Verificar si la celda es editable
-            if (target.classList.contains('editable')) {
-                const currentValue = target.textContent.trim();
-                const fieldName = target.getAttribute('data-field');
-                const row = target.closest('tr');
-                const rowIndex = row.getAttribute('data-index');
-
-                // Crear un input para editar la celda
-                const input = document.createElement('input');
-                input.type = 'text';
-                input.value = currentValue;
-                input.classList.add('edit-input');
-
-                // Reemplazar el contenido de la celda con el input
-                target.textContent = '';
-                target.appendChild(input);
-                input.focus();
-
-                // Guardar cambios cuando se presiona Enter o se pierde el foco
-                input.addEventListener('blur', function () {
-                    submitChanges(target, input.value, rowIndex, fieldName);
-                });
-
-                input.addEventListener('keydown', function (e) {
-                    if (e.key === 'Enter') {
-                        submitChanges(target, input.value, rowIndex, fieldName);
-                    }
-                });
-            }
         });
-
-        function submitChanges(cell, newValue, rowIndex, fieldName) {
-            // Actualizar el valor visualmente
-            cell.textContent = newValue;
-
-            // Actualizar el formulario oculto con los nuevos datos
-            document.getElementById('editFieldName').value = fieldName;
-            document.getElementById('editFieldValue').value = newValue;
-            document.getElementById('editRowIndex').value = rowIndex;
-
-            // Actualizar la acción del formulario con el índice correcto
-            const form = document.getElementById('editCellForm');
-            form.action = `/administracion/editar_producto_temporal/${rowIndex}/`;
-
-            // Enviar el formulario automáticamente
-            form.submit();
-        }
-
     });
 
-
+    // Hacer la función `openModal` global para que pueda ser utilizada en otros scripts
+    window.showGlobalModal = openModal;
+});
 
 
 
 
 </script>
 
+
+<script src="{% static 'js/Inventario/agregar-producto.js' %}?v={{ timestamp }}"></script>
 
 {% endblock %}

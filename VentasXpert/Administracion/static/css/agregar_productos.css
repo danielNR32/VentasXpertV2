@@ -161,3 +161,29 @@ select:hover {
 .custom-table td:last-child {
     width: 100px;
 }
+
+/*Boton eliminar*/
+.custom-table td {
+    text-align: center;  /* Centrar horizontalmente el contenido */
+    vertical-align: middle;  /* Centrar verticalmente el contenido */
+}
+
+.custom-table .icono-eliminar {
+    font-size: 2.5em;
+    color: red;
+}
+
+.custom-table i {
+    display: inline-block; /* Asegura que el ícono se comporte como un bloque */
+}
+
+.custom-button {
+    background-color: #6c63ff; /* Color del botón */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    text-decoration: none; /* Elimina la línea subrayada del enlace */
+    display: inline-block; /* Asegura que el botón se muestre correctamente */
+}
