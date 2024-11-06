@@ -15,17 +15,14 @@
 <!--Modal confirmar-->
 
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agregar Producto</title>
 
-    {% block extrahead %}
-    <link rel="stylesheet" href="{% static 'css/agregar_productos.css' %}?v={{ timestamp }}">
-    <link rel="stylesheet" href="{% static 'css/inventario_inventario.css' %}?v={{ timestamp }}">
-    {% endblock %}
 
-</head>
+{% block extrahead %}
+<link rel="stylesheet" href="{% static 'css/agregar_productos.css' %}?v={{ timestamp }}">
+<link rel="stylesheet" href="{% static 'css/inventario_inventario.css' %}?v={{ timestamp }}">
+{% endblock %}
+
+
 
 <div class="fondoTodo">
 
@@ -51,7 +48,7 @@
             <form class="product-form" method="post" action="{% url 'inventario_admiministrarAgregarProducto' %}">
                 {% csrf_token %}
                 <div class="orden_div">
-                    <div>
+                    <div style="margin-right: 20px;">
                         <!-- Grupo para el Código -->
                         <div style="margin-bottom: 20px;"> <!-- Añade margen inferior para separación -->
                             <label for="codigo" style="font-weight: bold;">Código</label><br>
@@ -67,13 +64,10 @@
                                 value="{{ form.precio_proveedor.value|default:'0' }}">
                         </div>
 
-                        <div class="custom-button-wrapper">
-                            <button type="submit" class="custom-button">Agregar producto</button>
-                            <button type="button" class="custom-buttonRechazar">Cancelar</button>
-                        </div>
+
                     </div>
 
-                    <div>
+                    <div style="margin-right: 20px;">
 
                         <div style="margin-bottom: 20px;">
                             <label for="codigo" style="font-weight: bold;">Nombre</label><br>
@@ -98,7 +92,7 @@
 
 
 
-                    <div>
+                    <div style="margin-right: 20px;">
 
                         <div style="margin-bottom: 20px;">
                             <label for="stock_Inventario" style="font-weight: bold;">Stock ingresado</label><br>
@@ -145,13 +139,35 @@
 
 
                         <div>
-                            <label for="cantidad_ingresar" style="font-weight: bold;">Ganancia en$</label>
-                            <input type="text" id="ganancia_pesos" class="precio-total" placeholder="Ganancia $"
-                                value="{{ form.ganancia_pesos.value|default:'0' }}" disabled
-                                style="width: 70%; height: 60px;">
+
+
+                            <div>
+                                <label for="cantidad_ingresar" style="font-weight: bold;">Ganancia en$</label>
+                                <input type="text" id="ganancia_pesos" class="precio-total" placeholder="Ganancia $"
+                                    value="{{ form.ganancia_pesos.value|default:'0' }}" disabled
+                                    style="width: 70%; height: 60px;">
+                            </div>
+    
+    
+    
+                            <div class="custom-button-wrapper">
+                                <button type="submit" class="custom-button">Agregar producto</button>
+                                <button type="button" class="custom-buttonRechazar">Cancelar</button>
+                            </div>
+    
+    
+    
                         </div>
+    
+
+
+
+
+
 
                     </div>
+
+                  
 
 
                     <!-- Estos campos de ganancia son calculados automáticamente y no se editan -->
@@ -181,6 +197,10 @@
                 <input type="text" id="search-product" class="custom-input" placeholder="Buscar producto">
             </div>
         </div>
+
+
+
+
 
         <!-- Tabla con los productos temporales -->
         <div class="table-scroll">
@@ -212,11 +232,13 @@
                             <td class="editable" data-field="precio_proveedor">{{ producto.precio_proveedor }}</td>
                             <td class="editable" data-field="precio_tienda">{{ producto.precio_tienda }}</td>
                             <td>
-                                <a href="#" class="open-modal-delete" data-url="{% url 'eliminar_producto_temporal' forloop.counter0 %}">
+                                <a href="#" id="openModalDelete-{{ forloop.counter0 }}"
+                                    data-url="{% url 'eliminar_producto_temporal' forloop.counter0 %}">
                                     <i class="bi bi-trash icono-eliminar"></i>
                                 </a>
                             </td>
-                            
+
+
 
 
                         </tr>
@@ -235,7 +257,7 @@
         <div class="orden_div2">
             <div class="custom-button-wrapper">
                 <!-- Cambiar el botón para que abra el modal de confirmación -->
-                <button id="openModal" class="custom-button" type="button">Actualizar inventario</button>
+                <button id="openModal"  data-url="{% url 'confirmar_inventario' %}" class="custom-button" type="button">Actualizar inventario</button>
                 <button id="openModalCancel" class="custom-buttonRechazar" type="button">Cancelar</button>
             </div>
         </div>
@@ -250,85 +272,6 @@
     <input type="hidden" id="editRowIndex" name="index">
 </form>
 
-
-<script>
-    document.getElementById("openModal").addEventListener("click", function () {
-        showGlobalModal("¿Confirmar actualización?", function () {
-            // Acción a ejecutar cuando el usuario confirme
-            window.location.href = "{% url 'confirmar_inventario' %}";
-        });
-    });
-
-
-
-    document.addEventListener("DOMContentLoaded", function () {
-    var modal = document.getElementById("confirmModal");
-    var closeModalBtn = document.getElementById("closeModal");
-    var cancelBtn = document.getElementById("cancelBtn");
-    var confirmBtn = document.getElementById("confirmBtn");
-    var confirmAction = null; // Variable para almacenar la acción de confirmación
-    var currentUrl = '';  // Variable para almacenar la URL que se ejecutará al confirmar
-
-    // Función global para abrir el modal con diferentes configuraciones
-    function openModal(title, onConfirm) {
-        // Cambiar el título dinámicamente
-        document.getElementById("modal-title").textContent = title || "¿Confirmar acción?";
-        modal.style.display = "block"; // Mostrar el modal
-
-        // Asignar la función que se ejecutará cuando el usuario confirme
-        confirmAction = onConfirm;
-    }
-
-    // Cerrar el modal cuando se haga clic en "X" o "Cancelar"
-    closeModalBtn.onclick = function () {
-        modal.style.display = "none";
-    };
-    cancelBtn.onclick = function () {
-        modal.style.display = "none";
-    };
-
-    // Ejecutar la acción de confirmación cuando el usuario haga clic en "Confirmar"
-    confirmBtn.onclick = function () {
-        if (confirmAction) {
-            confirmAction(); // Ejecutar la acción asignada
-        }
-        modal.style.display = "none"; // Cerrar el modal después de confirmar
-    };
-
-    // Cerrar el modal si el usuario hace clic fuera del contenido del modal
-    window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    };
-
-    // Seleccionar todos los enlaces de eliminación con la clase "open-modal-delete"
-    var deleteLinks = document.querySelectorAll(".open-modal-delete");
-
-    // Agregar el evento a cada enlace de eliminación
-    deleteLinks.forEach(function (link) {
-        link.addEventListener('click', function (event) {
-            event.preventDefault();  // Prevenir la acción predeterminada del enlace
-
-            // Obtener la URL del enlace desde el atributo data-url
-            currentUrl = link.getAttribute('data-url');
-
-            // Mostrar el modal con el mensaje de confirmación
-            openModal("¿Estás seguro de eliminar este producto?", function () {
-                // Si el usuario confirma, redirigir a la URL de eliminación
-                window.location.href = currentUrl;
-            });
-        });
-    });
-
-    // Hacer la función `openModal` global para que pueda ser utilizada en otros scripts
-    window.showGlobalModal = openModal;
-});
-
-
-
-
-</script>
 
 
 <script src="{% static 'js/Inventario/agregar-producto.js' %}?v={{ timestamp }}"></script>

@@ -184,3 +184,24 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 });
+
+
+//Funcionalidad de modal para confirmar el modal
+document.getElementById("openModal").addEventListener("click", function () {
+    const url = this.getAttribute("data-url");  // Obtenemos la URL desde el atributo data-url
+    showGlobalModal("¿Confirmar actualización?", function () {
+        window.location.href = url;
+    });
+});
+
+//Para el modal rechazar
+document.querySelectorAll("[id^='openModalDelete']").forEach(function (deleteBtn) {
+    deleteBtn.addEventListener("click", function (event) {
+        event.preventDefault();
+        var deleteUrl = deleteBtn.getAttribute("data-url");
+
+        showGlobalModal("¿Confirmar eliminación?", function () {
+            window.location.href = deleteUrl;
+        });
+    });
+});
