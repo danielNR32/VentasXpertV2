@@ -12,17 +12,77 @@
 <!-- Estilos -->
 {% block extrahead %}
 <link rel="stylesheet" href="{% static 'css/caja.css' %}">
+<style>
+    /* Estilo para el tooltip de búsqueda */
+    .buscarProductoInput {
+        position: relative; /* Asegura que el tooltip se posicione respecto al contenedor */
+        padding: 5px; 
+        border-radius: 10px; 
+        border: 1px solid #464646;
+    }
+    
+    .search-tooltip {
+        position: absolute;
+        background-color: white;
+        border: 1px solid #ddd;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        padding: 10px;
+        width: 100%;
+        max-width: 300px;
+        z-index: 1000;
+        top: 100%; /* Coloca el tooltip justo debajo del campo de búsqueda */
+        left: 0; /* Alinea el tooltip con el borde izquierdo del campo de búsqueda */
+        margin-top: 5px; /* Espacio entre el campo de búsqueda y el tooltip */
+    }
+    
+
+    .search-result {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 5px 0;
+    }
+
+    .search-result:hover {
+        background-color: #f2f2f2;
+    }
+
+    .add-button {
+        background-color: #4400cd;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 5px 10px;
+        cursor: pointer;
+        font-size: 0.8em;
+    }
+
+    .add-button:hover {
+        background-color: #310093;
+    }
+
+</style>
 {% endblock %}
 <div style="display: flex;">
     <div style="flex: 2;">
         <div class="TituloTablaC">
             <h2 style="flex: 1;">Lista de productos a cobrar</h2>
-            <form class="BuscarProducto-cajero">
+            <div class="BuscarProducto-cajero">
                 <div class="buscarProductoInput">
-                    <input type="text" name="q" placeholder="Buscar producto...">
-                    <button type="submit"><i class="bi bi-search"></i></button>
+                    <input type="text" name="q" placeholder="Buscar producto..." oninput="toggleTooltip(this)">
+                    <button><i class="bi bi-search"></i></button>
+                    
+                    <!-- Tooltip de resultados de búsqueda -->
+                    <div id="searchTooltip" class="search-tooltip" style="display: none;">
+                        {% for producto in productos %}
+                        <div class="search-result" data-nombre="{{ producto.nombre }}" data-codigo="{{ producto.codigo }}">
+                            {{ producto.nombre }} <button class="add-button" style="background-color: #4400cd;">Agregar</button>
+                        </div>
+                        {% endfor %}
+                    </div>
                 </div>
-            </form>
+            </div>
         </div>
         <table class="Productos-Caja">
             <thead>
@@ -168,46 +228,13 @@
             </tr>
         </thead>
         <tbody>
+            {% for producto in productos %}
             <tr>
-                <td>Producto 1 jbdjkadjkdhjakdh</td>
-                <td>$100.00</td>
-                <td>2</td>
+                <td>{{ producto.nombre }}</td>
+                <td>${{ producto.precio_tienda }}</td>
+                <td>{{ producto.stock_Inventario}}</td>
             </tr>
-            <tr>
-                <td>Producto 2</td>
-                <td>$50.00</td>
-                <td>1</td>
-            </tr>
-            <tr>
-                <td>Producto 3</td>
-                <td>$50.00</td>
-                <td>1</td>
-            </tr>
-            <tr>
-                <td>Producto 4</td>
-                <td>$50.00</td>
-                <td>1</td>
-            </tr>
-            <tr>
-                <td>Producto 5</td>
-                <td>$50.00</td>
-                <td>1</td>
-            </tr>
-            <tr>
-                <td>Producto 5</td>
-                <td>$50.00</td>
-                <td>1</td>
-            </tr>
-            <tr>
-                <td>Producto 5</td>
-                <td>$50.00</td>
-                <td>1</td>
-            </tr>
-            <tr>
-                <td>Producto 5</td>
-                <td>$50.00</td>
-                <td>1</td>
-            </tr>
+            {% endfor %}
         </tbody>
     </table>
 </div>
@@ -312,6 +339,28 @@
         </div>
     </div>
 </div>
+
+<script>
+    function toggleTooltip(input) {
+        var tooltip = document.getElementById("searchTooltip");
+        var filter = input.value.toLowerCase();
+        var results = tooltip.getElementsByClassName("search-result");
+
+        // Mostrar u ocultar el tooltip
+        tooltip.style.display = filter ? "block" : "none";
+
+        // Iterar sobre cada resultado y verificar si coincide el filtro en nombre o código
+        Array.from(results).forEach(function(result) {
+            var productName = result.getAttribute("data-nombre").toLowerCase();
+            var productCode = result.getAttribute("data-codigo").toLowerCase();
+            if (productName.includes(filter) || productCode.includes(filter)) {
+                result.style.display = "flex"; // Mostrar resultados coincidentes
+            } else {
+                result.style.display = "none"; // Ocultar resultados no coincidentes
+            }
+        });
+    }
+</script>
 
 
 {% endblock %}
