@@ -62,6 +62,19 @@
         background-color: #310093;
     }
 
+    .Productos-Caja a {
+        background-color: #4400cd;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+    
+    .Productos-Caja a:hover {
+        background-color: #310093;
+    }
+
 </style>
 {% endblock %}
 <div style="display: flex;">
@@ -77,7 +90,7 @@
                     <div id="searchTooltip" class="search-tooltip" style="display: none;">
                         {% for producto in productos %}
                         <div class="search-result" data-nombre="{{ producto.nombre }}" data-codigo="{{ producto.codigo }}">
-                            {{ producto.nombre }} <button class="add-button" style="background-color: #4400cd;">Agregar</button>
+                            {{ producto.nombre }} <a href="{% url 'agregar_producto' producto.id %}" class="add-button" style="background-color: #4400cd; text-decoration: none; color: white;">Agregar</a>
                         </div>
                         {% endfor %}
                     </div>
@@ -95,94 +108,21 @@
                 </tr>
             </thead>
             <tbody>
+                {% for carrito in carritoProductos %}
                 <tr>
-                    <td>Producto 1</td>
-                    <td>$100.00</td>
-                    <td>2</td>
-                    <td>$200.00</td>
+                    <td>{{ carrito.producto.nombre }}</td>
+                    <td>${{ carrito.producto.precio_tienda }}</td>
+                    <td>{{ carrito.cantidad }}</td>
+                    <td>${{ carrito.subtotal }}</td>
                     <td>
-                        <button><i class="bi bi-plus"></i></button>
-                        <button><i class="bi bi-dash"></i></button>
-                        <button><i class="bi bi-trash3-fill"></i></button>
+                        <a href="{% url 'sumar_producto' carrito.producto.id %}"><i class="bi bi-plus" style="color: white;"></i></a>
+                        {% if carrito.cantidad > 1 %}
+                        <a href="{% url 'restar_producto' carrito.producto.id %}"><i class="bi bi-dash" style="color: white;"></i></a>
+                        {% endif %}
+                        <a href="{% url 'quitar_producto' carrito.producto.id %}"><i class="bi bi-trash3-fill" style="color: white;"></i></a>
                     </td>
                 </tr>
-                <tr>
-                    <td>Producto 2</td>
-                    <td>$50.00</td>
-                    <td>1</td>
-                    <td>$50.00</td>
-                    <td>
-                        <button><i class="bi bi-plus"></i></button>
-                        <button><i class="bi bi-dash"></i></button>
-                        <button><i class="bi bi-trash3-fill"></i></button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Producto 3</td>
-                    <td>$50.00</td>
-                    <td>1</td>
-                    <td>$50.00</td>
-                    <td>
-                        <button><i class="bi bi-plus"></i></button>
-                        <button><i class="bi bi-dash"></i></button>
-                        <button><i class="bi bi-trash3-fill"></i></button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Producto 4</td>
-                    <td>$50.00</td>
-                    <td>1</td>
-                    <td>$50.00</td>
-                    <td>
-                        <button><i class="bi bi-plus"></i></button>
-                        <button><i class="bi bi-dash"></i></button>
-                        <button><i class="bi bi-trash3-fill"></i></button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Producto 5</td>
-                    <td>$50.00</td>
-                    <td>1</td>
-                    <td>$50.00</td>
-                    <td>
-                        <button><i class="bi bi-plus"></i></button>
-                        <button><i class="bi bi-dash"></i></button>
-                        <button><i class="bi bi-trash3-fill"></i></button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Producto 5</td>
-                    <td>$50.00</td>
-                    <td>1</td>
-                    <td>$50.00</td>
-                    <td>
-                        <button><i class="bi bi-plus"></i></button>
-                        <button><i class="bi bi-dash"></i></button>
-                        <button><i class="bi bi-trash3-fill"></i></button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Producto 5</td>
-                    <td>$50.00</td>
-                    <td>1</td>
-                    <td>$50.00</td>
-                    <td>
-                        <button><i class="bi bi-plus"></i></button>
-                        <button><i class="bi bi-dash"></i></button>
-                        <button><i class="bi bi-trash3-fill"></i></button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Producto 5</td>
-                    <td>$50.00</td>
-                    <td>1</td>
-                    <td>$50.00</td>
-                    <td>
-                        <button><i class="bi bi-plus"></i></button>
-                        <button><i class="bi bi-dash"></i></button>
-                        <button><i class="bi bi-trash3-fill"></i></button>
-                    </td>
-                </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
@@ -190,21 +130,24 @@
         <div class="VentaActual">
             <h2>Información de la Venta</h2>
             <div class="marco-VentaActual">
-                <p>Total de productos: 3</p>
-                <p>Costo total de los productos: $300</p>
-                <p>IVA calculado: $10</p>
-                <p>Descuento: no aplica</p>
+                <p>Total de productos: {{ total_productos }}</p>
+                <p>Costo total de los productos: ${{ total_costo_productos }}</p>
+                <p>IVA calculado: N/A</p>
+                <p>Descuento: N/A</p>
                 <div>
-                    <h4 class="espaciadoVenta">Total a pagar: $250.00</h4>
-                    <div class="checkbox_section">
-                        <input type="checkbox" id="imprimir_ticket" name="imprimir_ticket">
-                        <label for="imprimir_ticket">Imprimir ticket</label>
-                    </div>
+                    <h4 class="espaciadoVenta">Total a pagar: ${{ total_costo_productos }}</h4>
                 </div>
             </div>
-            <button data-bs-toggle="modal" data-bs-target="#confirmacionVentaModal">
-                Finalizar Venta
-            </button>
+            <div style="display: flex; justify-content: end; margin-top: 10px;">
+                {% if carritoProductos %}
+                <button data-bs-toggle="modal" data-bs-target="#cancelarVentaModal" style="margin-right: 10px; background-color: red;">
+                    Cancelar venta
+                </button>
+                {% endif %}
+                <button data-bs-toggle="modal" data-bs-target="#confirmacionVentaModal">
+                    Finalizar Venta
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -240,6 +183,25 @@
 </div>
 
 <!-- Modales  -->
+<div class="modal fade" id="cancelarVentaModal" tabindex="-1" aria-labelledby="cancelarVentaModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cancelarVentaModalLabel">¿Cancelar venta?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Se eliminaran todos los productos del carrito actual.</p>
+            </div>
+            <div class="modal-footer">
+                <a href="{% url 'eliminar_carrito_actual' %}" class="btn btn-danger" style="text-decoration: none;">
+                    Si, cancelar
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="confirmacionVentaModal" tabindex="-1" aria-labelledby="confirmacionVentaModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -248,12 +210,12 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>Total de productos: 3</p>
-                <p>Costo total de los productos: $300</p>
-                <p>IVA calculado: $10</p>
-                <p>Descuento: no aplica</p>
+                <p>Total de productos: {{ total_productos }}</p>
+                <p>Costo total de los productos: ${{ total_costo_productos }}</p>
+                <p>IVA calculado: N/A</p>
+                <p>Descuento: N/A</p>
                 <div>
-                    <h4 class="espaciadoVenta">Total a pagar: $250.00</h4>
+                    <h4 class="espaciadoVenta">Total a pagar: ${{ total_costo_productos }}</h4>
                 </div>
             </div>
             <div class="modal-footer">
@@ -275,7 +237,9 @@
                 <p>Se ha realizado el cobro exitosamente.</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Aceptar</button>
+                <a href="{% url 'eliminar_carrito_actual' %}" class="btn btn-secondary" style="text-decoration: none;">
+                    Aceptar
+                </a>
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ticket_generado">Ver Ticket</button>
             </div>
         </div>
@@ -283,7 +247,7 @@
 </div>
 
 <div class="modal fade" id="ticket_generado" tabindex="-1" aria-labelledby="ticket_generadoLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog ">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="ticket_generadoLabel">Ticket generado</h5>
@@ -294,8 +258,8 @@
                 <div class="ticket-container">
                     <div class="ticket-header">
                         <h4>VentasXpert</h4>
-                        <p>Fecha: <span id="ticket-date">2024-10-04</span></p>
-                        <p>Ticket #: <span id="ticket-number">12345</span></p>
+                        <p>Fecha: <span id="ticket-date">{{ fecha_actual }} {{ hora_actual }}</span></p>
+                        <p>Ticket #: <span id="ticket-number">1</span></p>
                     </div>
                     <div class="ticket-body">
                         <table class="ticket-table">
@@ -309,31 +273,30 @@
                             </thead>
                             <tbody id="ticket-items">
                                 <!-- Detalles de los productos -->
-                                <tr>
-                                    <td>Producto 1</td>
-                                    <td>2</td>
-                                    <td>$100.00</td>
-                                    <td>$200.00</td>
-                                </tr>
-                                <tr>
-                                    <td>Producto 2</td>
-                                    <td>1</td>
-                                    <td>$50.00</td>
-                                    <td>$50.00</td>
-                                </tr>
+                                {% for carrito in carritoProductos %}
+                                    <tr>
+                                        <td>{{ carrito.producto.nombre }}</td>
+                                        <td>{{ carrito.cantidad }}</td>
+                                        <td>${{ carrito.producto.precio_tienda }}</td>
+                                        <td>${{ carrito.subtotal }}</td>
+                                    </tr>
+                                    {% endfor %}
                             </tbody>
                         </table>
                     </div>
                     <div class="ticket-footer">
-                        <p>Total: $250.00</p>
-                        <p>IVA: $10.00</p>
-                        <p>Total a pagar: $260.00</p>
+                        <p>Total de productos: {{ total_productos }}</p>
+                        <p>Precio total: ${{ total_costo_productos }}</p>
+                        <p>IVA: N/A</p>
+                        <p>Total a pagar: ${{ total_costo_productos }}</p>
                     </div>
                 </div>
                 <!-- Fin de la plantilla -->
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Aceptar</button>
+                <a href="{% url 'eliminar_carrito_actual' %}" class="btn btn-secondary" style="text-decoration: none;">
+                    Aceptar
+                </a>
                 <button type="button" class="btn btn-primary">Imprimir</button>
             </div>
         </div>

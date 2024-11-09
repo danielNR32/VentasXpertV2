@@ -81,7 +81,7 @@
     background-color: #f5f5f5;
 }
 
-.Productos-Caja button {
+.Productos-Caja a {
     background-color: #4400cd;
     color: white;
     border: none;
@@ -90,7 +90,7 @@
     cursor: pointer;
 }
 
-.Productos-Caja button:hover {
+.Productos-Caja a:hover {
     background-color: #310093;
 }
 
