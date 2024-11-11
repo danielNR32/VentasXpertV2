@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Usuarios- VentasXpert{% endblock %}
+
+<!--Cargamos los css extras-->
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/add_user.css' %}">
+
+
+{% endblock %}
+
+{% block options %}
+    <a href="{% url 'usuarios' %}">Usuarios</a>
+    <a href="{% url 'permisos' %}">Permisos</a>
+    <a href="{% url 'roles' %}">Roles</a>
+{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Gestión de Usuarios</h2>
+<button type="button" class="btn btn-primary mb-4" data-bs-toggle="modal" data-bs-target="#add_user">
+    Añadir Usuario
+</button>
+
+
+
+
+
+<!-- DataTable de Usuario-->
+<div class="table-responsive">
+    <table id="userTable" class="table table-striped table-bordered" style="width:100%">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Usuario</th>
+                <th>Nombre Completo</th>
+                <th>Correo</th>
+                <th>Rol</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in Usuarios %}
+            <tr>
+                <!-- Índice -->
+                <td>{{ forloop.counter }}</td>
+                
+                <!-- Nombre Completo -->
+                <td>{{ user.username }}</td>
+
+                <!-- Nombre Completo -->
+                <td>{{ user.persona.nombre }} {{ user.persona.apPaterno }} {{ user.persona.apMaterno }}</td>
+                
+                <!-- Correo -->
+                <td>{{ user.persona.correo }}</td>
+                
+                <!-- Rol -->
+                <td>
+                    {% if user.usuariorol %}
+                        {{ user.usuariorol.rol.nombre }}
+                    {% else %}
+                        Sin asignar
+                    {% endif %}
+                </td>
+                
+                <!-- Acciones -->
+                <td class="text-center">
+                    <div class="d-flex justify-content-center">
+                        <!-- Botón de editar usuario -->
+                        <button class="btn btn-warning btn-sm mx-1" onclick="editarUsuario({{ user.id }}, '{{ user.username }}')"> 
+                            <i class="bi bi-pencil-square"></i>
+                        </button>
+                        
+                      
+                        
+                        <!-- Botón de eliminar usuario -->
+                        <button class="btn btn-danger btn-sm mx-1" onclick="eliminarUsuario({{ user.id }}, '{{ user.username }}')">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </td>
+                                
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+<!-- Incluimos los modales aquí -->
+{% include 'Usuarios_permisos/modals/add_user.html' %}
+{% include 'Usuarios_permisos/modals/edit_user.html' %}
+{% include 'Usuarios_permisos/modals/delete_user.html' %}
+
+{% endblock %}
+
+<!--Cargamos los js extras-->
+{% block extra_js %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <!-- JS de DataTables -->
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    <script src="{% static 'js/add_user.js' %}"></script>
+    <script src="{% static 'js/edit_user.js' %}"></script>
+    <script src="{% static 'js/delete_user.js' %}"></script>
+
+
+    <!-- Script para la datatable-->
+    <script>
+    $(document).ready(function() {
+        $('#userTable').DataTable({
+            "paging": true,         // Habilita la paginación
+            "lengthChange": false,  // Deshabilita la opción de cambiar el número de elementos por página
+            "searching": true,      // Habilita la barra de búsqueda
+            "ordering": true,       // Habilita el ordenamiento de columnas
+            "info": true,           // Muestra información de la tabla
+            "autoWidth": false,     // Ajusta automáticamente el ancho de las columnas
+            "pageLength": 50,       // Define la cantidad de registros por página
+            "responsive": true,     // Habilita la responsividad
+            "language": {
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                },
+                "search": "Buscar:",
+                "info": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                "infoEmpty": "No hay registros disponibles",
+                "infoFiltered": "(filtrado de _MAX_ registros en total)"
+            }
+        });
+    });
+    </script>
+    
+
+
+
+{% endblock %}
+

@@ -1,0 +1,133 @@
+<div class="modal fade" id="add_user" tabindex="-1" aria-labelledby="addUserLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addUserLabel">Añadir Usuario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addUserForm" method="post" action="{% url 'add_user' %}">
+                    {% csrf_token %}
+                    
+                    <h6>Datos del Usuario</h6>
+                    <!-- Username -->
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                        <div class="form-floating flex-grow-1">
+                            {{ formUser.username }}
+                            <label for="id_username">Usuario</label>
+                        </div>
+                    </div>
+                    
+                    <!-- Email -->
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                        <div class="form-floating flex-grow-1">
+                            {{ formUser.email }}
+                            <label for="id_email">Correo Electrónico</label>
+                        </div>
+                    </div>
+                    
+                    <!-- Password -->
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                        <div class="form-floating flex-grow-1">
+                            {{ formUser.password }}
+                            <label for="id_password">Contraseña</label>
+                        </div>
+                    </div>
+                    
+                    <h6>Datos Personales</h6>
+                    <!-- Nombre -->
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                        <div class="form-floating flex-grow-1">
+                            {{ formPerson.nombre }}
+                            <label for="id_nombre">Nombre</label>
+                        </div>
+                    </div>
+                    
+                    <!-- Segundo Nombre -->
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                        <div class="form-floating flex-grow-1">
+                            {{ formPerson.segNombre }}
+                            <label for="id_segNombre">Segundo Nombre</label>
+                        </div>
+                    </div>
+                    
+                    <!-- Apellido Paterno -->
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                        <div class="form-floating flex-grow-1">
+                            {{ formPerson.apPaterno }}
+                            <label for="id_apPaterno">Apellido Paterno</label>
+                        </div>
+                    </div>
+                    
+                    <!-- Apellido Materno -->
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                        <div class="form-floating flex-grow-1">
+                            {{ formPerson.apMaterno }}
+                            <label for="id_apMaterno">Apellido Materno</label>
+                        </div>
+                    </div>
+                    
+                    <!-- Género -->
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="bi bi-gender-ambiguous"></i></span>
+                        <div class="form-floating flex-grow-1">
+                            {{ formPerson.genero }}
+                            <label for="id_genero">Género</label>
+                        </div>
+                    </div>
+                    
+                    <!-- Teléfono -->
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="bi bi-phone"></i></span>
+                        <div class="form-floating flex-grow-1">
+                            {{ formPerson.telefono }}
+                            <label for="id_telefono">Teléfono</label>
+                        </div>
+                    </div>
+                    
+                    <!-- RFC -->
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="bi bi-credit-card"></i></span>
+                        <div class="form-floating flex-grow-1">
+                            {{ formPerson.rfc }}
+                            <label for="id_rfc">RFC</label>
+                        </div>
+                    </div>
+
+                     <!-- Correo -->
+                     <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                        <div class="form-floating flex-grow-1">
+                            {{ formPerson.correo }}
+                            <label for="id_email">Correo Electrónico</label>
+                        </div>
+                    </div>
+
+
+
+
+                    <!-- CURP -->
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="bi bi-credit-card-2-front"></i></span>
+                        <div class="form-floating flex-grow-1">
+                            {{ formPerson.curp }}
+                            <label for="id_curp">CURP</label>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

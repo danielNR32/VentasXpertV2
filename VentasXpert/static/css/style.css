@@ -200,3 +200,8 @@ a:hover {
 .backdrop.active {
     display: block; /* Muestra el fondo oscuro cuando el sidebar está activo */
 }
+
+.modal-content {
+    padding: 20px;
+    border-radius: 10px;
+}

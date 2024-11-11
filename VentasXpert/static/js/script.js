@@ -17,3 +17,9 @@ document.addEventListener('DOMContentLoaded', function() {
         toggleSidebar();
     });
 });
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    var modalElement = document.getElementById('globalModal');
+    var myModal = new bootstrap.Modal(modalElement, {});
+});
