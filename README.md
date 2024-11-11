@@ -20,7 +20,7 @@ Sigue estos pasos para configurar y ejecutar el proyecto localmente.
 Primero, clona el repositorio desde GitHub:
 
 ```bash
-$ git clone -b Parte_Melvin https://github.com/tonny54v/VentasXpert.git^C
+git clone -b Parte_Melvin https://github.com/tonny54v/VentasXpert.git
 cd VentasXpert
 ```
 ### 2. Crear el entorno virtual
