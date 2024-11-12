@@ -4,6 +4,11 @@ from django.shortcuts import render
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from Usuarios_permisos.models import Producto, CarritoProducto, Carrito
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from xhtml2pdf import pisa
+import io, os
+from django.conf import settings
 
 @login_required
 def caja(request):
@@ -96,9 +101,66 @@ def quitar_producto(request, id):
 
 def eliminar_carrito_actual(request):
     carritoProductos = CarritoProducto.objects.all()
+    
+    # Restaurar stock de productos
+    for carritoProducto1 in carritoProductos:
+        producto_actual = Producto.objects.get(id=carritoProducto1.producto_id)
+        producto_actual.stock_Inventario -= carritoProducto1.cantidad
+        producto_actual.save()
+    
+    # Eliminar productos del carrito
     for carritoProducto in carritoProductos:
         carritoProducto.delete()
     return redirect('cajero_home')
+
+def generar_ticket_pdf(request):
+    # Obtén los datos del ticket desde el contexto que usaste en la vista 'home'
+    productos = Producto.objects.all()
+    carritoProductos = CarritoProducto.objects.select_related('producto').all()
+
+    # Calcula el total de productos y el costo total
+    total_productos = sum([carrito.cantidad for carrito in carritoProductos])
+    total_costo_productos = sum([carrito.subtotal for carrito in carritoProductos])
+    
+    # Obtén la fecha y hora actual
+    fecha_actual = datetime.datetime.now().strftime("%d/%m/%Y")
+    hora_actual = datetime.datetime.now().strftime("%H:%M:%S")
+
+    # Prepara el contexto
+    context = {
+        'productos': productos,
+        'carritoProductos': carritoProductos,
+        'total_productos': total_productos,
+        'total_costo_productos': total_costo_productos,
+        'fecha_actual': fecha_actual,
+        'hora_actual': hora_actual
+    }
+
+    # Renderiza la plantilla HTML
+    html = render_to_string('Ventas_caja/ticket_pdf.html', context)
+    
+    # Define la ruta de almacenamiento del PDF
+    pdf_path = os.path.join(settings.BASE_DIR,'Ventas_caja', 'static', 'pdf_ticket', f'ticket_{datetime.datetime.now().strftime("%Y%m%d%H%M%S")}.pdf')
+
+    # Genera el PDF y guárdalo en la ruta especificada
+    with open(pdf_path, "wb") as pdf_file:
+        pisa_status = pisa.CreatePDF(io.BytesIO(html.encode("UTF-8")), dest=pdf_file, encoding='UTF-8')
+
+    # Configura la respuesta como un PDF
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="ticket.pdf"'
+
+    # Genera el PDF
+    pisa_status = pisa.CreatePDF(io.BytesIO(html.encode("UTF-8")), dest=response, encoding='UTF-8')
+    
+    # ejecutar funcion para eliminar carrito actual
+    # eliminar_carrito_actual(request)
+
+    # Verifica si hay errores
+    if pisa_status.err:
+        return HttpResponse("Hubo un error al generar el PDF", status=500)
+    
+    return response
 
 @login_required
 def caja2(request):

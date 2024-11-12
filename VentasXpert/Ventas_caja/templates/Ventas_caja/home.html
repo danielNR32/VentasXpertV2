@@ -143,10 +143,10 @@
                 <button data-bs-toggle="modal" data-bs-target="#cancelarVentaModal" style="margin-right: 10px; background-color: red;">
                     Cancelar venta
                 </button>
-                {% endif %}
                 <button data-bs-toggle="modal" data-bs-target="#confirmacionVentaModal">
                     Finalizar Venta
                 </button>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -297,7 +297,7 @@
                 <a href="{% url 'eliminar_carrito_actual' %}" class="btn btn-secondary" style="text-decoration: none;">
                     Aceptar
                 </a>
-                <button type="button" class="btn btn-primary">Imprimir</button>
+                <button onclick="window.location.href='{% url 'generar_ticket_pdf' %}'" class="btn btn-primary">Imprimir</button>
             </div>
         </div>
     </div>
