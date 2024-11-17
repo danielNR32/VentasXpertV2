@@ -3,7 +3,7 @@ from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-from .forms import   EditUserForm, PermForm, PersonForm, RolForm, UserForm
+from .forms import    EditUserForm, PermForm, PersonForm, RolForm, UserForm
 from .models import Rol, UsuarioRol, Persona
 from django.contrib.auth.models import User,Permission,ContentType
 from django.template.loader import render_to_string
@@ -31,9 +31,19 @@ def logout_view(request):
 def users(request):
     formUser = UserForm()
     formPerson = PersonForm()
-    
-    usuarios = User.objects.select_related('persona', 'usuariorol__rol').all()  # Incluye las relaciones para evitar consultas adicionales
-    return render(request, 'Usuarios_permisos/users.html', {'formUser': formUser, 'formPerson': formPerson, 'Usuarios': usuarios})
+    user = User.objects.prefetch_related('usuariorol', 'persona').all()  # Incluye las relaciones
+    roles = Rol.objects.all()  # Obtener todos los roles
+    return render(
+        request,
+        'Usuarios_permisos/users.html',
+        {
+            'formUser': formUser,
+            'formPerson': formPerson,
+            'Usuarios': user,  # Asegúrate de enviar los usuarios aquí
+            'roles': roles,  # Enviar los roles al template
+        }
+    )
+
 
 @login_required
 def add_user(request):
@@ -159,12 +169,49 @@ def eliminar_usuario(request, user_id):
 
 
 
+@login_required
+def assign_role_to_user(request, id_user):
+    # Obtenemos el usuario por ID
+    user = get_object_or_404(User, id=id_user)
+
+    if request.method == 'POST':
+        # Obtenemos el ID del rol desde la solicitud POST
+        rol_id = request.POST.get('rol', None)
+        if rol_id:
+            try:
+                # Obtenemos el objeto Rol correspondiente al ID proporcionado
+                rol = Rol.objects.get(id=rol_id)
+                # Actualizamos o creamos la relación Usuario-Rol
+                UsuarioRol.objects.update_or_create(user=user, defaults={'rol': rol})
+                return JsonResponse({'success': True})
+            except Rol.DoesNotExist:
+                return JsonResponse({'success': False, 'error': 'El rol seleccionado no existe.'})
+        return JsonResponse({'success': False, 'error': 'No se proporcionó un rol válido.'})
+    else:
+        # Para solicitudes GET, obtenemos todos los roles disponibles
+        roles = Rol.objects.all()
+        # Renderizamos el template con el usuario y los roles
+        return render(
+            request,
+            'Usuarios_permisos/modals/assign_role_to_user.html',
+            {
+                'usuario': user,
+                'roles': roles,  # Enviamos los roles al template
+            }
+        )
+
+
+
+
+
+
+
 
 
 
 """
     !Apartado para las vistas, modales, formularios 
-    como: añadir, editar, elimnar y asignar en Roles.!
+    !como: añadir, editar, elimnar y asignar en Roles.!
 """
 #? Vista de roles
 @login_required

@@ -9,7 +9,7 @@ urlpatterns = [
     path('usuarios/add/', views.add_user, name='add_user'),
     path('usuarios/edit/<int:user_id>/', views.edit_user, name='edit_user'),
     path('usuarios/delete/<int:user_id>/', views.eliminar_usuario, name='delete_user'),
-   
+    path('usuarios/assign_role/<int:id_user>/', views.assign_role_to_user, name='assign_role_to_user'),
     # URLs de permisos
     path('permisos/', views.permissions, name='permisos'),
     path('permisos/add/', views.add_permission, name='add_permission'),
