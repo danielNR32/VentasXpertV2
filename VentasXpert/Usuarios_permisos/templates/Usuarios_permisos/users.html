@@ -66,16 +66,31 @@
                 <td class="text-center">
                     <div class="d-flex justify-content-center">
                         <!-- Botón de editar usuario -->
-                        <button class="btn btn-warning btn-sm mx-1" onclick="editarUsuario({{ user.id }}, '{{ user.username }}')"> 
+                        <button class="btn btn-warning btn-sm mx-1" onclick="editarUsuario('{{ user.id }}', '{{ user.username }}')"> 
                             <i class="bi bi-pencil-square"></i>
                         </button>
                         
                       
                         
                         <!-- Botón de eliminar usuario -->
-                        <button class="btn btn-danger btn-sm mx-1" onclick="eliminarUsuario({{ user.id }}, '{{ user.username }}')">
+                        <button class="btn btn-danger btn-sm mx-1" onclick="eliminarUsuario('{{ user.id }}', '{{ user.username }}')">
                             <i class="bi bi-trash"></i>
                         </button>
+
+
+                        {% if user.usuariorol %}
+                            <!-- Si ya tiene un rol asignado, muestra Editar Rol -->
+                            <button class="btn btn-warning btn-sm mx-1" onclick="assignRoleToUser('{{ user.id }}', '{{ user.username }}')">
+                                Editar Rol
+                            </button>
+                        {% else %}
+                            <!-- Si no tiene un rol asignado, muestra Asignar Rol -->
+                            <button class="btn btn-primary btn-sm mx-1" onclick="assignRoleToUser('{{ user.id }}', '{{ user.username }}')">
+                                Asignar Rol
+                            </button>
+                        {% endif %}
+                                    
+
                     </div>
                 </td>
                                 
@@ -90,7 +105,7 @@
 {% include 'Usuarios_permisos/modals/add_user.html' %}
 {% include 'Usuarios_permisos/modals/edit_user.html' %}
 {% include 'Usuarios_permisos/modals/delete_user.html' %}
-
+{% include 'Usuarios_permisos/modals/assign_role_to_user.html' %}
 {% endblock %}
 
 <!--Cargamos los js extras-->
@@ -103,7 +118,7 @@
     <script src="{% static 'js/add_user.js' %}"></script>
     <script src="{% static 'js/edit_user.js' %}"></script>
     <script src="{% static 'js/delete_user.js' %}"></script>
-
+    <script src="{% static 'js/assign_role_to_user.js' %}"></script>
 
     <!-- Script para la datatable-->
     <script>

@@ -50,12 +50,12 @@
                 <td class="text-center">
                     <div class="d-flex justify-content-center">
                         <!-- Botón de editar con icono -->
-                        <button class="btn btn-warning btn-sm mx-1" onclick="editarRol({{ rol.id }}, '{{ rol.nombre }}')"> 
+                        <button class="btn btn-warning btn-sm mx-1" onclick="editarRol('{{ rol.id }}', '{{ rol.nombre }}')"> 
                             <i class="bi bi-pencil-square"></i>
                         </button>
                 
                         <!-- Botón de eliminar con icono -->
-                        <button class="btn btn-danger btn-sm mx-1" onclick="eliminarRol({{ rol.id }}, '{{ rol.nombre }}')">
+                        <button class="btn btn-danger btn-sm mx-1" onclick="eliminarRol('{{ rol.id }}', '{{ rol.nombre }}')">
                             <i class="bi bi-trash"></i>
                         </button>
                     </div>

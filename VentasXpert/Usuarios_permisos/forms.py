@@ -76,3 +76,5 @@ class EditUserForm(forms.ModelForm):
                 'id': 'user_email'
             }),
         }
+
+

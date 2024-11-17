@@ -1,0 +1,37 @@
+<div class="modal fade" id="assign_role_to_user" tabindex="-1" aria-labelledby="assignRoleToUserLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="assignRoleToUserLabel">
+                    Asignar Rol al Usuario: <strong>{{ usuario.username }}</strong>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <form id="assignRoleForm" method="post" action="">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Usuario</label>
+                        <p>{{ usuario.username }}</p> <!-- Mostrar el nombre del usuario -->
+                    </div>
+                    <div class="mb-3">
+                        <label for="id_rol" class="form-label">Seleccionar Rol</label>
+                        <select name="rol" id="id_rol" class="form-control">
+                            <!-- Opción predeterminada -->
+                            <option value="" selected disabled>Seleccionar Rol</option>
+                            <!-- Opciones dinámicas generadas desde los roles -->
+                            {% for rol in roles %}
+                                <option value="{{ rol.id }}">{{ rol.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
