@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.contrib.auth import logout
+from django.shortcuts import render
 
 @login_required
 def usuarios_permisos_home(request):
@@ -24,3 +25,10 @@ def permisos(request):
 @login_required
 def roles(request):
     return render(request, 'app/roles.html')
+
+
+def error_permiso(request):
+    return render(request, 'usuarios_permisos/error_permiso.html', {
+        'mensaje': "No tienes permiso para acceder a esta página."
+    })
+

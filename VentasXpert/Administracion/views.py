@@ -292,3 +292,10 @@ def confirmar_surtido(request):
     request.session['productos_temp'] = []
     messages.success(request, "Surtido confirmado exitosamente.")
     return JsonResponse({"success": True})
+
+#restriccion de url
+def error_permiso(request):
+    return render(request, 'usuarios_permisos/error_permiso.html', {
+        'mensaje': "No tienes permiso para acceder a esta página."
+    })
+

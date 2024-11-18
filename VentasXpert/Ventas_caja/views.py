@@ -18,3 +18,10 @@ def caja2(request):
 def logout_view(request):
     logout(request)
     return redirect('login')  # Redirect to the login page or another page
+
+#restriccion de url
+def error_permiso(request):
+    return render(request, 'usuarios_permisos/error_permiso.html', {
+        'mensaje': "No tienes permiso para acceder a esta página."
+    })
+
