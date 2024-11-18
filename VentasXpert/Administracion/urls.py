@@ -28,6 +28,15 @@ urlpatterns = [
     ## editar en tabla
     path('editar_producto_temporal/<int:index>/', views.editar_producto_temporal, name='editar_producto_temporal'),
 
+    ##Funcionalidad para agregar stock
+
+
+    path('surtir_inventario/', views.surtir_inventario, name='surtir_inventario'),
+    path('buscar_producto/', views.buscar_producto, name='buscar_producto'),
+    path('confirmar_surtido/', views.confirmar_surtido, name='confirmar_surtido'),
+
+
+
     
 
 ]

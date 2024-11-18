@@ -236,3 +236,59 @@ def editar_producto_temporal(request, index):
 
     messages.error(request, "Método no permitido.")
     return redirect('vista_inventario2')
+#
+
+
+#Funcionalidad de agregar funcionalidad agregar nuevo producto
+from django.shortcuts import render, redirect
+from django.http import JsonResponse
+from django.contrib import messages
+from Usuarios_permisos.models import Producto, Categoria
+from django.views.decorators.csrf import csrf_exempt
+from decimal import Decimal
+
+def surtir_inventario(request):
+    categorias = Categoria.objects.all()
+    return render(request, 'app/Inventario/informacion.html', {'categorias': categorias})
+
+def buscar_producto(request):
+    codigo = request.GET.get('codigo', '').strip()
+    nombre = request.GET.get('nombre', '').strip()
+    categoria_id = request.GET.get('categoria', '').strip()
+
+    productos = Producto.objects.all()
+    if codigo:
+        productos = productos.filter(codigo__icontains=codigo)
+    if nombre:
+        productos = productos.filter(nombre__icontains=nombre)
+    if categoria_id:
+        productos = productos.filter(categoria_id=categoria_id)
+
+    productos_data = [
+        {
+            "id": producto.id,
+            "codigo": producto.codigo,
+            "nombre": producto.nombre,
+            "categoria": producto.categoria.nombre,
+            "stock_Inventario": producto.stock_Inventario,
+            "precio_tienda": str(producto.precio_tienda),
+            "precio_proveedor": str(producto.precio_proveedor),
+        }
+        for producto in productos
+    ]
+    
+    return JsonResponse({"productos": productos_data})
+
+@csrf_exempt
+def confirmar_surtido(request):
+    # Confirmar los productos en surtido
+    productos_temp = request.session.get('productos_temp', [])
+    for item in productos_temp:
+        producto = Producto.objects.get(id=item['id'])
+        producto.stock_Inventario += item['cantidad']
+        producto.save()
+
+    # Limpiar la sesión temporal
+    request.session['productos_temp'] = []
+    messages.success(request, "Surtido confirmado exitosamente.")
+    return JsonResponse({"success": True})
