@@ -166,6 +166,32 @@ def generar_ticket_pdf(request):
 def caja2(request):
     return render(request, 'Ventas_caja/caja.html')
 
+@login_required
+def vistaHistorial(request):
+    import os
+    from django.conf import settings
+
+    # Ruta de la carpeta donde se guardan los PDFs
+    pdf_folder = os.path.join(settings.BASE_DIR, 'Ventas_caja', 'static', 'pdf_ticket')
+
+    # Lista los archivos en la carpeta
+    pdf_files = []
+    for file_name in os.listdir(pdf_folder):
+        file_path = os.path.join(pdf_folder, file_name)
+        if os.path.isfile(file_path) and file_name.endswith('.pdf'):
+            # Obtener la fecha de creación
+            creation_time = os.path.getctime(file_path)
+            pdf_files.append({
+                'name': file_name,
+                'creation_time': datetime.datetime.fromtimestamp(creation_time),
+                'path': f'{settings.STATIC_URL}pdf_ticket/{file_name}'
+            })
+
+    # Ordenar por fecha de creación descendente
+    pdf_files.sort(key=lambda x: x['creation_time'], reverse=True)
+
+    return render(request, 'Ventas_caja/vistaHistorial.html', {'pdf_files': pdf_files})
+
+
 def logout_view(request):
-    logout(request)
     return redirect('login')  # Redirect to the login page or another page
