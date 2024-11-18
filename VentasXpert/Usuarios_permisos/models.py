@@ -175,3 +175,4 @@ class Finanzas(models.Model):
     class Meta:
         db_table = 'Finanza'
         verbose_name_plural = 'Finanzas'
+

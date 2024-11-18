@@ -21,7 +21,7 @@ def login_view(request):
 
             # Redirigir al usuario según su rol
             if rol_nombre == 'SU':
-                return redirect('superusuario_home')
+                return redirect('usuarios_permisos_home')
             elif rol_nombre == 'Administrador':
                 return redirect('administrador_home')
             elif rol_nombre == 'Cajero':

@@ -1,0 +1,86 @@
+<div class="modal fade" id="edit_user" tabindex="-1" aria-labelledby="editUserLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editUserLabel">Editar Usuario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editUserForm" method="post" action="">
+                    {% csrf_token %}
+
+                    <h6>Datos del Usuario</h6>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                        <input type="text" name="username" class="form-control user-username" placeholder="Usuario">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                        <input type="email" name="email" class="form-control user-email" placeholder="Correo Electrónico">
+                    </div>
+                    
+                    <!-- Contraseña Actual -->
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                        <input type="password" name="password_actual" class="form-control user-password" placeholder="Contraseña Actual">
+                    </div>
+
+                    <!-- Nueva Contraseña -->
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                        <input type="password" name="new_password" class="form-control user-newpassword" placeholder="Nueva Contraseña">
+                    </div>
+
+
+                    <h6>Datos Personales</h6>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                        <input type="text" name="nombre" class="form-control person-nombre" placeholder="Nombre">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                        <input type="text" name="segNombre" class="form-control person-segNombre" placeholder="Segundo Nombre">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                        <input type="text" name="apPaterno" class="form-control person-apPaterno" placeholder="Apellido Paterno">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                        <input type="text" name="apMaterno" class="form-control person-apMaterno" placeholder="Apellido Materno">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="bi bi-gender-ambiguous"></i></span>
+                        <select name="genero" class="form-control person-genero">
+                            <option value="M">Masculino</option>
+                            <option value="F">Femenino</option>
+                            <option value="N">Prefiero no decirlo</option>
+                            <option value="D">Desconocido</option>
+                        </select>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="bi bi-phone"></i></span>
+                        <input type="text" name="telefono" class="form-control person-telefono" placeholder="Teléfono">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="bi bi-credit-card"></i></span>
+                        <input type="text" name="rfc" class="form-control person-rfc" placeholder="RFC">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="bi bi-credit-card-2-front"></i></span>
+                        <input type="text" name="curp" class="form-control person-curp" placeholder="CURP">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                        <input type="email" name="correo" class="form-control person-correo" placeholder="Correo Personal">
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
