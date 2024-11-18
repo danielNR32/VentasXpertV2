@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from Usuarios_permisos.models import Producto, CarritoProducto, Carrito
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden, FileResponse
 from django.template.loader import render_to_string
 from xhtml2pdf import pisa
 import io, os
@@ -140,7 +140,7 @@ def generar_ticket_pdf(request):
     html = render_to_string('Ventas_caja/ticket_pdf.html', context)
     
     # Define la ruta de almacenamiento del PDF
-    pdf_path = os.path.join(settings.BASE_DIR,'Ventas_caja', 'static', 'pdf_ticket', f'ticket_{datetime.datetime.now().strftime("%Y%m%d%H%M%S")}.pdf')
+    pdf_path = os.path.join(settings.BASE_DIR,'Ventas_caja', 'media', 'pdf_ticket', f'ticket_{datetime.datetime.now().strftime("%Y%m%d%H%M%S")}.pdf')
 
     # Genera el PDF y guárdalo en la ruta especificada
     with open(pdf_path, "wb") as pdf_file:
@@ -172,7 +172,7 @@ def vistaHistorial(request):
     from django.conf import settings
 
     # Ruta de la carpeta donde se guardan los PDFs
-    pdf_folder = os.path.join(settings.BASE_DIR, 'Ventas_caja', 'static', 'pdf_ticket')
+    pdf_folder = os.path.join(settings.BASE_DIR, 'Ventas_caja', 'media', 'pdf_ticket')
 
     # Lista los archivos en la carpeta
     pdf_files = []
@@ -184,13 +184,25 @@ def vistaHistorial(request):
             pdf_files.append({
                 'name': file_name,
                 'creation_time': datetime.datetime.fromtimestamp(creation_time),
-                'path': f'{settings.STATIC_URL}pdf_ticket/{file_name}'
+                'path': f'{settings.MEDIA_URL}pdf_ticket/{file_name}'
             })
 
     # Ordenar por fecha de creación descendente
     pdf_files.sort(key=lambda x: x['creation_time'], reverse=True)
 
     return render(request, 'Ventas_caja/vistaHistorial.html', {'pdf_files': pdf_files})
+
+@login_required
+def serve_pdf_ticket(request, file_name):
+    # Ruta completa del archivo
+    file_path = os.path.join(settings.BASE_DIR, 'Ventas_caja', 'media', 'pdf_ticket', file_name)
+
+    # Verifica si el archivo existe
+    if not os.path.exists(file_path):
+        return HttpResponse("Archivo no encontrado", status=404)
+
+    # Devuelve el archivo como respuesta
+    return FileResponse(open(file_path, 'rb'), content_type='application/pdf')
 
 
 def logout_view(request):

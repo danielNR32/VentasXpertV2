@@ -101,8 +101,8 @@
                 <td>{{ pdf.name }}</td>
                 <td>{{ pdf.creation_time|date:"d/m/Y H:i:s" }}</td>
                 <td>
-                    <a href="{{ pdf.path }}" target="_blank" class="btn btn-primary">Ver</a>
-                    <a href="{{ pdf.path }}" download="{{ pdf.name }}" class="btn btn-success">Descargar</a>
+                    <a href="{% url 'serve_pdf_ticket' pdf.name %}" target="_blank" class="btn btn-primary"><i class="bi bi-folder2-open"></i> Ver</a>
+                    <a href="{% url 'serve_pdf_ticket' pdf.name %}" download="{{ pdf.name }}" class="btn btn-success"><i class="bi bi-download"></i> Descargar</a>
                 </td>
             </tr>
             {% empty %}
