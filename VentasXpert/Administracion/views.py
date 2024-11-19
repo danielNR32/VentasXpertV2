@@ -345,6 +345,7 @@ def productos_api(request):
             "cantidad_total": producto.stock_Inventario,
             "precio_tienda": producto.precio_tienda,
             "ganancia": producto.ganancia_pesos,
+            "precio_provedor": producto.precio_proveedor,
         }
         for producto in productos
     ]
@@ -369,3 +370,28 @@ from Usuarios_permisos.models import Categoria
 def categorias_api(request):
     categorias = Categoria.objects.values('id', 'nombre')  # Obtén las categorías
     return JsonResponse({"categorias": list(categorias)})
+
+##Actualizar el stock
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from Usuarios_permisos.models import Producto
+
+@csrf_exempt
+def actualizar_stock(request):
+    if request.method == "POST":
+        codigo = request.POST.get("codigo")
+        cantidad = int(request.POST.get("cantidad", 0))
+        
+        try:
+            # Buscar el producto por su código
+            producto = Producto.objects.get(codigo=codigo)
+            producto.stock_Inventario += cantidad  # Actualizar el stock
+            producto.save()
+
+            return JsonResponse({"success": True})
+        except Producto.DoesNotExist:
+            return JsonResponse({"success": False, "error": "Producto no encontrado."})
+        except Exception as e:
+            return JsonResponse({"success": False, "error": str(e)})
+
+    return JsonResponse({"success": False, "error": "Método no permitido."})

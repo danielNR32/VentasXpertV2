@@ -4,17 +4,17 @@
 {% block title %}Administrador inventario información - VentasXpert{% endblock %}
 
 {% block options %}
-    <a href="{% url 'informacionInventario' %}">Informacion</a>
-    <a href="{% url 'inventarioInventario' %}">Inventario</a>
-    <a href="{% url ' inventario_administrar' %}">Administrar</a>
-    <a href="{% url 'reportes_home' %}">Reporte</a>
+<a href="{% url 'informacionInventario' %}">Informacion</a>
+<a href="{% url 'inventarioInventario' %}">Inventario</a>
+<a href="{% url ' inventario_administrar' %}">Administrar</a>
+<a href="{% url 'reportes_home' %}">Reporte</a>
 
 {% endblock %}
 
 
 {% block content %}
-    {% include 'app/Inventario/modales/modal-confirmar.html' %}
-     
+{% include 'app/Inventario/modales/modal-confirmar.html' %}
+
 
 
 
@@ -45,17 +45,12 @@
                     <div><input type="text" class="nombre" placeholder="Nombre"></div>
                     <div class="custom-select-wrapper">
                         <select class=" styled-select">
-                            <option>categoria</option>J
-                            <option>Lacteos</option>
-                            <option>Refrescos</option>
-                            <option>Limpieza</option>
                         </select>
                     </div>
 
-                    
+
                     <div><input type="text" class="precio" placeholder="Precio tienda"></div>
                     <div><input type="text" class="precio-total" placeholder="Precio provedor"></div>
-                    <div><input type="text" class="precio-total" placeholder="Precio total"></div>
 
                     <div><input type="text" class="cantidad-minima" placeholder="Cantidad mínima"></div>
                     <div><input type="text" class="cantidad" placeholder="Cantidad"></div>
@@ -63,10 +58,10 @@
                     <div class="custom-button-wrapper">
                         <button class="custom-button" type="button">Agregar producto</button>
                         <button class="custom-buttonRechazar" type="button">Cancelar</button>
-                      
-            
+
+
                     </div>
-                   
+
                 </div>
 
 
@@ -82,192 +77,225 @@
 
 
 
-    <div class="inventory-header orden_div">
+    <div class="inventory-header">
+        <h1>Productos</h1>
 
-        <h1>Productos añadidos</h1>
+        <div class="orden_div2">
+            <div class="custom-select-wrapper">
+                <select id="categoriaFilter" class="custom-select">
+                    <option value="">Filtrar por categoría</option>
+                    {% for categoria in categorias %}
+                    <option value="{{ categoria.nombre }}">{{ categoria.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
 
 
+            <div class="custom-select-wrapper">
+                <select id="estadoFilter" class="custom-select">
+                    <option value="">Filtrar por estado</option>
+                    <option value="Suficiente">Suficiente</option>
+                    <option value="Poca existencia">Poca existencia</option>
+                    <option value="Sin existencia">Sin existencia</option>
+                </select>
+            </div>
 
-
-        <div class="custom-select-wrapper" ">
-                    <select class=" custom-select">
-            <option>Filtrar por categoria</option>
-            <option>Pescado</option>
-            <option>Lacteos</option>
-            <option>Refrescos</option>
-            </select>
+            <div class="custom-input-wrapper">
+                <input type="text" id="searchInput" class="custom-input" placeholder="Buscar producto">
+            </div>
         </div>
-
-
-        <div class="custom-input-wrapper">
-            <input type="text" class="custom-input" placeholder="Buscar producto">
-        </div>
-
-
     </div>
-
-
-
 
     <div class="table-scroll">
+        <table id="productosTable" class="custom-table">
+            <thead>
+                <tr>
 
+                    <th>Código de barras</th>
+                    <th>Nombre</th>
+                    <th>Categoría</th>
+                    <th>Estado en stock</th>
+                    <th>Stock minimo</th>
+                    <th>Stock actual</th>
+                    <th>Precio</th>
+                    <th>Ganancia</th>
 
-        <div class="custom-table-wrapper">
-            <table class="custom-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Código de barras</th>
-                        <th>Nombre</th>
-                        <th>Categoría</th>
-                        <th>Estado en stock</th>
-                        <th>Cantidad mínima</th>
-                        <th>Cantidad Total</th>
-                        <th>editar</th>
-                        <th>Eliminar</th>
-
-                    </tr>
-                </thead>
-            </table>
-
-            <table class="custom-table">
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>0011223344</td>
-                        <td>Producto 1</td>
-                        <td>Categoría A</td>
-                        <td>En stock</td>
-                        <td>10</td>
-                        <td>100</td>
-
-                        <td>
-                            <button class="btn-edit custom-button"><i class="bi bi-pencil"></i> Editar</button>
-                        </td>
-                        <td>
-                            <button class="btn-delete custom-buttonRechazar"><i class="bi bi-trash3-fill"></i>
-                                Eliminar</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>0011223344</td>
-                        <td>Producto 1</td>
-                        <td>Categoría A</td>
-                        <td>En stock</td>
-                        <td>10</td>
-                        <td>100</td>
-                        <td>
-                            <button class="btn-edit custom-button"><i class="bi bi-pencil"></i> Editar</button>
-                        </td>
-                        <td>
-                            <button class="btn-delete custom-buttonRechazar"><i class="bi bi-trash3-fill"></i>
-                                Eliminar</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>0011223344</td>
-                        <td>Producto 1</td>
-                        <td>Categoría A</td>
-                        <td>En stock</td>
-                        <td>10</td>
-                        <td>100</td>
-
-                        <td>
-                            <button class="btn-edit custom-button"><i class="bi bi-pencil"></i> Editar</button>
-                        </td>
-                        <td>
-                            <button class="btn-delete custom-buttonRechazar"><i class="bi bi-trash3-fill"></i>
-                                Eliminar</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>0011223344</td>
-                        <td>Producto 1</td>
-                        <td>Categoría A</td>
-                        <td>En stock</td>
-                        <td>10</td>
-                        <td>100</td>
-
-                        <td>
-                            <button class="btn-edit custom-button"><i class="bi bi-pencil"></i> Editar</button>
-                        </td>
-                        <td>
-                            <button class="btn-delete custom-buttonRechazar"><i class="bi bi-trash3-fill"></i>
-                                Eliminar</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>0011223344</td>
-                        <td>Producto 1</td>
-                        <td>Categoría A</td>
-                        <td>En stock</td>
-                        <td>10</td>
-                        <td>100</td>
-
-                        <td>
-                            <button class="btn-edit custom-button"><i class="bi bi-pencil"></i> Editar</button>
-                        </td>
-                        <td>
-                            <button class="btn-delete custom-buttonRechazar"><i class="bi bi-trash3-fill"></i>
-                                Eliminar</button>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>1</td>
-                        <td>0011223344</td>
-                        <td>Producto 1</td>
-                        <td>Categoría A</td>
-                        <td>En stock</td>
-                        <td>10</td>
-                        <td>100</td>
-
-
-                        <td>
-
-                            <button class="btn-edit custom-button"><i class="bi bi-pencil"></i> Editar</button>
-                        </td>
-                        <td>
-                            <button class="btn-delete custom-buttonRechazar"><i class="bi bi-trash3-fill"></i>
-                                Eliminar</button>
-                        </td>
-                    </tr>
-
-
-
-                    <!-- Más filas según necesites -->
-                </tbody>
-            </table>
-
-
-        </div>
-
-
-
-
-
-
-
-
-    </div>
-    <div class="orden_div2">
-
-
-        <div class="custom-button-wrapper">
-            <button id="openModal" class="custom-button" type="button">Actualizar inventario</button>
-            <button id="openModal2" class="custom-buttonRechazar">Cancelar</button>
-
-        </div>
-        
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
     </div>
 
 
-    
-  
+
+    <!-- Scripts para DataTables -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+
+
+
+
+
+
+
+    <script>
+
+        $(document).ready(function () {
+            const table = $('#productosTable').DataTable({
+                responsive: true,
+                scrollY: "400px",  // Altura máxima para el desplazamiento vertical
+                scrollCollapse: true,  // Habilita colapsar si los datos son pocos
+                paging: true,
+                ajax: {
+                    url: "{% url 'productos_api' %}",
+                    data: function (d) {
+                        d.categoria = $('#categoriaFilter').val();
+                        d.estado = $('#estadoFilter').val();
+                    },
+                    dataSrc: 'data',
+                },
+                columns: [
+                    { data: 'codigo' },
+                    { data: 'nombre' },
+                    { data: 'categoria' },
+                    { data: 'estado_stock' },
+                    { data: 'cantidad_minima' },
+                    { data: 'cantidad_total' },
+                    { data: 'precio_tienda' },
+                    { data: 'ganancia' }
+                ],
+                createdRow: function (row, data, dataIndex) {
+                    // Seleccionar la celda correspondiente al "Estado en stock"
+                    const estadoCell = $('td', row).eq(3);
+
+                    // Agregar clases según el estado de inventario
+                    if (data.estado_stock === "Sin existencia") {
+                        estadoCell.addClass('sin-existencia');
+                    } else if (data.estado_stock === "Poca existencia") {
+                        estadoCell.addClass('poca-existencia');
+                    } else if (data.estado_stock === "Suficiente") {
+                        estadoCell.addClass('Suficiente');
+                    }
+                },
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.1/i18n/es-ES.json',
+                },
+                pagingType: "simple_numbers",
+                dom: '<"top"f>rt<"bottom"p>',
+            });
+
+            // Actualizar tabla cuando se selecciona un filtro
+            $('#categoriaFilter, #estadoFilter').change(function () {
+                table.ajax.reload();
+            });
+
+            // Buscar en la tabla
+            $('#searchInput').on('keyup', function () {
+                table.search(this.value).draw();
+            });
+
+            // Escuchar el click en una fila de la tabla
+            $('#productosTable tbody').on('click', 'tr', function () {
+                const data = table.row(this).data();
+                if (data) {
+                    // Rellenar los inputs con los datos de la fila seleccionada
+                    $('.codigo').val(data.codigo).prop('disabled', true); // Deshabilitar para que no se edite
+                    $('.nombre').val(data.nombre).prop('disabled', true);
+                    $('.styled-select').val(data.categoria).prop('disabled', true);
+                    $('.precio').val(data.precio_tienda).prop('disabled', true);
+                    $('.precio-total').val(data.precio_provedor).prop('disabled', true);
+                    $('.cantidad-minima').val(data.cantidad_minima).prop('disabled', true);
+                    $('.cantidad').val("").prop('disabled', false); // Solo habilitar el input de cantidad
+                }
+            });
+
+            // Al hacer clic en el botón para agregar stock
+            $('.custom-button').on('click', function () {
+                const codigo = $('.codigo').val();
+                const cantidadNueva = parseInt($('.cantidad').val());
+
+                if (!cantidadNueva || cantidadNueva <= 0) {
+                    alert("Ingrese una cantidad válida para agregar al stock.");
+                    return;
+                }
+
+                // Enviar los datos al servidor
+                $.ajax({
+                    url: "{% url 'actualizar_stock' %}", // Crear la vista para esta URL
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": "{{ csrf_token }}", // Asegúrate de usar el token CSRF
+                    },
+                    data: {
+                        codigo: codigo,
+                        cantidad: cantidadNueva,
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            alert("El stock ha sido actualizado correctamente.");
+                            $('.cantidad').val("").prop('disabled', true); // Limpiar el input cantidad
+                            $('#productosTable').DataTable().ajax.reload(); // Recargar la tabla
+                        } else {
+                            alert("Error al actualizar el stock: " + response.error);
+                        }
+                    },
+                    error: function () {
+                        alert("Error al realizar la solicitud.");
+                    },
+                });
+            });
+
+            // Cargar categorías dinámicamente
+            $.ajax({
+                url: "{% url 'categorias_api' %}", // Ruta a la vista de categorías
+                method: "GET",
+                success: function (response) {
+                    const categoriaFilter = $('#categoriaFilter');
+                    categoriaFilter.empty(); // Limpia las opciones
+                    categoriaFilter.append('<option value="">Filtrar por categoría</option>');
+                    response.categorias.forEach(categoria => {
+                        categoriaFilter.append(`<option value="${categoria.nombre}">${categoria.nombre}</option>`);
+                    });
+                },
+                error: function () {
+                    alert("Error al cargar las categorías");
+                }
+            });
+        });
+
+
+
+
+
+
+
+
+
+    </script>
+
+
+
+
+
+
+
+
+</div>
+<div class="orden_div2">
+
+
+    <div class="custom-button-wrapper">
+        <button id="openModal" class="custom-button" type="button">Actualizar inventario</button>
+        <button id="openModal2" class="custom-buttonRechazar">Cancelar</button>
+
+    </div>
+
+</div>
+
+
+
+
 
 
 

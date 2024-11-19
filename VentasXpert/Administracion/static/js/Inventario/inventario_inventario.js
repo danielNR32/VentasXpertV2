@@ -21,6 +21,7 @@ $(document).ready(function () {
             { data: 'cantidad_total' },
             { data: 'precio_tienda' },
             { data: 'ganancia' },
+            { data: 'precio_provedor' },
 
         ],
         createdRow: function (row, data, dataIndex) {

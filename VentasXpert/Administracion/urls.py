@@ -39,6 +39,7 @@ urlpatterns = [
   ## Funcionalidad para inventario inventario
    path('productos-api/', views.productos_api, name='productos_api'),
     path('categorias-api/', views.categorias_api, name='categorias_api'),
+     path('actualizar-stock/', views.actualizar_stock, name='actualizar_stock'),
 
     path('error_permiso/', views.error_permiso, name='error_permiso'),
 
