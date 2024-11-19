@@ -395,3 +395,44 @@ def actualizar_stock(request):
             return JsonResponse({"success": False, "error": str(e)})
 
     return JsonResponse({"success": False, "error": "Método no permitido."})
+
+## Informacion inventario
+from django.shortcuts import render
+from django.db.models import F, Sum, Max
+from Usuarios_permisos.models import Producto
+
+def informacion_inventario(request):
+    productos = Producto.objects.all()
+
+    # Total de productos (cantidad de todos los productos)
+    total_productos = productos.count()
+    #total cantidad productos
+    total_cantidad_productos = productos.aggregate(total=Sum('stock_Inventario'))['total'] or 0
+    # Productos con poca cantidad (stock menor que el mínimo)
+    poca_cantidad = productos.filter(stock_Inventario__lt=F('stock_Minimo')).count()
+
+    # Productos sin existencia (stock igual a 0)
+    sin_existencia = productos.filter(stock_Inventario=0).count()
+
+    # Valor en tienda (precio_proveedor * stock_Inventario para cada producto)
+    valor_tienda = sum(p.precio_proveedor * p.stock_Inventario for p in productos)
+
+    # Reinversión en stock (cantidad necesaria para llegar al stock mínimo)
+    reinversion = sum(
+        max(0, p.stock_Minimo - p.stock_Inventario) * p.precio_proveedor for p in productos
+    )
+
+
+
+    context = {
+        'total_productos': total_productos,
+        'total_cantidad_productos': total_cantidad_productos,
+        'poca_cantidad': poca_cantidad,
+        'sin_existencia': sin_existencia,
+        'valor_tienda': valor_tienda,
+        'reinversion': reinversion,
+        
+    }
+
+  
+    return render(request, 'app/Inventario/informacion.html', context)

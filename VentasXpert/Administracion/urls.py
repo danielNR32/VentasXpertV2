@@ -7,7 +7,7 @@ from utils.decorators import role_required
 urlpatterns = [
     path('', views.home, name='administrador_home'),  # Ruta para la vista home
     path('dashboard/', views.dashboard, name='dashboard'),
-    path('inventario_informacion/',role_required(['Gerente', 'Administrador', 'SU'])( views.informacionInventario), name='informacionInventario'),
+    path('inventario_informacion/',role_required(['Gerente', 'Administrador', 'SU'])( views.informacion_inventario), name='informacionInventario'),
     path('inventario_inventario/',role_required(['Gerente', 'Administrador', 'SU'])( views.inventarioInventario), name='inventarioInventario'),
     path('modal-agregar-producto/',role_required(['Gerente', 'Administrador', 'SU'])(views.inventarioAgregra_producto), name='inventarioAgregra_producto'),
     path('inventario-administrar/',role_required(['Gerente', 'Administrador', 'SU']) (views. inventario_administrar), name=' inventario_administrar'),
