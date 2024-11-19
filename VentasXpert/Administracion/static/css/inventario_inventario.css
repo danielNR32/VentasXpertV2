@@ -173,9 +173,9 @@ th {
 
 .custom-table tbody {
     display: block;
-    height: 260px; /* Ajusta esta altura basada en la altura de tus filas para mostrar solo 5 filas */
+    height: 450px; /* Ajusta esta altura basada en la altura de tus filas para mostrar solo 5 filas */
     background-color: rgba(223, 215, 215, 0.577);
-    overflow-y: auto;
+    
 }
 
 
@@ -186,11 +186,11 @@ th {
     height: 260px;
     max-height: 400px; ;  Altura ajustable según el número de filas que quieras mostrar 
 }*/
-.table-scroll2 {
+/*.table-scroll2 {
     overflow-y: auto;
-    height: 100px; ; /* Altura ajustable según el número de filas que quieras mostrar */
+    height: 100px; ; /* Altura ajustable según el número de filas que quieras mostrar 
 }
-
+*/
 
 
 .custom-table thead, .custom-table tbody tr {
@@ -366,3 +366,84 @@ th {
 .custom-buttonRechazar:hover {
     background-color: #e63946;
 }
+
+/*Busqueda actualizado*/
+.dataTables_filter {
+    display: none; /* Oculta el campo de búsqueda por defecto */
+}
+
+.custom-input-wrapper {
+    position: relative;
+    width: 300px;
+}
+
+.custom-input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 20px;
+    border: 2px solid #6C63FF;
+    font-size: 16px;
+    outline: none;
+}
+
+.custom-input::placeholder {
+    color: #999;
+}
+
+.custom-input-wrapper:after {
+    content: "🔍";
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6C63FF;
+}
+/*Configuracion dataTable*/
+
+
+
+.custom-table {
+    width: 100%;
+    overflow-y: auto; /* Desplazamiento vertical */
+    max-height:  450pxpx; /* Define la altura máxima para la tabla */
+    border-collapse: collapse;
+    table-layout: fixed; /* Asegura que las columnas sean uniformes */
+}
+
+.custom-table th, .custom-table td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+    overflow: hidden; /* Evita que el contenido salga del cuadro */
+    text-overflow: ellipsis; /* Agrega puntos suspensivos al contenido largo */
+    white-space: nowrap; /* Evita que el texto se ajuste */
+}
+
+.custom-table thead th {
+    background-color: #6C63FF;
+    color: white;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .custom-table th, .custom-table td {
+        font-size: 12px; /* Ajusta el tamaño del texto para pantallas pequeñas */
+    }
+}
+
+/* Fila roja para "Sin existencia" */
+/* Celda roja para "Sin existencia" */
+.sin-existencia {
+    background-color: #ffcccc; /* Fondo rojo claro */
+}
+
+/* Celda amarilla para "Poca existencia" */
+.poca-existencia {
+    background-color: #fff8c4; /* Fondo amarillo claro */
+}
+
+.Suficiente {
+    background-color: #dfffcd; /* Fondo verde claro */
+}
+
+

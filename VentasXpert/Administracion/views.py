@@ -299,3 +299,73 @@ def error_permiso(request):
         'mensaje': "No tienes permiso para acceder a esta página."
     })
 
+
+
+## VITSA PARA INVENTARIO INVENTARIO
+from django.http import JsonResponse
+from django.db.models import F
+
+from django.http import JsonResponse
+from django.db.models import F
+
+def productos_api(request):
+    """
+    Devuelve los datos de productos en formato JSON para DataTables.
+    """
+    productos = Producto.objects.all()
+    
+    # Filtrar por categoría
+    categoria = request.GET.get('categoria')
+    if categoria:
+        productos = productos.filter(categoria__nombre=categoria)
+    
+    # Filtrar por estado
+    estado = request.GET.get('estado')
+    if estado:
+        if estado == "Suficiente":
+            productos = productos.filter(stock_Inventario__gte=F('stock_Minimo')).exclude(stock_Inventario=0)
+            print(productos.count())
+        elif estado == "Poca existencia":
+            productos = productos.filter(stock_Inventario__lt=F('stock_Minimo'), stock_Inventario__gt=0)
+        elif estado == "Sin existencia":
+            productos = productos.filter(stock_Inventario=0)
+    
+    # Serializar los datos
+    data = [
+        {
+            "codigo": producto.codigo,
+            "nombre": producto.nombre,
+            "categoria": producto.categoria.nombre if producto.categoria else "",
+            "estado_stock": (
+                "Sin existencia" if producto.stock_Inventario == 0
+                else "Poca existencia" if producto.stock_Inventario < producto.stock_Minimo
+                else "Suficiente"
+            ),
+            "cantidad_minima": producto.stock_Minimo,
+            "cantidad_total": producto.stock_Inventario,
+            "precio_tienda": producto.precio_tienda,
+            "ganancia": producto.ganancia_pesos,
+        }
+        for producto in productos
+    ]
+
+    # Debugging para comprobar los filtros aplicados
+    print(f"Filtrado: {categoria=}, {estado=}, Productos encontrados: {len(data)}")
+    
+    return JsonResponse({"data": data})
+
+from Usuarios_permisos.models import Categoria
+
+@login_required
+def inventarioInventario(request):
+    # Obtener todas las categorías de la base de datos
+    categorias = Categoria.objects.all()
+    return render(request, 'app/Inventario/inventario.html', {'categorias': categorias})
+
+
+from django.http import JsonResponse
+from Usuarios_permisos.models import Categoria
+
+def categorias_api(request):
+    categorias = Categoria.objects.values('id', 'nombre')  # Obtén las categorías
+    return JsonResponse({"categorias": list(categorias)})

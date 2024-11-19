@@ -12,9 +12,9 @@ urlpatterns = [
     path('modal-agregar-producto/',role_required(['Gerente', 'Administrador', 'SU'])(views.inventarioAgregra_producto), name='inventarioAgregra_producto'),
     path('inventario-administrar/',role_required(['Gerente', 'Administrador', 'SU']) (views. inventario_administrar), name=' inventario_administrar'),
     path('inventario-actualizarProducto/',role_required(['Gerente', 'Administrador', 'SU'])(views. inventario_actualizarProducto), name='inventario_actualizarProducto'), 
-    path('reportes/', views.reportes_home, name='reportes_home'),
+    path('reportes/',role_required(['Gerente', 'Administrador', 'SU']) (views.reportes_home), name='reportes_home'),
     path('inventario/', views.inventario_home, name='inventario_home'),
-    path('proovedores/', views.proovedores_home, name='proovedores_home'),
+    path('proovedores/', role_required(['Gerente', 'Administrador', 'SU'])(views.proovedores_home), name='proovedores_home'),
 
     ## funcionalidad para guardar en la base de datos
    ## path('agregar_producto/', views.agregar_producto_temporal, name='agregar_producto'),
@@ -36,7 +36,9 @@ urlpatterns = [
     path('buscar_producto/', views.buscar_producto, name='buscar_producto'),
     path('confirmar_surtido/', views.confirmar_surtido, name='confirmar_surtido'),
 
-
+  ## Funcionalidad para inventario inventario
+   path('productos-api/', views.productos_api, name='productos_api'),
+    path('categorias-api/', views.categorias_api, name='categorias_api'),
 
     path('error_permiso/', views.error_permiso, name='error_permiso'),
 

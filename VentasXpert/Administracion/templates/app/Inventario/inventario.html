@@ -7,10 +7,10 @@
 
 {% block title %}inventario inventario- VentasXpert{% endblock %}
 {% block options %}
-    <a href="{% url 'informacionInventario' %}">Informacion</a>
-    <a href="{% url 'inventarioInventario' %}">Inventario</a>
-    <a href="{% url ' inventario_administrar' %}">Administrar</a>
-    <a href="{% url 'reportes_home' %}">Reporte</a>
+<a href="{% url 'informacionInventario' %}">Informacion</a>
+<a href="{% url 'inventarioInventario' %}">Inventario</a>
+<a href="{% url ' inventario_administrar' %}">Administrar</a>
+<a href="{% url 'reportes_home' %}">Reporte</a>
 {% endblock %}
 
 
@@ -22,7 +22,7 @@
 
     <!-- Estilos -->
     {% block extrahead %}
-    <link rel="stylesheet" href="{% static 'css/inventario_inventario.css' %}">
+    <link rel="stylesheet" href="{% static 'css/inventario_inventario.css' %}?v={ timestamp }">
     {% endblock %}
 
 
@@ -31,295 +31,148 @@
 
 
     <div class="inventory-header">
-
         <h1>Inventario</h1>
 
-        <di class="orden_div2">
-
-
-            <div class="custom-select-wrapper" ">
-                    <select class=" custom-select">
-                <option>Filtrar por categoria</option>
-                <option>Pescado</option>
-                <option>Lacteos</option>
-                <option>Refrescos</option>
+        <div class="orden_div2">
+            <div class="custom-select-wrapper">
+                <select id="categoriaFilter" class="custom-select">
+                    <option value="">Filtrar por categoría</option>
+                    {% for categoria in categorias %}
+                    <option value="{{ categoria.nombre }}">{{ categoria.nombre }}</option>
+                    {% endfor %}
                 </select>
             </div>
 
-            <div class="custom-select-wrapper" ">
-                                <select class=" custom-select">
-                <option>Filtrar por estado</option>
-                <option>Suficiente</option>
-                <option>Poca existencia</option>
-                <option>Sin existencia</option>
+
+            <div class="custom-select-wrapper">
+                <select id="estadoFilter" class="custom-select">
+                    <option value="">Filtrar por estado</option>
+                    <option value="Suficiente">Suficiente</option>
+                    <option value="Poca existencia">Poca existencia</option>
+                    <option value="Sin existencia">Sin existencia</option>
                 </select>
             </div>
+
             <div class="custom-input-wrapper">
-                <input type="text" class="custom-input" placeholder="Buscar producto">
+                <input type="text" id="searchInput" class="custom-input" placeholder="Buscar producto">
             </div>
-
-            <!-- Botón para abrir el modal -->
-            <button id="openAgregarProducto" class="custom-button">Agregar Producto</button>
-            <!-- Aquí cargaremos el contenido del modal dinámicamente -->
-            <div id="modalContainer"></div>
-            <!-- Incluir el archivo JS -->
-
-
-
-
-
+        </div>
     </div>
 
+    <div class="table-scroll">
+        <table id="productosTable" class="custom-table">
+            <thead>
+                <tr>
 
-    <div>
+                    <th>Código de barras</th>
+                    <th>Nombre</th>
+                    <th>Categoría</th>
+                    <th>Estado en stock</th>
+                    <th>Stock minimo</th>
+                    <th>Stock actual</th>
+                    <th>Precio</th>
+                    <th>Ganancia</th>
 
-
-        <div class="table-scroll">
-
-
-            <div class="custom-table-wrapper">
-                <table class="custom-table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Código de barras</th>
-                            <th>Nombre</th>
-                            <th>Categoría</th>
-                            <th>Estado en stock</th>
-                            <th>Cantidad mínima</th>
-                            <th>Cantidad Total</th>
-                        </tr>
-                    </thead>
-                </table>
-
-                <table class="custom-table">
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>0011223344</td>
-                            <td>Producto 1</td>
-                            <td>Categoría A</td>
-                            <td>En stock</td>
-                            <td>10</td>
-                            <td>100</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>0011223344</td>
-                            <td>Producto 1</td>
-                            <td>Categoría A</td>
-                            <td>En stock</td>
-                            <td>10</td>
-                            <td>100</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>0011223344</td>
-                            <td>Producto 1</td>
-                            <td>Categoría A</td>
-                            <td>En stock</td>
-                            <td>10</td>
-                            <td>100</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>0011223344</td>
-                            <td>Producto 1</td>
-                            <td>Categoría A</td>
-                            <td>En stock</td>
-                            <td>10</td>
-                            <td>100</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>0011223344</td>
-                            <td>Producto 1</td>
-                            <td>Categoría A</td>
-                            <td>En stock</td>
-                            <td>10</td>
-                            <td>100</td>
-                        </tr>
-
-                        <tr>
-                            <td>1</td>
-                            <td>0011223344</td>
-                            <td>Producto 1</td>
-                            <td>Categoría A</td>
-                            <td>En stock</td>
-                            <td>10</td>
-                            <td>100</td>
-                        </tr>
-                        <!-- Más filas según necesites -->
-                    </tbody>
-                </table>
-
-            </div>
-
-
-
-
-
-        </div>
-
-
-
-
-
-
-        <div class="inventory-header">
-
-            <h1>Stock bajo</h1>
-
-            <di class="orden_div2">
-
-
-                <div class="custom-select-wrapper" ">
-                        <select class=" custom-select">
-                    <option>Filtrar por categoria</option>
-                    <option>Pescado</option>
-                    <option>Lacteos</option>
-                    <option>Refrescos</option>
-                    </select>
-                </div>
-
-                <div class="custom-select-wrapper" ">
-                                    <select class=" custom-select">
-                    <option>Filtrar por estado</option>
-                    <option>Suficiente</option>
-                    <option>Poca existencia</option>
-                    <option>Sin existencia</option>
-                    </select>
-                </div>
-                <div class="custom-input-wrapper">
-                    <input type="text" class="custom-input" placeholder="Buscar producto">
-                </div>
-
-                <div class="custom-button-wrapper">
-                    <button class="custom-button">Generar reporte</button>
-                </div>
-        </div>
-
-
-
-
-        <div class="table-scroll">
-
-
-            <div class="custom-table-wrapper">
-                <table class="custom-table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Código de barras</th>
-                            <th>Nombre</th>
-                            <th>Categoría</th>
-                            <th>Estado en stock</th>
-                            <th>Cantidad mínima</th>
-                            <th>Cantidad Total</th>
-                        </tr>
-                    </thead>
-                </table>
-
-                <table class="custom-table">
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>0011223344</td>
-                            <td>Producto 1</td>
-                            <td>Categoría A</td>
-                            <td>En stock</td>
-                            <td>10</td>
-                            <td>100</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>0011223344</td>
-                            <td>Producto 1</td>
-                            <td>Categoría A</td>
-                            <td>En stock</td>
-                            <td>10</td>
-                            <td>100</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>0011223344</td>
-                            <td>Producto 1</td>
-                            <td>Categoría A</td>
-                            <td>En stock</td>
-                            <td>10</td>
-                            <td>100</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>0011223344</td>
-                            <td>Producto 1</td>
-                            <td>Categoría A</td>
-                            <td>En stock</td>
-                            <td>10</td>
-                            <td>100</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>0011223344</td>
-                            <td>Producto 1</td>
-                            <td>Categoría A</td>
-                            <td>En stock</td>
-                            <td>10</td>
-                            <td>100</td>
-                        </tr>
-
-                        <tr>
-                            <td>1</td>
-                            <td>0011223344</td>
-                            <td>Producto 1</td>
-                            <td>Categoría A</td>
-                            <td>En stock</td>
-                            <td>10</td>
-                            <td>100</td>
-                        </tr>
-
-                        <tr>
-                            <td>1</td>
-                            <td>0011223344</td>
-                            <td>Producto 1</td>
-                            <td>Categoría A</td>
-                            <td>En stock</td>
-                            <td>10</td>
-                            <td>100</td>
-                        </tr>
-
-                        <tr>
-                            <td>1</td>
-                            <td>0011223344</td>
-                            <td>Producto 1</td>
-                            <td>Categoría A</td>
-                            <td>En stock</td>
-                            <td>10</td>
-                            <td>100</td>
-                        </tr>
-                        <!-- Más filas según necesites -->
-                    </tbody>
-                </table>
-
-
-            </div>
-
-
-
-
-
-
-        </div>
-
-
-
-
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
     </div>
 
 
 
+    <!-- Scripts para DataTables -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
 
 
+
+
+
+
+
+    <script>
+
+        $(document).ready(function () {
+            const table = $('#productosTable').DataTable({
+                responsive: true,
+                scrollY: "400px",  // Altura máxima para el desplazamiento vertical
+                scrollCollapse: true,  // Habilita colapsar si los datos son pocos
+                paging: true,
+                ajax: {
+                    url: "{% url 'productos_api' %}",
+                    data: function (d) {
+                        d.categoria = $('#categoriaFilter').val();
+                        d.estado = $('#estadoFilter').val();
+                    },
+                    dataSrc: 'data',
+                },
+                columns: [
+                    { data: 'codigo' },
+                    { data: 'nombre' },
+                    { data: 'categoria' },
+                    { data: 'estado_stock' },
+                    { data: 'cantidad_minima' },
+                    { data: 'cantidad_total' },
+                    { data: 'precio_tienda' },
+                    { data: 'ganancia' },
+
+                ],
+                createdRow: function (row, data, dataIndex) {
+                    // Seleccionar la celda correspondiente al "Estado en stock"
+                    const estadoCell = $('td', row).eq(3);
+
+                    // Agregar clases según el estado de inventario
+                    if (data.estado_stock === "Sin existencia") {
+                        estadoCell.addClass('sin-existencia');
+                    } else if (data.estado_stock === "Poca existencia") {
+                        estadoCell.addClass('poca-existencia');
+                    } else if (data.estado_stock === "Suficiente") {
+                        estadoCell.addClass('Suficiente');
+                    }
+                },
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.1/i18n/es-ES.json',
+                },
+                pagingType: "simple_numbers",
+                dom: '<"top"f>rt<"bottom"p>',
+            });
+
+            // Actualizar tabla cuando se selecciona un filtro
+            $('#categoriaFilter, #estadoFilter').change(function () {
+                table.ajax.reload();
+            });
+
+            // Buscar en la tabla
+            $('#searchInput').on('keyup', function () {
+                table.search(this.value).draw();
+            });
+        });
+
+
+        $(document).ready(function () {
+            // Cargar categorías dinámicamente
+            $.ajax({
+                url: "{% url 'categorias_api' %}", // Ruta a la vista de categorías
+                method: "GET",
+                success: function (response) {
+                    const categoriaFilter = $('#categoriaFilter');
+                    categoriaFilter.empty(); // Limpia las opciones
+                    categoriaFilter.append('<option value="">Filtrar por categoría</option>');
+                    response.categorias.forEach(categoria => {
+                        categoriaFilter.append(`<option value="${categoria.nombre}">${categoria.nombre}</option>`);
+                    });
+                },
+                error: function () {
+                    alert("Error al cargar las categorías");
+                }
+            });
+        });
+
+
+
+    </script>
 
 
     <script src="{% static 'js/Inventario/inventario.js' %}"></script>
