@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Ticket de Venta</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .header { text-align: center; }
+        .header h4 { margin: 0; }
+        .ticket-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .ticket-table th, .ticket-table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        .ticket-footer { margin-top: 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h4>VentasXpert</h4>
+        <p>Fecha: {{ fecha_actual }} {{ hora_actual }}</p>
+        <p>Ticket #: 1</p>
+    </div>
+    <table class="ticket-table">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for carrito in carritoProductos %}
+            <tr>
+                <td>{{ carrito.producto.nombre }}</td>
+                <td>{{ carrito.cantidad }}</td>
+                <td>${{ carrito.producto.precio_tienda }}</td>
+                <td>${{ carrito.subtotal }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="ticket-footer">
+        <p>Total de productos: {{ total_productos }}</p>
+        <p>Precio total: ${{ total_costo_productos }}</p>
+        <p>IVA: N/A</p>
+        <p>Total a pagar: ${{ total_costo_productos }}</p>
+    </div>
+</body>
+</html>

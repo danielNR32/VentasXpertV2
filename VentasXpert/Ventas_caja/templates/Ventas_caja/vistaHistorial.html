@@ -77,87 +77,12 @@
 
 </style>
 {% endblock %}
-<div style="display: flex;">
-    <div style="flex: 2;">
-        <div class="TituloTablaC">
-            <h2 style="flex: 1;">Lista de productos a cobrar</h2>
-            <div class="BuscarProducto-cajero">
-                <div class="buscarProductoInput">
-                    <input type="text" name="q" placeholder="Buscar producto..." oninput="toggleTooltip(this)">
-                    <button><i class="bi bi-search"></i></button>
-                    
-                    <!-- Tooltip de resultados de búsqueda -->
-                    <div id="searchTooltip" class="search-tooltip" style="display: none;">
-                        {% for producto in productos %}
-                        <div class="search-result" data-nombre="{{ producto.nombre }}" data-codigo="{{ producto.codigo }}">
-                            {{ producto.nombre }} <a href="{% url 'agregar_producto' producto.id %}" class="add-button" style="background-color: #4400cd; text-decoration: none; color: white;">Agregar</a>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-        </div>
-        <table class="Productos-Caja">
-            <thead>
-                <tr>
-                    <th>Producto</th>
-                    <th>Precio</th>
-                    <th>Cantidad</th>
-                    <th>Subtotal</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for carrito in carritoProductos %}
-                <tr>
-                    <td>{{ carrito.producto.nombre }}</td>
-                    <td>${{ carrito.producto.precio_tienda }}</td>
-                    <td>{{ carrito.cantidad }}</td>
-                    <td>${{ carrito.subtotal }}</td>
-                    <td>
-                        <a href="{% url 'sumar_producto' carrito.producto.id %}"><i class="bi bi-plus" style="color: white;"></i></a>
-                        {% if carrito.cantidad > 1 %}
-                        <a href="{% url 'restar_producto' carrito.producto.id %}"><i class="bi bi-dash" style="color: white;"></i></a>
-                        {% endif %}
-                        <a href="{% url 'quitar_producto' carrito.producto.id %}"><i class="bi bi-trash3-fill" style="color: white;"></i></a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    <div style="flex: 1; margin-left: 20px;">
-        <div class="VentaActual">
-            <h2>Información de la Venta</h2>
-            <div class="marco-VentaActual">
-                <p>Total de productos: {{ total_productos }}</p>
-                <p>Costo total de los productos: ${{ total_costo_productos }}</p>
-                <p>IVA calculado: N/A</p>
-                <p>Descuento: N/A</p>
-                <div>
-                    <h4 class="espaciadoVenta">Total a pagar: ${{ total_costo_productos }}</h4>
-                </div>
-            </div>
-            <div style="display: flex; justify-content: end; margin-top: 10px;">
-                {% if carritoProductos %}
-                <button data-bs-toggle="modal" data-bs-target="#cancelarVentaModal" style="margin-right: 10px; background-color: red;">
-                    Cancelar venta
-                </button>
-                <button data-bs-toggle="modal" data-bs-target="#confirmacionVentaModal">
-                    Finalizar Venta
-                </button>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="seccionInvetario">
+<div class="seccionInvetario mt-0">
     <div class="TituloTablaC">
-        <h2 style="flex: 1;">Inventario disponible</h2>
+        <h2 style="flex: 1;">Historial de compras</h2>
         <form class="BuscarProducto-cajero">
             <div class="buscarProductoInput">
-                <input type="text" name="q" placeholder="Buscar producto...">
+                <input type="text" name="q" placeholder="Buscar...">
                 <button type="submit"><i class="bi bi-search"></i></button>
             </div>
         </form>
@@ -165,17 +90,24 @@
     <table>
         <thead>
             <tr>
-                <th>Producto</th>
-                <th>Precio</th>
-                <th>Cantidad</th>
+                <th>Nombre del archivo</th>
+                <th>Fecha de venta</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
-            {% for producto in productos %}
+            {% for pdf in pdf_files %}
             <tr>
-                <td>{{ producto.nombre }}</td>
-                <td>${{ producto.precio_tienda }}</td>
-                <td>{{ producto.stock_Inventario}}</td>
+                <td>{{ pdf.name }}</td>
+                <td>{{ pdf.creation_time|date:"d/m/Y H:i:s" }}</td>
+                <td>
+                    <a href="{% url 'serve_pdf_ticket' pdf.name %}" target="_blank" class="btn btn-primary"><i class="bi bi-folder2-open"></i> Ver</a>
+                    <a href="{% url 'serve_pdf_ticket' pdf.name %}" download="{{ pdf.name }}" class="btn btn-success"><i class="bi bi-download"></i> Descargar</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3">No hay archivos disponibles</td>
             </tr>
             {% endfor %}
         </tbody>

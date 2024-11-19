@@ -21,7 +21,9 @@ body {
     gap: 20px;
 }
 
+/* Aplica los estilos a input[type="text"] e input[type="number"] */
 input[type="text"],
+input[type="number"],
 select {
     width: 100%;
     padding: 12px;
@@ -32,13 +34,17 @@ select {
     transition: border-color 0.3s, box-shadow 0.3s;
 }
 
+/* Efecto al enfocar */
 input[type="text"]:focus,
+input[type="number"]:focus,
 select:focus {
     border-color: #4CAF50;
     box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
 }
 
+/* Efecto al pasar el ratón por encima */
 input[type="text"]:hover,
+input[type="number"]:hover,
 select:hover {
     border-color: #888;
 }
@@ -85,8 +91,6 @@ select:hover {
     padding: 10px; /* Espaciado interno */
 }
 
-
-
 /*Select*/
 .styled-select {
     padding: 12px; /* Espaciado interno */
@@ -113,7 +117,6 @@ select:hover {
     border-color: #888; /* Cambiar el borde al pasar el mouse */
 }
 
-
 .styled-select::after {
     content: '▼'; /* Flecha hacia abajo */
     position: absolute;
@@ -123,8 +126,64 @@ select:hover {
     pointer-events: none; /* Ignorar eventos de mouse en el ícono */
 }
 
-.fondoTodo{
+.fondoTodo {
     background-color: white;
+}
 
+.btn-no-bootstrap {
+    background-color: inherit; /* Si tienes algún color específico */
+    border-radius: inherit; /* Para mantener el diseño original */
+    padding: inherit; /* Mantén el relleno original */
+    font-size: inherit; /* Asegúrate de que use el tamaño de fuente original */
+    box-shadow: none; /* Evitar sombras de Bootstrap */
+}
 
+/* Estilos personalizados */
+.custom-button {
+    background-color: #6c63ff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+}
+
+.custom-buttonRechazar {
+    background-color: red;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+}
+
+.custom-table th:last-child,
+.custom-table td:last-child {
+    width: 100px;
+}
+
+/*Boton eliminar*/
+.custom-table td {
+    text-align: center;  /* Centrar horizontalmente el contenido */
+    vertical-align: middle;  /* Centrar verticalmente el contenido */
+}
+
+.custom-table .icono-eliminar {
+    font-size: 2.5em;
+    color: red;
+}
+
+.custom-table i {
+    display: inline-block; /* Asegura que el ícono se comporte como un bloque */
+}
+
+.custom-button {
+    background-color: #6c63ff; /* Color del botón */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    text-decoration: none; /* Elimina la línea subrayada del enlace */
+    display: inline-block; /* Asegura que el botón se muestre correctamente */
 }

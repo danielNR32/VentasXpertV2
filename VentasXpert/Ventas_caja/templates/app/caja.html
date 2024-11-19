@@ -168,46 +168,13 @@
             </tr>
         </thead>
         <tbody>
+            {% for producto in productos %}
             <tr>
-                <td>Producto 1 jbdjkadjkdhjakdh</td>
-                <td>$100.00</td>
-                <td>2</td>
+                <td>{{ producto.nombre }}</td>
+                <td>{{ producto.precio_tienda }}</td>
+                <td>{{ producto."stock_Inventario" }}</td>
             </tr>
-            <tr>
-                <td>Producto 2</td>
-                <td>$50.00</td>
-                <td>1</td>
-            </tr>
-            <tr>
-                <td>Producto 3</td>
-                <td>$50.00</td>
-                <td>1</td>
-            </tr>
-            <tr>
-                <td>Producto 4</td>
-                <td>$50.00</td>
-                <td>1</td>
-            </tr>
-            <tr>
-                <td>Producto 5</td>
-                <td>$50.00</td>
-                <td>1</td>
-            </tr>
-            <tr>
-                <td>Producto 5</td>
-                <td>$50.00</td>
-                <td>1</td>
-            </tr>
-            <tr>
-                <td>Producto 5</td>
-                <td>$50.00</td>
-                <td>1</td>
-            </tr>
-            <tr>
-                <td>Producto 5</td>
-                <td>$50.00</td>
-                <td>1</td>
-            </tr>
+            {% endfor %}
         </tbody>
     </table>
 </div>

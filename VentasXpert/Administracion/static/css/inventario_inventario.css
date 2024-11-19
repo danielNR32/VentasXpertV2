@@ -58,15 +58,6 @@ th {
     pointer-events: none; /* Hace que el icono sea no interactivo */
 }
 /*ORDEN PARA IZQUIERDA A DERECHA*/
-.orden_div{
-
-    display: flex;                /* Establece un layout flexible para los elementos internos */
-    justify-content: flex-start;  /* Alinea los elementos al comienzo del contenedor */
-    padding: 2%;                  /* Añade padding alrededor del contenedor para evitar que los elementos toquen los bordes */
-    flex-wrap: wrap;              /* Permite que los elementos se envuelvan en múltiples líneas si no caben en una sola */
-    gap: 20px;      
-
-}
 
 
 .orden_div2{
@@ -247,11 +238,15 @@ th {
 /* Asegúrate de que las celdas del cuerpo y los encabezados coincidan en el ancho */
 .custom-table th:nth-child(1), .custom-table td:nth-child(1) { width: 5%; }
 .custom-table th:nth-child(2), .custom-table td:nth-child(2) { width: 10%; }
-.custom-table th:nth-child(3), .custom-table td:nth-child(3) { width: 20%; }
-.custom-table th:nth-child(4), .custom-table td:nth-child(4) { width: 15%; }
+.custom-table th:nth-child(3), .custom-table td:nth-child(3) { width: 10%; }
+.custom-table th:nth-child(4), .custom-table td:nth-child(4) { width: 10%; }
 .custom-table th:nth-child(5), .custom-table td:nth-child(5) { width: 10%; }
 .custom-table th:nth-child(6), .custom-table td:nth-child(6) { width: 10%; }
 .custom-table th:nth-child(7), .custom-table td:nth-child(7) { width: 10%; }
+.custom-table th:nth-child(8), .custom-table td:nth-child(8) { width: 10%; }
+.custom-table th:nth-child(9), .custom-table td:nth-child(9) { width: 10%; }
+.custom-table th:nth-child(10), .custom-table td:nth-child(10) { width: 10%; }
+.custom-table th:nth-child(11), .custom-table td:nth-child(11) { width: 10%; }
 
 
 
@@ -288,3 +283,86 @@ th {
 
 }
 
+/*Estilos inputs*/
+
+
+
+.orden_div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+    justify-content: flex-start;  /* Alinea los elementos al comienzo del contenedor */
+    align-items: flex-start;
+}
+
+.orden_div > div {
+    flex: 1 1 22%; /* Cada campo ocupa el 22% del contenedor en pantallas grandes */
+    max-width: 300px; /* Asegura un ancho mínimo para que los campos no se vean demasiado pequeños */
+    min-width: 300px;
+    margin-bottom: 20px;
+    max-height: 300px;
+}
+
+/* Media query para pantallas medianas */
+@media (max-width: 1024px) {
+    .orden_div {
+        justify-content: space-evenly; /* Espacio uniforme en pantallas medianas */
+    }
+
+    .orden_div > div {
+        flex: 1 1 45%; /* Ocupa el 45% del ancho en pantallas medianas, dejando espacio para 2 columnas */
+        min-width: 200px;
+    }
+}
+
+/* Media query para pantallas pequeñas */
+@media (max-width: 768px) {
+    .orden_div {
+        justify-content: center;
+    }
+    
+    .orden_div > div {
+        flex: 1 1 100%; /* Cada elemento ocupa el 100% en pantallas pequeñas */
+        min-width: auto;
+    }
+}
+
+/* Espaciado para los botones de acción */
+.custom-button-wrapper {
+    text-align: left; /* Alinea los botones a la izquierda */
+    margin-top: 10px;
+}
+
+/* Botones */
+.custom-button {
+    background-color: #6C63FF;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    outline: none;
+}
+
+.custom-buttonRechazar {
+    background-color: #fb001d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    outline: none;
+}
+
+/* Hover effects */
+.custom-button:hover {
+    background-color: #5a52d8;
+}
+.custom-buttonRechazar:hover {
+    background-color: #e63946;
+}

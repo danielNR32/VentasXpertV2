@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurar MFA</title>
+</head>
+<body>
+    <h1>Configurar Autenticación Multifactor</h1>
+    <p>Escanea este código QR con tu aplicación de autenticación:</p>
+    <img src="data:image/png;base64,{{ qr_code }}" alt="QR Code">
+    <form method="post" action="{% url 'verify_totp' %}">
+        {% csrf_token %}
+        <label for="otp_code">Introduce el código OTP generado por la aplicación:</label>
+        <input type="text" id="otp_code" name="otp_code" required>
+        <button type="submit">Verificar</button>
+    </form>
+</body>
+</html>
