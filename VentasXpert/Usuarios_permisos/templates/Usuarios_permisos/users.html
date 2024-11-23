@@ -10,9 +10,10 @@
 {% endblock %}
 
 {% block options %}
-    <a href="{% url 'usuarios' %}">Usuarios</a>
-    <a href="{% url 'permisos' %}">Permisos</a>
-    <a href="{% url 'roles' %}">Roles</a>
+<a href="{% url 'usuarios_permisos_home' %}">Home</a>
+<a href="{% url 'usuarios' %}">Usuarios</a>
+<a href="{% url 'permisos' %}">Permisos</a>
+<a href="{% url 'roles' %}">Roles</a>
 {% endblock %}
 
 {% block content %}
