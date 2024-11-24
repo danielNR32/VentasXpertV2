@@ -194,6 +194,8 @@ class Bitacora(models.Model):
     ('update', 'Actualizar'),
     ('delete', 'Eliminar'),
     ('purchase', 'Compra'),
+    ('login', 'Inicio de Session'),
+    ('logout', 'Cierre de Session'),
 ]
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)  # Relación con el usuario
     persona = models.ForeignKey(Persona, on_delete=models.SET_NULL, null=True, blank=True)

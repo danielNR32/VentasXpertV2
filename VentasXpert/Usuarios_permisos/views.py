@@ -19,8 +19,18 @@ def usuarios_permisos_home(request):
 
 @login_required
 def logout_view(request):
+    # Registrar el cierre de sesión antes de hacer logout
+    if request.user.is_authenticated:
+        Bitacora.objects.create(
+            usuario=request.user,
+            persona=request.user.persona if hasattr(request.user, 'persona') else None,
+            rol=request.user.usuariorol.rol if hasattr(request.user, 'usuariorol') else None,
+            accion='logout',
+            detalle=f"Cierre de sesión para el usuario {request.user.username}."
+        )
+
     logout(request)
-    return redirect('login')  # Redirect to the login page or another page
+    return redirect('login')
 
 """
 !Apartado para las vistas, modales, formularios 
