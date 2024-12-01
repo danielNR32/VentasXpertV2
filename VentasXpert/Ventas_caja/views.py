@@ -3,7 +3,7 @@ import datetime
 from django.shortcuts import render
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from Usuarios_permisos.models import Producto, CarritoProducto, Carrito
+from Usuarios_permisos.models import Producto, CarritoProducto, Carrito, Bitacora, UsuarioRol
 from django.http import HttpResponse, HttpResponseForbidden, FileResponse
 from django.template.loader import render_to_string
 from xhtml2pdf import pisa
@@ -107,6 +107,9 @@ def eliminar_carrito_actual(request):
         producto_actual = Producto.objects.get(id=carritoProducto1.producto_id)
         producto_actual.stock_Inventario -= carritoProducto1.cantidad
         producto_actual.save()
+        
+    # llama a la funcion para generar el ticket
+    generar_ticket_pdf(request)
     
     # Eliminar productos del carrito
     for carritoProducto in carritoProductos:
@@ -133,14 +136,27 @@ def generar_ticket_pdf(request):
         'total_productos': total_productos,
         'total_costo_productos': total_costo_productos,
         'fecha_actual': fecha_actual,
-        'hora_actual': hora_actual
+        'hora_actual': hora_actual,
+        'usuarios': request.user
     }
+    
+    # almacenar datos en la tabla bitacora
+    Bitacora.objects.create(
+        accion='purchase',
+        detalle=f'Compra de {total_productos} productos por un total de ${total_costo_productos}',
+        usuario=request.user,
+        rol=request.user.usuariorol.rol if hasattr(request.user, 'usuariorol') else None,
+        persona=request.user.persona if hasattr(request.user, 'persona') else None,
+    )
 
     # Renderiza la plantilla HTML
     html = render_to_string('Ventas_caja/ticket_pdf.html', context)
     
+    pdf_dir = os.path.join(settings.BASE_DIR, 'Ventas_caja', 'media', 'pdf_ticket')
+    os.makedirs(pdf_dir, exist_ok=True)  # Crea la carpeta si no existe
+    
     # Define la ruta de almacenamiento del PDF
-    pdf_path = os.path.join(settings.BASE_DIR,'Ventas_caja', 'media', 'pdf_ticket', f'ticket_{datetime.datetime.now().strftime("%Y%m%d%H%M%S")}.pdf')
+    pdf_path = os.path.join(pdf_dir, f'ticket_{datetime.datetime.now().strftime("%Y%m%d%H%M%S")}.pdf')
 
     # Genera el PDF y guárdalo en la ruta especificada
     with open(pdf_path, "wb") as pdf_file:

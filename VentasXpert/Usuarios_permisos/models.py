@@ -145,7 +145,7 @@ class Carrito(models.Model):
 
 
 class CarritoProducto(models.Model):
-    carrito = models.ForeignKey(Carrito, on_delete=models.CASCADE)
+    carrito = models.ForeignKey(Carrito, on_delete=models.CASCADE, null=True)
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     cantidad = models.IntegerField()
     subtotal = models.DecimalField(max_digits=10, decimal_places=2)
@@ -197,7 +197,7 @@ class Bitacora(models.Model):
     ('login', 'Inicio de Session'),
     ('logout', 'Cierre de Session'),
 ]
-    usuario = models.ForeignKey(User, on_delete=models.CASCADE)  # Relación con el usuario
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE, null=True)  # Relación con el usuario
     persona = models.ForeignKey(Persona, on_delete=models.SET_NULL, null=True, blank=True)
     rol = models.ForeignKey(Rol, on_delete=models.SET_NULL, null=True, blank=True) # Rol del usuario
     accion = models.CharField(max_length=50, choices=ACCION_CHOICES)  # Acción realizada

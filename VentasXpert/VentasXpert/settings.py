@@ -114,6 +114,10 @@ STATICFILES_DIRS = [
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIAFILES_DIRS = [
+    BASE_DIR / 'media',
+    os.path.join(BASE_DIR, "media"),
+]
 
 # Configuración de mensajes
 DEFAULT_FROM_EMAIL = 'ventasxpert.2024@gmail.com'
@@ -125,17 +129,6 @@ EMAIL_HOST_USER = 'ventasxpert.2024@gmail.com'
 EMAIL_HOST_PASSWORD = 'DaniGodinez69@'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIAFILES_DIRS = [
-    BASE_DIR / 'media',
-    os.path.join(BASE_DIR, "media"),
-]
-
-
-
 
 LOGOUT_REDIRECT_URL = 'login'  # Nombre de la URL o una ruta específica
 

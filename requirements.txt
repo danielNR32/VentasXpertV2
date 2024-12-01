@@ -1,8 +1,8 @@
 Django==5.1.2
 psycopg2
-
-
-
-django-allauth django-otp qrcode pyotp
+django-allauth 
+django-otp 
+qrcode 
+pyotp
 xhtml2pdf
 weasyprint
