@@ -176,3 +176,48 @@ class Finanzas(models.Model):
         db_table = 'Finanza'
         verbose_name_plural = 'Finanzas'
 
+
+
+class UsuarioMFA(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    mfa_secret = models.CharField(max_length=100, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'UsuarioMFA'
+        verbose_name_plural = 'UsuariosMFA'
+
+class Bitacora(models.Model):
+    ACCION_CHOICES = [
+    ('create', 'Crear'),
+    ('update', 'Actualizar'),
+    ('delete', 'Eliminar'),
+    ('purchase', 'Compra'),
+    ('login', 'Inicio de Session'),
+    ('logout', 'Cierre de Session'),
+]
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)  # Relación con el usuario
+    persona = models.ForeignKey(Persona, on_delete=models.SET_NULL, null=True, blank=True)
+    rol = models.ForeignKey(Rol, on_delete=models.SET_NULL, null=True, blank=True) # Rol del usuario
+    accion = models.CharField(max_length=50, choices=ACCION_CHOICES)  # Acción realizada
+    detalle = models.TextField(blank=True, null=True)  # Información adicional de la acción
+    created_at = models.DateTimeField(auto_now_add=True) # Fecha y hora de creación
+    update_at = models.DateTimeField(auto_now=True)# Fecha y hora de actualización
+
+    class Meta:
+        db_table = 'Bitacora'
+        verbose_name_plural = 'Bitacoras'
+        indexes = [
+        models.Index(fields=['usuario']),  # Índice para usuario
+        models.Index(fields=['rol']),     # Índice para rol
+        models.Index(fields=['created_at']),  # Índice para la fecha de creación
+    ]
+
+    def __str__(self):
+        if self.persona:
+            return f"{self.persona.nombre} ({self.usuario.username}) - {self.accion}"
+        
+        if self.rol:
+            return f"{self.rol.nombre} ({self.usuario.username}) - {self.accion}"
+        return f"{self.usuario.username} - {self.accion}"    

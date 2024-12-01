@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from .forms import    EditUserForm, PermForm, PersonForm, RolForm, UserForm
-from .models import Rol, UsuarioRol, Persona
+from .models import Bitacora, Rol, UsuarioRol, Persona
 from django.contrib.auth.models import User,Permission,ContentType
 from django.template.loader import render_to_string
 
@@ -14,12 +14,23 @@ from django.views.decorators.http import require_POST
 
 @login_required
 def usuarios_permisos_home(request):
-    return render(request, 'Usuarios_permisos/home.html')
+    bitacoras = Bitacora.objects.all().order_by('-created_at')  # Ordenar por fecha más reciente
+    return render(request, 'Usuarios_permisos/home.html', {'bitacoras': bitacoras})
 
 @login_required
 def logout_view(request):
+    # Registrar el cierre de sesión antes de hacer logout
+    if request.user.is_authenticated:
+        Bitacora.objects.create(
+            usuario=request.user,
+            persona=request.user.persona if hasattr(request.user, 'persona') else None,
+            rol=request.user.usuariorol.rol if hasattr(request.user, 'usuariorol') else None,
+            accion='logout',
+            detalle=f"Cierre de sesión para el usuario {request.user.username}."
+        )
+
     logout(request)
-    return redirect('login')  # Redirect to the login page or another page
+    return redirect('login')
 
 """
 !Apartado para las vistas, modales, formularios 
@@ -52,26 +63,28 @@ def add_user(request):
         formPerson = PersonForm(request.POST)
 
         if formUser.is_valid() and formPerson.is_valid():
-            # Crear un nuevo usuario sin guardar en la base de datos aún
             user = formUser.save(commit=False)
-            # Encriptar la contraseña antes de guardar
-            # Dejar esta linea para poder encriptar las contraseñas
             user.set_password(formUser.cleaned_data['password'])
-            # Guardar el usuario en la base de datos
             user.save()
 
-            # Guardar la información de Persona asociada al usuario
             persona = formPerson.save(commit=False)
             persona.user = user
             persona.save()
 
-            # Si es una solicitud AJAX, enviar una respuesta JSON de éxito
+            # Registrar en la bitácora
+            Bitacora.objects.create(
+                usuario=request.user,
+                persona=request.user.persona if hasattr(request.user, 'persona') else None,
+                rol=request.user.usuariorol.rol if hasattr(request.user, 'usuariorol') else None,
+                accion='create',
+                detalle=f"Usuario {user.username} añadido."
+            )
+
             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
                 return JsonResponse({'success': True, 'message': 'Usuario añadido correctamente'})
             
             return redirect('usuarios')
         
-        # En caso de errores, enviamos los errores como JSON
         errors = {**formUser.errors, **formPerson.errors}
         return JsonResponse({'success': False, 'errors': errors})
 
@@ -82,7 +95,6 @@ def add_user(request):
 @login_required
 def edit_user(request, user_id):
     user = get_object_or_404(User, id=user_id)
-    
     try:
         persona = Persona.objects.get(user=user)
     except Persona.DoesNotExist:
@@ -93,26 +105,30 @@ def edit_user(request, user_id):
         formPerson = PersonForm(request.POST, instance=persona)
 
         if formUser.is_valid() and formPerson.is_valid():
-            # Verificar si se proporciona una nueva contraseña
             password_actual = request.POST.get('password_actual')
             password_nueva = request.POST.get('new_password')
-            
+
             if password_nueva and password_actual:
-                # Validar la contraseña actual
                 if authenticate(username=user.username, password=password_actual):
-                    # Si la actual es correcta, actualizar a la nueva
                     user.password = make_password(password_nueva)
                 else:
                     return JsonResponse({'success': False, 'errors': {'password_actual': ['Contraseña actual incorrecta']}})
-            elif password_nueva and not password_actual:
-                # Si se proporciona una nueva pero no la actual, devolver error
-                return JsonResponse({'success': False, 'errors': {'password_actual': ['Debe ingresar la contraseña actual para cambiar la contraseña.']}})
             
             formUser.save()
             formPerson.save()
 
+            # Registrar en la bitácora
+            Bitacora.objects.create(
+                usuario=request.user,
+                persona=request.user.persona if hasattr(request.user, 'persona') else None,
+                rol=request.user.usuariorol.rol if hasattr(request.user, 'usuariorol') else None,
+                accion='update',
+                detalle=f"Usuario {user.username} actualizado."
+            )
+
             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
                 return JsonResponse({'success': True, 'message': 'Usuario actualizado correctamente'})
+            
             return redirect('usuarios')
 
         errors = {**formUser.errors, **formPerson.errors}
@@ -152,19 +168,26 @@ def edit_user(request, user_id):
 def eliminar_usuario(request, user_id):
     if request.method == 'POST':
         user = get_object_or_404(User, id=user_id)
-        
+
         # Elimina el objeto Persona asociado si existe
         if hasattr(user, 'persona'):
             user.persona.delete()
-        
+
+        # Registrar en la bitácora
+        Bitacora.objects.create(
+            usuario=request.user,
+            persona=request.user.persona if hasattr(request.user, 'persona') else None,
+            rol=request.user.usuariorol.rol if hasattr(request.user, 'usuariorol') else None,
+            accion='delete',
+            detalle=f"Usuario {user.username} eliminado."
+        )
+
         # Elimina el usuario
         user.delete()
-        
-        # Responde con éxito en JSON
+
         return JsonResponse({'success': True})
 
     return JsonResponse({'success': False, 'error': 'Método no permitido'}, status=405)
-
 
 
 
@@ -183,6 +206,16 @@ def assign_role_to_user(request, id_user):
                 rol = Rol.objects.get(id=rol_id)
                 # Actualizamos o creamos la relación Usuario-Rol
                 UsuarioRol.objects.update_or_create(user=user, defaults={'rol': rol})
+
+                # Registrar en la bitácora
+                Bitacora.objects.create(
+                    usuario=request.user,
+                    persona=request.user.persona if hasattr(request.user, 'persona') else None,
+                    rol=request.user.usuariorol.rol if hasattr(request.user, 'usuariorol') else None,
+                    accion='update',
+                    detalle=f"Rol {rol.nombre} asignado al usuario {user.username}."
+                )
+
                 return JsonResponse({'success': True})
             except Rol.DoesNotExist:
                 return JsonResponse({'success': False, 'error': 'El rol seleccionado no existe.'})
@@ -190,13 +223,12 @@ def assign_role_to_user(request, id_user):
     else:
         # Para solicitudes GET, obtenemos todos los roles disponibles
         roles = Rol.objects.all()
-        # Renderizamos el template con el usuario y los roles
         return render(
             request,
             'Usuarios_permisos/modals/assign_role_to_user.html',
             {
                 'usuario': user,
-                'roles': roles,  # Enviamos los roles al template
+                'roles': roles,
             }
         )
 
@@ -227,7 +259,17 @@ def add_role(request):
     if request.method == 'POST':
         form = RolForm(request.POST)
         if form.is_valid():
-            form.save()
+            rol = form.save()
+
+            # Registrar en la bitácora
+            Bitacora.objects.create(
+                usuario=request.user,
+                persona=request.user.persona if hasattr(request.user, 'persona') else None,
+                rol=request.user.usuariorol.rol if hasattr(request.user, 'usuariorol') else None,
+                accion='create',
+                detalle=f"Rol {rol.nombre} creado."
+            )
+
             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
                 return JsonResponse({'success': True, 'message': 'Rol añadido correctamente'})
             return redirect('roles')  # Redirige si no es una solicitud AJAX
@@ -239,6 +281,7 @@ def add_role(request):
     
     return render(request, 'Usuarios_permisos/roles.html', {'form': form})
 
+
 #? Editar de roles
 @login_required
 def edit_role(request, role_id):
@@ -247,7 +290,17 @@ def edit_role(request, role_id):
     if request.method == 'POST':
         form = RolForm(request.POST, instance=rol)
         if form.is_valid():
-            form.save()
+            rol = form.save()
+
+            # Registrar en la bitácora
+            Bitacora.objects.create(
+                usuario=request.user,
+                persona=request.user.persona if hasattr(request.user, 'persona') else None,
+                rol=request.user.usuariorol.rol if hasattr(request.user, 'usuariorol') else None,
+                accion='update',
+                detalle=f"Rol {rol.nombre} actualizado."
+            )
+
             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
                 return JsonResponse({'success': True, 'message': 'Rol actualizado correctamente'})
             return redirect('roles')
@@ -258,6 +311,7 @@ def edit_role(request, role_id):
         return render(request, 'Usuarios_permisos/modals/edit_role.html', {'form': form, 'rol': rol})
 
     return redirect('roles')
+
 
 
 @login_required
@@ -274,6 +328,16 @@ def get_role_data(request, role_id):
 @login_required
 def delete_role(request, role_id):
     rol = get_object_or_404(Rol, id=role_id)
+
+    # Registrar en la bitácora antes de eliminar
+    Bitacora.objects.create(
+        usuario=request.user,
+        persona=request.user.persona if hasattr(request.user, 'persona') else None,
+        rol=request.user.usuariorol.rol if hasattr(request.user, 'usuariorol') else None,
+        accion='delete',
+        detalle=f"Rol {rol.nombre} eliminado."
+    )
+
     rol.delete()
     return redirect('roles')
 
@@ -296,7 +360,17 @@ def add_permission(request):
     if request.method == 'POST':
         form = PermForm(request.POST)
         if form.is_valid():
-            form.save()
+            permiso = form.save()
+
+            # Registrar en la bitácora
+            Bitacora.objects.create(
+                usuario=request.user,
+                persona=request.user.persona if hasattr(request.user, 'persona') else None,
+                rol=request.user.usuariorol.rol if hasattr(request.user, 'usuariorol') else None,
+                accion='create',
+                detalle=f"Permiso {permiso.name} creado."
+            )
+
             return JsonResponse({'success': True})
         else:
             return JsonResponse({'success': False, 'errors': form.errors})
@@ -305,13 +379,25 @@ def add_permission(request):
     
     return render(request, 'Usuarios_permisos/modals/add_permission.html', {'form': form})
 
+
 @login_required
 def edit_permission(request, permission_id):
     permission = get_object_or_404(Permission, id=permission_id)
+
     if request.method == 'POST':
         form = PermForm(request.POST, instance=permission)
         if form.is_valid():
-            form.save()
+            permiso_editado = form.save()
+
+            # Registrar en la bitácora
+            Bitacora.objects.create(
+                usuario=request.user,
+                persona=request.user.persona if hasattr(request.user, 'persona') else None,
+                rol=request.user.usuariorol.rol if hasattr(request.user, 'usuariorol') else None,
+                accion='update',
+                detalle=f"Permiso {permiso_editado.name} actualizado."
+            )
+
             return JsonResponse({'success': True})
         else:
             return JsonResponse({'success': False, 'errors': form.errors})
@@ -323,6 +409,16 @@ def edit_permission(request, permission_id):
 @require_POST
 @login_required
 def delete_permission(request, permission_id):
-    permission = get_object_or_404(Permission, id=permission_id)
-    permission.delete()
+    permiso = get_object_or_404(Permission, id=permission_id)
+
+    # Registrar en la bitácora antes de eliminar
+    Bitacora.objects.create(
+        usuario=request.user,
+        persona=request.user.persona if hasattr(request.user, 'persona') else None,
+        rol=request.user.usuariorol.rol if hasattr(request.user, 'usuariorol') else None,
+        accion='delete',
+        detalle=f"Permiso {permiso.name} eliminado."
+    )
+
+    permiso.delete()
     return JsonResponse({'success': True})

@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Carrito',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('precio_total', models.DecimalField(decimal_places=2, max_digits=10)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('update_at', models.DateTimeField(auto_now=True)),
@@ -31,7 +31,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Categoria',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('nombre', models.CharField(max_length=255)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('update_at', models.DateTimeField(auto_now=True)),
@@ -44,7 +44,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Finanzas',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('fecha', models.DateField()),
                 ('hora', models.TimeField()),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
@@ -58,7 +58,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Proveedor',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('nombre', models.CharField(max_length=255)),
                 ('telefono', models.CharField(max_length=15)),
                 ('correo', models.EmailField(max_length=254)),
@@ -73,7 +73,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Caja',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('saldo_actual', models.DecimalField(decimal_places=2, max_digits=10)),
                 ('corte_caja', models.DecimalField(decimal_places=2, max_digits=10)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
@@ -88,7 +88,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Persona',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('nombre', models.CharField(max_length=100)),
                 ('segNombre', models.CharField(blank=True, max_length=100, null=True)),
                 ('apPaterno', models.CharField(max_length=100)),
@@ -110,7 +110,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Producto',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('nombre', models.CharField(max_length=255)),
                 ('codigo', models.CharField(max_length=100)),
                 ('precio_Proveedor', models.DecimalField(decimal_places=2, max_digits=10)),
@@ -130,7 +130,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='CarritoProducto',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('cantidad', models.IntegerField()),
                 ('subtotal', models.DecimalField(decimal_places=2, max_digits=10)),
                 ('carrito', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='Usuarios_permisos.carrito')),
@@ -144,7 +144,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Rol',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('nombre', models.CharField(max_length=50, unique=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
@@ -156,9 +156,23 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
+            name='UsuarioMFA',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('mfa_secret', models.CharField(blank=True, max_length=100, null=True)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
+                ('update_at', models.DateTimeField(auto_now=True)),
+                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+            ],
+            options={
+                'verbose_name_plural': 'UsuariosMFA',
+                'db_table': 'UsuarioMFA',
+            },
+        ),
+        migrations.CreateModel(
             name='UsuarioPermiso',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('permisos', models.ManyToManyField(blank=True, to='auth.permission')),
@@ -172,7 +186,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='UsuarioRol',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('rol', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='Usuarios_permisos.rol')),
@@ -186,7 +200,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Venta',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('total', models.DecimalField(decimal_places=2, max_digits=10)),
                 ('fecha', models.DateTimeField()),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
