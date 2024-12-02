@@ -1,0 +1,31 @@
+<div class="modal fade" id="add_permission" tabindex="-1" aria-labelledby="addPermissionLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addPermissionLabel">Añadir Permiso</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addPermissionForm" method="post" action="{% url 'add_permission' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="permissionName" class="form-label">Nombre del Permiso</label>
+                        {{ form.name }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="codename" class="form-label">Codename</label>
+                        {{ form.codename }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="contentType" class="form-label">Tipo de Contenido</label>
+                        {{ form.content_type }}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

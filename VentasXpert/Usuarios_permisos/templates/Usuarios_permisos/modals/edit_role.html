@@ -1,0 +1,37 @@
+<!-- Usuarios_permisos/modals/edit_role.html -->
+<div class="modal fade" id="edit_role" tabindex="-1" aria-labelledby="editRoleLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar el Rol: <span id="editRoleName"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editRoleForm" method="post">
+                    {% csrf_token %}
+                    <!-- Nombre -->
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                        <div class="form-floating flex-grow-1">
+                            <input type="text" name="nombre" id="nombre" class="form-control">
+                            <label for="nombre">Rol</label>
+                        </div>
+                    </div>
+                    <!-- Permisos -->
+                    <div class="mb-3">
+                        <label for="permisos">Permisos:</label>
+                        <select name="permisos" id="permisos" class="form-control" multiple size="10">
+                            {% for permiso in permisos %}
+                                <option value="{{ permiso.id }}">{{ permiso.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <small class="form-text text-muted">
+                            Mantenga presionado "Control" o "Comando" en una Mac, para seleccionar más de uno.
+                        </small>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
