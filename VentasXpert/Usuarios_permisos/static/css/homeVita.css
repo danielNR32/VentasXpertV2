@@ -1,0 +1,144 @@
+/* Encapsulación de los estilos en el contenedor */
+.tabla-contenedor .table {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+}
+
+.tabla-contenedor .table thead {
+    background-color: #343a40;
+    color: #ffffff;
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.tabla-contenedor .table tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.tabla-contenedor .table tbody tr:hover {
+    background-color: #e9ecef;
+    cursor: pointer;
+}
+
+.tabla-contenedor .table td,
+.tabla-contenedor .table th {
+    padding: 12px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+/* Estilos de los botones en el panel */
+.tabla-contenedor .options a {
+    color: #fff;
+    text-decoration: none;
+    background-color: #007bff;
+    padding: 8px 12px;
+    border-radius: 5px;
+    margin-right: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.tabla-contenedor .options a:hover {
+    background-color: #0056b3;
+}
+
+/* Encabezados y párrafos dentro del contenedor */
+.tabla-contenedor h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.tabla-contenedor p {
+    font-size: 1.1rem;
+    color: #6c757d;
+    text-align: center;
+}
+
+/* Barra de búsqueda */
+.dataTables_filter {
+    margin-bottom: 20px;
+    text-align: right;
+}
+
+.dataTables_filter label {
+    font-size: 16px;
+    color: #343a40;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.dataTables_filter input {
+    margin-left: 10px;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.dataTables_filter input:focus {
+    border-color: #000000;
+    outline: none;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+}
+
+/* Botones de paginación */
+.dataTables_paginate {
+    margin-top: -40px; /* Subir los botones hacia la parte superior */
+    display: flex;
+    justify-content: flex-end; /* Alinear los botones a la derecha */
+    align-items: center;
+    gap: 5px;
+}
+
+.dataTables_paginate .paginate_button {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    color: #343a40;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+
+
+.dataTables_paginate .paginate_button.current {
+    background-color: #5d5d5d;
+    color: #ffffff;
+    border-color: #010101;
+    font-weight: bold;
+    cursor: default;
+}
+
+/* Botones de control (Siguiente/Anterior) */
+.dataTables_paginate .paginate_button.previous,
+.dataTables_paginate .paginate_button.next {
+    background-color: #343a40;
+    color: #ffffff;
+    border-color: #343a40;
+}
+
+.dataTables_paginate .paginate_button.previous:hover,
+.dataTables_paginate .paginate_button.next:hover {
+    background-color: #4a90e2;
+    border-color: #4a90e2;
+}
+
+/* Ajuste del contenido de DataTables */
+.dataTables_info {
+    text-align: left;
+    font-size: 14px;
+    color: #6c757d;
+    margin-top: 10px;
+}

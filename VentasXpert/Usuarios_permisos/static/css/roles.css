@@ -1,140 +1,191 @@
+/* Estilo general del cuerpo */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 20px;
 }
 
-.button {
-    background-color: #a020f0;
-    color: white;
+/* Botón principal (Añadir Rol) */
+.btn-primary {
+    background-color: #4a90e2;
+    border-color: #4a90e2;
+    color: #ffffff;
     padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
+    border-radius: 8px;
+    font-size: 16px;
     cursor: pointer;
-    margin-bottom: 20px;
+    transition: all 0.3s ease;
 }
 
-.search-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
+.btn-primary:hover {
+    background-color: #357ab8;
+    border-color: #357ab8;
 }
 
-.search-box {
-    display: flex;
-}
-
-.search-box input {
-    padding: 10px;
-    border: 2px solid #000;
-    border-radius: 10px 0 0 10px;
-    width: 300px;
-}
-
-.search-box button {
-    padding: 10px;
-    border: 2px solid #000;
-    border-left: none;
-    border-radius: 0 10px 10px 0;
-    background-color: #fff;
-    cursor: pointer;
-}
-
-.filter-container {
-    position: relative;
-    display: inline-block;
-}
-
-.filter-button {
-    border: 2px solid #000;
-    padding: 10px 20px;
-    border-radius: 10px;
-    cursor: pointer;
-    background-color: #fff;
-}
-
-.dropdown-content {
-    display: none;
-    position: absolute;
-    right: 0;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-    z-index: 1;
-    border-radius: 10px;
-}
-
-.dropdown-content a {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-    border-bottom: 1px solid #ccc;
-}
-
-.dropdown-content a:hover {
-    background-color: #f1f1f1;
-}
-
-.dropdown-content a:last-child {
-    border-bottom: none;
-}
-
-.show {
-    display: block;
-}
-
-/* Estilos para la tabla */
-table {
+/* Tabla */
+.table {
     width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: none;
+    border-radius: 12px; /* Bordes redondeados */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+    overflow: hidden; /* Aplicar bordes redondeados */
 }
 
-table th, table td {
-    border: 1px solid #ddd;
+.table thead {
+    background-color: #343a40; /* Fondo oscuro */
+    color: #ffffff; /* Texto blanco */
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.table thead th:first-child {
+    border-top-left-radius: 12px; /* Esquina redondeada superior izquierda */
+}
+
+.table thead th:last-child {
+    border-top-right-radius: 12px; /* Esquina redondeada superior derecha */
+}
+
+.table tbody tr:nth-child(even) {
+    background-color: #f8f9fa; /* Fondo claro para las filas pares */
+}
+
+.table tbody tr:nth-child(odd) {
+    background-color: #ffffff; /* Fondo blanco para las filas impares */
+}
+
+.table tbody tr:hover {
+    background-color: #e9ecef; /* Efecto hover */
+    cursor: pointer;
+}
+
+.table td,
+.table th {
     padding: 12px;
     text-align: left;
-}
-
-table th {
-    background-color: #f0f0f0;
-}
-
-table td {
     vertical-align: middle;
+    border-top: 1px solid #ddd; /* Línea divisoria */
 }
 
-.table-icons {
+/* Esquinas redondeadas en la última fila */
+.table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 12px; /* Esquina redondeada inferior izquierda */
+}
+
+.table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 12px; /* Esquina redondeada inferior derecha */
+}
+
+/* Botones dentro de la tabla */
+.btn-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #343a40;
+    padding: 8px 12px;
+    font-size: 14px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-warning:hover {
+    background-color: #e0a800;
+    border-color: #d39e00;
+    color: #ffffff;
+}
+
+.btn-danger {
+    background-color: #e74c3c;
+    border-color: #e74c3c;
+    color: #ffffff;
+    padding: 8px 12px;
+    font-size: 14px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-danger:hover {
+    background-color: #c0392b;
+    border-color: #bd2130;
+}
+
+/* Información de la tabla */
+.dataTables_info {
+    text-align: left;
+    font-size: 14px;
+    color: #777;
+    margin-top: 10px;
+}
+
+/* Barra de búsqueda */
+.dataTables_filter {
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+.dataTables_filter label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #343a40;
     display: flex;
+    justify-content: flex-end;
+    align-items: center;
     gap: 10px;
 }
 
-.edit-button {
+.dataTables_filter input {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    max-width: 300px;
+}
+
+.dataTables_filter input:focus {
+    border-color: #4a90e2;
+    outline: none;
+    box-shadow: 0 0 8px rgba(74, 144, 226, 0.3);
+}
+
+/* Botones de paginación */
+.dataTables_paginate {
+    margin-top: -10px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 5px;
+}
+
+.dataTables_paginate .paginate_button {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    color: #343a40;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.dataTables_paginate .paginate_button:hover {
     background-color: #4a90e2;
-    color: white;
-    padding: 8px;
-    border: none;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
+    color: #ffffff;
+    border-color: #4a90e2;
 }
-
-.delete-button {
-    background-color: #e74c3c;
-    color: white;
-    padding: 8px;
-    border: none;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-}
-
-.info-text {
-    text-align: center;
-    color: #777;
-    margin-top: 20px;
+ 
+.dataTables_paginate .paginate_button.current {
+    background-color: #4a90e2;
+    color: #ffffff;
+    border-color: #4a90e2;
+    font-weight: bold;
+    cursor: default;
 }
