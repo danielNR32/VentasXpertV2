@@ -1,20 +1,34 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-    {% load static %}  <!-- Asegúrate de cargar la librería estática -->
+    {% load static %} <!-- Asegúrate de cargar la librería estática -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="{% static 'images/icon-page.png' %}" type="image/x-icon">
     <title>Iniciar Sesión</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- boostrap 5-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- boostrap 5-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="{% static 'css/login.css' %}"> <!-- Enlace a tu archivo CSS -->
 </head>
-<body style="background-image: url('{% static 'images/fondo_login.png' %}'); background-size: cover; background-position: center; height: 100vh; display: flex; justify-content: center; align-items: center;">
-    <div class="login-container" >
+
+<body
+    style="background-image: url('{% static 'images/fondo_login.png' %}'); background-size: cover; background-position: center; height: 100vh; display: flex; justify-content: center; align-items: center;">
+    <div class="login-container">
+        {% if messages %}
+        <div class="alert alert-info">
+            {% for message in messages %}
+            <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
         <div class="login-box" style="background-color: rgba(255, 255, 255, 0.8); padding: 20px; border-radius: 10px;">
             <div class="login-header text-center">
-                <img src="{% static 'images/Logo_completo.png' %}" alt="VentasXpert Logo" class="img-fluid mx-auto d-block" style="width: 300px;"> <!-- Asegúrate de tener la imagen en la carpeta static/images -->
+                <img src="{% static 'images/Logo_completo.png' %}" alt="VentasXpert Logo"
+                    class="img-fluid mx-auto d-block" style="width: 300px;">
+                <!-- Asegúrate de tener la imagen en la carpeta static/images -->
                 <p>¡Bienvenido de vuelta!</p>
             </div>
 
@@ -22,13 +36,15 @@
                 {% csrf_token %}
                 <div class="mb-3">
                     <label for="usuario" class="form-label">Usuario</label>
-                    <input type="usuario" class="form-control" id="usuario" name="username" placeholder="Usuario" required>
+                    <input type="usuario" class="form-control" id="usuario" name="username" placeholder="Usuario"
+                        required>
                 </div>
 
                 <div class="mb-3">
                     <label for="password" class="form-label">Contraseña</label>
                     <div class="input-group">
-                        <input type="password" class="form-control" id="password" name="password" placeholder="Contraseña" required>
+                        <input type="password" class="form-control" id="password" name="password"
+                            placeholder="Contraseña" required>
                         <span class="input-group-text">
                             <i class="bi bi-eye-slash" id="togglePassword" style="cursor: pointer;"></i>
                         </span>
@@ -68,8 +84,10 @@
         });
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" ></script> <!--Boostrap 5 js-->
-    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!--Boostrap 5 js-->
+
 
 </body>
+
 </html>

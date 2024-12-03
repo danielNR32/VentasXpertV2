@@ -39,6 +39,7 @@ MIDDLEWARE = [
     'django_otp.middleware.OTPMiddleware',  # Middleware para OTP
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'VentasXpert.middleware.SessionTimeoutMiddleware',  # Middleware personalizado
 ]
 
 # Configuración de URLs
@@ -131,6 +132,7 @@ EMAIL_HOST_PASSWORD = 'DaniGodinez69@'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGOUT_REDIRECT_URL = 'login'  # Nombre de la URL o una ruta específica
+LOGIN_URL = '/'
 
 
 
@@ -141,3 +143,8 @@ MESSAGE_TAGS = {
     message_constants.WARNING: 'warning',
     message_constants.ERROR: 'danger',
 }
+
+
+SESSION_COOKIE_AGE = 900  # 15 minutos de inactividad
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_SAVE_EVERY_REQUEST = True

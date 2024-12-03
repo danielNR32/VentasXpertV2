@@ -12,7 +12,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from Usuarios_permisos.models import Categoria, Proveedor, Producto
 from .forms import ProductoForm
-
+from Usuarios_permisos.models import Producto, CarritoProducto, Carrito, Bitacora, UsuarioRol
 # Create your views here.
 @login_required
 def dashboard(request):
@@ -40,8 +40,15 @@ def home(request):
     return render(request, 'Administracion/home.html')
 
 def logout_view(request):
+    if request.user.is_authenticated:
+        Bitacora.objects.create(
+            usuario=request.user,
+            accion='Cerrar Sesión',
+            detalle=f'Cierre de sesión para el usuario {request.user.username}.'
+        )
     logout(request)
-    return redirect('login')  # Redirect to the login page or another page
+    return redirect('login')
+
 @login_required
 def proovedores_home(request):
     return render(request, 'Administracion/proovedores_home.html')
@@ -108,6 +115,22 @@ def confirmar_inventario(request):
         )
         producto.save()
 
+      # Obtener el rol del usuario
+    usuario = request.user
+    try:
+        usuario_rol = UsuarioRol.objects.get(user=usuario)
+        rol = usuario_rol.rol.nombre
+    except UsuarioRol.DoesNotExist:
+        rol = "Sin rol asignado"
+
+    # Registrar la acción en la bitácora
+    Bitacora.objects.create(
+        usuario=usuario,
+        persona=usuario.persona if hasattr(usuario, 'persona') else None,
+        rol=usuario_rol.rol if hasattr(usuario, 'usuariorol') else None,
+        accion='Inventario actualizado',
+        detalle=f"Se han agregado nuevos productos al inventario. Usuario: {usuario.username}, Rol: {rol}",
+    )
     # Limpiar la sesión después de guardar los productos
     request.session['productos_temp'] = []
     messages.success(request, "Inventario actualizado correctamente.")
@@ -287,6 +310,26 @@ def confirmar_surtido(request):
         producto = Producto.objects.get(id=item['id'])
         producto.stock_Inventario += item['cantidad']
         producto.save()
+    
+
+    # Obtener el rol del usuario
+    usuario = request.user
+    try:
+        usuario_rol = UsuarioRol.objects.get(user=usuario)
+        rol = usuario_rol.rol.nombre
+    except UsuarioRol.DoesNotExist:
+        rol = "Sin rol asignado"
+
+    # Registrar la acción en la bitácora
+    Bitacora.objects.create(
+        usuario=usuario,
+        persona=usuario.persona if hasattr(usuario, 'persona') else None,
+        rol=usuario_rol.rol if hasattr(usuario, 'usuariorol') else None,
+        accion='Inventario actualizado',
+        detalle=f"Se han agregado stock a los productos del inventario. Usuario: {usuario.username}, Rol: {rol}",
+    )
+    
+     
 
     # Limpiar la sesión temporal
     request.session['productos_temp'] = []
@@ -387,6 +430,23 @@ def actualizar_stock(request):
             producto = Producto.objects.get(codigo=codigo)
             producto.stock_Inventario += cantidad  # Actualizar el stock
             producto.save()
+
+             # Obtener el rol del usuario
+            usuario = request.user
+            try:
+                usuario_rol = UsuarioRol.objects.get(user=usuario)
+                rol = usuario_rol.rol.nombre
+            except UsuarioRol.DoesNotExist:
+                rol = "Sin rol asignado"
+
+            # Registrar la acción en la bitácora
+            Bitacora.objects.create(
+                usuario=usuario,
+                persona=usuario.persona if hasattr(usuario, 'persona') else None,
+                rol=usuario_rol.rol if hasattr(usuario, 'usuariorol') else None,
+                accion='Inventario actualizado',
+                detalle=f"Se han agregado stock a los productos del inventario. Usuario: {usuario.username}, Rol: {rol}",
+            )
 
             return JsonResponse({"success": True})
         except Producto.DoesNotExist:
