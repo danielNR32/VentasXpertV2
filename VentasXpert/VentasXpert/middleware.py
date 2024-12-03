@@ -27,7 +27,7 @@ class SessionTimeoutMiddleware:
             # Si no hay registro previo de actividad, inicializa con la hora actual
             if last_activity:
                 # Calcula si ha pasado el tiempo máximo permitido
-                session_expiry_time = now() - timedelta(seconds=900)  # 1 minuto de inactividad
+                session_expiry_time = now() - timedelta(seconds=300)  # 1 minuto de inactividad
                 if last_activity < session_expiry_time:
                     # La sesión expiró: cerrar sesión y redirigir al login con un mensaje
                     logout(request)

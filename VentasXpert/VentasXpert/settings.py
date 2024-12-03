@@ -145,6 +145,6 @@ MESSAGE_TAGS = {
 }
 
 
-SESSION_COOKIE_AGE = 900  # 15 minutos de inactividad
+SESSION_COOKIE_AGE = 300  # 15 minutos de inactividad
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_SAVE_EVERY_REQUEST = True
