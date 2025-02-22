@@ -4,10 +4,12 @@
 
 <!--Cargamos los css extras-->
 {% block extra_css %}
-<!-- CSS de DataTables -->
+<link rel="stylesheet" href="{% static 'css/roles.css' %}">
 
 
 {% endblock %}
+
+
 
 {% block options %}
 <a href="{% url 'usuarios_permisos_home' %}">Home</a>

@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Panel de SuperUsuario{% endblock %}
 
 {% block extra_css %}
     <!-- CSS de DataTables -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
-
+    <link rel="stylesheet" href="{% static 'css/roles.css' %}">
+    
 {% endblock %}
 
 {% block options %}

@@ -2,6 +2,16 @@
 {% load static %}
 {% block title %}Permisos - VentasXpert{% endblock %}
 
+
+<!--Cargamos los css extras-->
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/permisos.css' %}">
+
+
+{% endblock %}
+
+
+
 {% block options %}
 <a href="{% url 'usuarios_permisos_home' %}">Home</a>
 <a href="{% url 'usuarios' %}">Usuarios</a>

@@ -73,7 +73,7 @@ WSGI_APPLICATION = 'VentasXpert.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE':   'django.db.backends.postgresql',
-        'NAME':     'pruebasXpert',
+        'NAME':     'VentasXpert',
         'USER':     'postgres',
         'PASSWORD': 'asdASD123',
         'HOST':     'localhost',  
