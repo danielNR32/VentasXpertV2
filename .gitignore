@@ -11,3 +11,5 @@ __pycache__
 # Archivos del sistema operativo
 .DS_Store
 *.log
+
+pdf_ticket/
