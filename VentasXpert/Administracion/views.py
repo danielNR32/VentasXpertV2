@@ -143,69 +143,39 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from Usuarios_permisos.models import Producto, Categoria  # Asegúrate de importar tus modelos correctamente
 from .forms import ProductoForm  # Asegúrate de tener el formulario correcto
-
+from Administracion.factories import ProductoInventarioFactory  # Importamos la fábrica
 from decimal import Decimal, InvalidOperation
-
 def agregar_nuevo_producto(request):
-    if request.method == 'POST':
+    """
+    Vista para agregar productos al inventario usando el patrón Factory Method.
+    """
+    if request.method == "POST":
         form = ProductoForm(request.POST)
         
         if form.is_valid():
             try:
-                # Convertir a Decimal para precios
-                precio_proveedor = Decimal(form.cleaned_data['precio_proveedor'])
-                precio_tienda = Decimal(form.cleaned_data['precio_tienda'])
+                # Extraer datos del formulario
+                datos_producto = form.cleaned_data
+                factory = ProductoInventarioFactory()  # Instanciamos la fábrica
+                factory.crear_producto(**datos_producto)  # Creamos el producto
 
-                # Asegurarse que sean números válidos y positivos
-                if precio_proveedor < 0 or precio_tienda < 0:
-                    messages.error(request, "Los precios no pueden ser negativos.")
-                    return redirect('inventario_admiministrarAgregarProducto')
+                messages.success(request, "Producto agregado con éxito.")
+                return redirect("inventario_admiministrarAgregarProducto")
 
-                # Validar que el stock sea un número entero positivo
-                stock_Inventario = int(form.cleaned_data['stock_Inventario'])
-                stock_Minimo = int(form.cleaned_data['stock_Minimo'])
+            except ValueError as e:
+                messages.error(request, f"Error al agregar el producto: {e}")
+                return redirect("inventario_admiministrarAgregarProducto")
 
-                if stock_Inventario < 0 or stock_Minimo < 0:
-                    messages.error(request, "El stock no puede ser negativo.")
-                    return redirect('inventario_admiministrarAgregarProducto')
-
-                # Continuar con el procesamiento del producto
-                producto = form.save(commit=False)
-                producto.ganancia_pesos = precio_tienda - precio_proveedor
-                producto.ganancia_porcentaje = (producto.ganancia_pesos / precio_proveedor) * 100 if precio_proveedor > 0 else 0
-
-                # Guardar el producto temporalmente en la sesión
-                productos_temp = request.session.get('productos_temp', [])
-                productos_temp.append({
-                    'codigo': producto.codigo,
-                    'nombre': producto.nombre,
-                    'categoria': producto.categoria.nombre,
-                    'proveedor': producto.proveedor.nombre if producto.proveedor else "No asignado",
-                    'stock_Inventario': stock_Inventario,
-                    'stock_Minimo': stock_Minimo,
-                    'precio_proveedor': float(precio_proveedor),
-                    'precio_tienda': float(precio_tienda),
-                    'ganancia_porcentaje': round(float(producto.ganancia_porcentaje), 2),
-                    'ganancia_pesos': round(float(producto.ganancia_pesos), 2),
-                })
-                request.session['productos_temp'] = productos_temp
-                messages.success(request, "Producto agregado con exito!!.")
-                return redirect('inventario_admiministrarAgregarProducto')
-
-            except InvalidOperation:
-                messages.error(request, "Por favor, ingrese un valor válido para los precios.")
-                return redirect('inventario_admiministrarAgregarProducto')
         else:
-            messages.error(request, "Formulario no válido codigo del producto ya existente.")
-            return redirect('inventario_admiministrarAgregarProducto')
+            messages.error(request, "Formulario no válido, código de producto ya existente.")
+            return redirect("inventario_admiministrarAgregarProducto")
 
     form = ProductoForm()
-    return render(request, 'app/Inventario/modales/agregarNuevoProducto.html', {
-        'form': form,
-        'categorias': Categoria.objects.all(),
-        'productos_temp': request.session.get('productos_temp', [])
+    return render(request, "app/Inventario/modales/agregarNuevoProducto.html", {
+        "form": form,
+        "categorias": Categoria.objects.all(),
+        "productos_temp": request.session.get("productos_temp", [])
     })
-
 
 
 
