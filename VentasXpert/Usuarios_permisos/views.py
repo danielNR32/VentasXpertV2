@@ -56,6 +56,12 @@ def users(request):
     )
 
 
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.shortcuts import redirect
+from .forms import UserForm, PersonForm
+from .adapters import UserAdapter
+
 @login_required
 def add_user(request):
     if request.method == 'POST':
@@ -63,42 +69,34 @@ def add_user(request):
         formPerson = PersonForm(request.POST)
 
         if formUser.is_valid() and formPerson.is_valid():
-            user = formUser.save(commit=False)
-            user.set_password(formUser.cleaned_data['password'])
-            user.save()
-
-            persona = formPerson.save(commit=False)
-            persona.user = user
-            persona.save()
-
-            # Registrar en la bitácora
-            Bitacora.objects.create(
-                usuario=request.user,
-                persona=request.user.persona if hasattr(request.user, 'persona') else None,
-                rol=request.user.usuariorol.rol if hasattr(request.user, 'usuariorol') else None,
-                accion='create',
-                detalle=f"Usuario {user.username} añadido."
-            )
+            # Crear usuario usando el adaptador
+            user = UserAdapter.create_user(formUser, formPerson, request.user)
 
             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
                 return JsonResponse({'success': True, 'message': 'Usuario añadido correctamente'})
             
             return redirect('usuarios')
-        
+
+        # Si hay errores en los formularios, devolverlos como JSON
         errors = {**formUser.errors, **formPerson.errors}
         return JsonResponse({'success': False, 'errors': errors})
 
     return JsonResponse({'success': False, 'message': 'Método no permitido'})
 
 
-#? Editar de usuarios
+
+
+
+
+
+
+
+
 @login_required
 def edit_user(request, user_id):
     user = get_object_or_404(User, id=user_id)
-    try:
-        persona = Persona.objects.get(user=user)
-    except Persona.DoesNotExist:
-        raise Http404("No se encontró una Persona asociada con este usuario.")
+    persona = get_object_or_404(Persona, user=user)
+    user_adapter = UserAdapter(user)
 
     if request.method == 'POST':
         formUser = EditUserForm(request.POST, instance=user)
@@ -108,29 +106,14 @@ def edit_user(request, user_id):
             password_actual = request.POST.get('password_actual')
             password_nueva = request.POST.get('new_password')
 
-            if password_nueva and password_actual:
-                if authenticate(username=user.username, password=password_actual):
-                    user.password = make_password(password_nueva)
-                else:
-                    return JsonResponse({'success': False, 'errors': {'password_actual': ['Contraseña actual incorrecta']}})
-            
-            formUser.save()
-            formPerson.save()
+            # Actualizar usuario usando el adaptador
+            errors = user_adapter.update_user(formUser, formPerson, password_actual, password_nueva, request.user)
 
-            # Registrar en la bitácora
-            Bitacora.objects.create(
-                usuario=request.user,
-                persona=request.user.persona if hasattr(request.user, 'persona') else None,
-                rol=request.user.usuariorol.rol if hasattr(request.user, 'usuariorol') else None,
-                accion='update',
-                detalle=f"Usuario {user.username} actualizado."
-            )
+            if errors:
+                return JsonResponse({'success': False, 'errors': errors})
 
-            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-                return JsonResponse({'success': True, 'message': 'Usuario actualizado correctamente'})
-            
-            return redirect('usuarios')
-
+            return JsonResponse({'success': True, 'message': 'Usuario actualizado correctamente'})
+        
         errors = {**formUser.errors, **formPerson.errors}
         return JsonResponse({'success': False, 'errors': errors})
 
@@ -164,26 +147,18 @@ def edit_user(request, user_id):
 
 
 
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from .adapters import UserAdapter
+
 @login_required
 def eliminar_usuario(request, user_id):
     if request.method == 'POST':
         user = get_object_or_404(User, id=user_id)
+        user_adapter = UserAdapter(user)
 
-        # Elimina el objeto Persona asociado si existe
-        if hasattr(user, 'persona'):
-            user.persona.delete()
-
-        # Registrar en la bitácora
-        Bitacora.objects.create(
-            usuario=request.user,
-            persona=request.user.persona if hasattr(request.user, 'persona') else None,
-            rol=request.user.usuariorol.rol if hasattr(request.user, 'usuariorol') else None,
-            accion='delete',
-            detalle=f"Usuario {user.username} eliminado."
-        )
-
-        # Elimina el usuario
-        user.delete()
+        user_adapter.delete_user(request.user)  # ✅ Usamos el adaptador para eliminar al usuario
 
         return JsonResponse({'success': True})
 
@@ -192,45 +167,29 @@ def eliminar_usuario(request, user_id):
 
 
 
+
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, render
+from .adapters import UserAdapter
+from .models import Rol, User
+
 @login_required
 def assign_role_to_user(request, id_user):
-    # Obtenemos el usuario por ID
     user = get_object_or_404(User, id=id_user)
+    user_adapter = UserAdapter(user)  # ✅ Usamos el adaptador
 
     if request.method == 'POST':
-        # Obtenemos el ID del rol desde la solicitud POST
         rol_id = request.POST.get('rol', None)
         if rol_id:
-            try:
-                # Obtenemos el objeto Rol correspondiente al ID proporcionado
-                rol = Rol.objects.get(id=rol_id)
-                # Actualizamos o creamos la relación Usuario-Rol
-                UsuarioRol.objects.update_or_create(user=user, defaults={'rol': rol})
-
-                # Registrar en la bitácora
-                Bitacora.objects.create(
-                    usuario=request.user,
-                    persona=request.user.persona if hasattr(request.user, 'persona') else None,
-                    rol=request.user.usuariorol.rol if hasattr(request.user, 'usuariorol') else None,
-                    accion='update',
-                    detalle=f"Rol {rol.nombre} asignado al usuario {user.username}."
-                )
-
-                return JsonResponse({'success': True})
-            except Rol.DoesNotExist:
-                return JsonResponse({'success': False, 'error': 'El rol seleccionado no existe.'})
+            result = user_adapter.assign_role(rol_id, request.user)  # ✅ Llamamos al adapter
+            return JsonResponse(result)
         return JsonResponse({'success': False, 'error': 'No se proporcionó un rol válido.'})
-    else:
-        # Para solicitudes GET, obtenemos todos los roles disponibles
-        roles = Rol.objects.all()
-        return render(
-            request,
-            'Usuarios_permisos/modals/assign_role_to_user.html',
-            {
-                'usuario': user,
-                'roles': roles,
-            }
-        )
+
+    # Si la petición es GET, renderizamos el modal con los roles disponibles
+    roles = Rol.objects.all()
+    return render(request, 'Usuarios_permisos/modals/assign_role_to_user.html', {'usuario': user, 'roles': roles})
+
 
 
 

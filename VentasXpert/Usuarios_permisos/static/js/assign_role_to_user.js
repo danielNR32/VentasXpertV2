@@ -1,4 +1,3 @@
-// Función para abrir el modal de asignación de rol
 function assignRoleToUser(userId, userName) {
     // Actualizar el título del modal
     $('#assignRoleToUserLabel').text(`Asignar Rol al Usuario: ${userName}`);
@@ -12,31 +11,48 @@ function assignRoleToUser(userId, userName) {
 
 // Manejo del formulario de asignación de rol
 $(document).on('submit', '#assignRoleForm', function(event) {
-    event.preventDefault(); // Prevenir el envío del formulario por defecto
+    event.preventDefault(); // Evitar recarga de página
 
-    // Deshabilitar el botón de envío para evitar múltiples envíos
-    $('#assignRoleForm button[type="submit"]').prop('disabled', true);
+    const form = $(this);
+    const url = form.attr('action');
+
+    // Deshabilitar botón para evitar múltiples envíos
+    form.find('button[type="submit"]').prop('disabled', true);
 
     $.ajax({
-        url: $(this).attr('action'),
+        url: url,
         type: 'POST',
-        data: $(this).serialize(), // Serializar los datos del formulario
-        success: function(response) {
-            // Habilitar el botón de envío
-            $('#assignRoleForm button[type="submit"]').prop('disabled', false);
+        data: form.serialize(),
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        success: function (response) {
+            form.find('button[type="submit"]').prop('disabled', false); // Rehabilitar botón
 
             if (response.success) {
-                $('#assign_role_to_user').modal('hide'); // Ocultar el modal
-                location.reload(); // Recargar la página
+                $('#assign_role_to_user').modal('hide');  // Cerrar modal sin recargar
+                actualizarListaUsuarios();  // Actualizar la lista de usuarios sin recargar la página
             } else {
-                $('#formErrors').text(response.error ? response.error : 'Ocurrió un error al asignar el rol. Intente nuevamente.');
+                alert(response.error || 'Ocurrió un error al asignar el rol.');
             }
         },
-        error: function() {
-            // Habilitar el botón de envío
-            $('#assignRoleForm button[type="submit"]').prop('disabled', false);
-
-            alert("Error al intentar asignar el rol.");
+        error: function () {
+            form.find('button[type="submit"]').prop('disabled', false);
+            console.error("Error al intentar asignar el rol.");
         }
     });
 });
+
+function actualizarListaUsuarios() {
+    $.ajax({
+        url: '/usuarios_permisos/usuarios/',  // Asegura que esta URL es correcta
+        type: 'GET',
+        success: function (response) {
+            $('#userTableContainer').html($(response).find('#userTableContainer').html()); // Solo actualiza la tabla
+        },
+        error: function () {
+            console.error("Error al actualizar la lista de usuarios.");
+        }
+    });
+}
+
+
+

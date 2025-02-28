@@ -1,38 +1,85 @@
-function editarUsuario(userId, userName) {
-    const editUserLabel = document.getElementById("editUserLabel");
-    if (editUserLabel) {
-        editUserLabel.innerText = `Editar Usuario: ${userName} (ID: ${userId})`;
-    }
+$(document).ready(function () {
+    // Hacer global la función editarUsuario
+    window.editarUsuario = function(userId, userName) {
+        console.log("Editar usuario:", userId, userName); // Para depuración en consola
 
-    const editForm = document.getElementById("editUserForm");
-    if (editForm) {
-        editForm.action = `/usuarios_permisos/usuarios/edit/${userId}/`;
-    }
+        // Actualizar el título del modal
+        $('#editUserLabel').text(`Editar Usuario: ${userName}`);
 
-    $.ajax({
-        url: `/usuarios_permisos/usuarios/edit/${userId}/`,
-        type: 'GET',
-        dataType: 'json',
-        success: function (data) {
-            document.querySelector('.user-username').value = data.formUser.username;
-            document.querySelector('.user-email').value = data.formUser.email;
-            document.querySelector('.user-password').value = ''; // Dejar vacío para nueva contraseña
-            document.querySelector('.user-newpassword').value = ''; // Dejar vacío para la nueva contraseña
+        // Configurar la acción del formulario con el ID del usuario
+        $('#editUserForm').attr('action', `/usuarios_permisos/usuarios/edit/${userId}/`);
 
-            document.querySelector('.person-nombre').value = data.formPerson.nombre;
-            document.querySelector('.person-segNombre').value = data.formPerson.segNombre;
-            document.querySelector('.person-apPaterno').value = data.formPerson.apPaterno;
-            document.querySelector('.person-apMaterno').value = data.formPerson.apMaterno;
-            document.querySelector('.person-genero').value = data.formPerson.genero;
-            document.querySelector('.person-telefono').value = data.formPerson.telefono;
-            document.querySelector('.person-rfc').value = data.formPerson.rfc;
-            document.querySelector('.person-curp').value = data.formPerson.curp;
-            document.querySelector('.person-correo').value = data.formPerson.correo;
+        // Realizar la petición AJAX para obtener los datos del usuario
+        $.ajax({
+            url: `/usuarios_permisos/usuarios/edit/${userId}/`,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                $('.user-username').val(data.formUser.username);
+                $('.user-email').val(data.formUser.email);
+                $('.user-password').val('');
+                $('.user-newpassword').val('');
 
-            $('#edit_user').modal('show');
-        },
-        error: function () {
-            alert("Error al cargar los datos del usuario.");
-        }
+                $('.person-nombre').val(data.formPerson.nombre);
+                $('.person-segNombre').val(data.formPerson.segNombre);
+                $('.person-apPaterno').val(data.formPerson.apPaterno);
+                $('.person-apMaterno').val(data.formPerson.apMaterno);
+                $('.person-genero').val(data.formPerson.genero);
+                $('.person-telefono').val(data.formPerson.telefono);
+                $('.person-rfc').val(data.formPerson.rfc);
+                $('.person-curp').val(data.formPerson.curp);
+                $('.person-correo').val(data.formPerson.correo);
+
+                // Mostrar el modal
+                $('#edit_user').modal('show');
+            },
+            error: function () {
+                console.error("Error al cargar los datos del usuario.");
+            }
+        });
+    };
+
+    // Manejo del formulario para editar usuario
+    $('#editUserForm').submit(function (e) {
+        e.preventDefault();
+        
+        const form = $(this);
+        const url = form.attr('action');
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: form.serialize(),
+            headers: {
+                "X-Requested-With": "XMLHttpRequest"
+            },
+            success: function (response) {
+                // Limpiar errores anteriores
+                form.find('.is-invalid').removeClass('is-invalid');
+                form.find('.invalid-feedback').remove();
+
+                if (response.success) {
+                    $('#edit_user').modal('hide');  // Oculta el modal
+                    setTimeout(function () {
+                        window.location.href = "/usuarios_permisos/usuarios/";  // Redirigir a user.html
+                    }, 500);  // Pequeño delay para que se vea el cierre del modal
+                } else if (response.errors) {
+                    for (const [field, messages] of Object.entries(response.errors)) {
+                        const fieldElement = form.find(`[name="${field}"]`);
+                        if (fieldElement.length) {
+                            fieldElement.addClass('is-invalid');
+                            fieldElement.after(`<div class="invalid-feedback">${messages.join(', ')}</div>`);
+                        } else {
+                            console.warn(`Campo no encontrado en el formulario: ${field}`);
+                        }
+                    }
+                } else {
+                    alert("Error al actualizar el usuario");
+                }
+            },
+            error: function (xhr) {
+                console.error("Error en la petición AJAX:", xhr.responseText);
+            }
+        });
     });
-}
+});
