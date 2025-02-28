@@ -116,67 +116,108 @@ def eliminar_carrito_actual(request):
         carritoProducto.delete()
     return redirect('cajero_home')
 
+# Interfaz Command (Refactorizacion al metodo command para la generacion de tickets)
+class Command:
+    def execute(self):
+        raise NotImplementedError("Debe implementarse en una subclase")
+
+# Comando para obtener productos del carrito
+class ObtenerProductosCommand(Command):
+    def __init__(self, request):
+        self.request = request
+    
+    def execute(self):
+        productos = Producto.objects.all()
+        carritoProductos = CarritoProducto.objects.select_related('producto').all()
+        total_productos = sum([carrito.cantidad for carrito in carritoProductos])
+        total_costo_productos = sum([carrito.subtotal for carrito in carritoProductos])
+        
+        fecha_actual = datetime.datetime.now().strftime("%d/%m/%Y")
+        hora_actual = datetime.datetime.now().strftime("%H:%M:%S")
+        
+        context = {
+            'productos': productos,
+            'carritoProductos': carritoProductos,
+            'total_productos': total_productos,
+            'total_costo_productos': total_costo_productos,
+            'fecha_actual': fecha_actual,
+            'hora_actual': hora_actual,
+            'usuarios': self.request.user
+        }
+        
+        return context
+
+# Comando para registrar en la bitácora
+class RegistrarBitacoraCommand(Command):
+    def __init__(self, request, total_productos, total_costo_productos):
+        self.request = request
+        self.total_productos = total_productos
+        self.total_costo_productos = total_costo_productos
+    
+    def execute(self):
+        Bitacora.objects.create(
+            accion='purchase',
+            detalle=f'Compra de {self.total_productos} productos por un total de ${self.total_costo_productos}',
+            usuario=self.request.user,
+            rol=self.request.user.usuariorol.rol if hasattr(self.request.user, 'usuariorol') else None,
+            persona=self.request.user.persona if hasattr(self.request.user, 'persona') else None,
+        )
+
+# Comando para generar PDF
+class GenerarPDFCommand(Command):
+    def __init__(self, context):
+        self.context = context
+    
+    def execute(self):
+        html = render_to_string('Ventas_caja/ticket_pdf.html', self.context)
+        pdf_dir = os.path.join(settings.BASE_DIR, 'Ventas_caja', 'media', 'pdf_ticket')
+        os.makedirs(pdf_dir, exist_ok=True)
+        pdf_path = os.path.join(pdf_dir, f'ticket_{datetime.datetime.now().strftime("%Y%m%d%H%M%S")}.pdf')
+        
+        with open(pdf_path, "wb") as pdf_file:
+            pisa_status = pisa.CreatePDF(io.BytesIO(html.encode("UTF-8")), dest=pdf_file, encoding='UTF-8')
+        
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="ticket.pdf"'
+        
+        pisa_status = pisa.CreatePDF(io.BytesIO(html.encode("UTF-8")), dest=response, encoding='UTF-8')
+        
+        if pisa_status.err:
+            return HttpResponse("Hubo un error al generar el PDF", status=500)
+        
+        return response
+
+# Invoker que gestiona la ejecución de los comandos
+class TicketInvoker:
+    def __init__(self):
+        self.comandos = []
+    
+    def agregar_comando(self, comando):
+        self.comandos.append(comando)
+    
+    def ejecutar_comandos(self):
+        resultados = []
+        for comando in self.comandos:
+            resultados.append(comando.execute())
+        return resultados
+
+# Vista Django refactorizada
 def generar_ticket_pdf(request):
-    # Obtén los datos del ticket desde el contexto que usaste en la vista 'home'
-    productos = Producto.objects.all()
-    carritoProductos = CarritoProducto.objects.select_related('producto').all()
-
-    # Calcula el total de productos y el costo total
-    total_productos = sum([carrito.cantidad for carrito in carritoProductos])
-    total_costo_productos = sum([carrito.subtotal for carrito in carritoProductos])
+    invoker = TicketInvoker()
     
-    # Obtén la fecha y hora actual
-    fecha_actual = datetime.datetime.now().strftime("%d/%m/%Y")
-    hora_actual = datetime.datetime.now().strftime("%H:%M:%S")
-
-    # Prepara el contexto
-    context = {
-        'productos': productos,
-        'carritoProductos': carritoProductos,
-        'total_productos': total_productos,
-        'total_costo_productos': total_costo_productos,
-        'fecha_actual': fecha_actual,
-        'hora_actual': hora_actual,
-        'usuarios': request.user
-    }
+    obtener_productos_command = ObtenerProductosCommand(request)
+    context = obtener_productos_command.execute()
     
-    # almacenar datos en la tabla bitacora
-    Bitacora.objects.create(
-        accion='purchase',
-        detalle=f'Compra de {total_productos} productos por un total de ${total_costo_productos}',
-        usuario=request.user,
-        rol=request.user.usuariorol.rol if hasattr(request.user, 'usuariorol') else None,
-        persona=request.user.persona if hasattr(request.user, 'persona') else None,
-    )
-
-    # Renderiza la plantilla HTML
-    html = render_to_string('Ventas_caja/ticket_pdf.html', context)
+    registrar_bitacora_command = RegistrarBitacoraCommand(request, context['total_productos'], context['total_costo_productos'])
+    generar_pdf_command = GenerarPDFCommand(context)
     
-    pdf_dir = os.path.join(settings.BASE_DIR, 'Ventas_caja', 'media', 'pdf_ticket')
-    os.makedirs(pdf_dir, exist_ok=True)  # Crea la carpeta si no existe
+    invoker.agregar_comando(registrar_bitacora_command)
+    invoker.agregar_comando(generar_pdf_command)
     
-    # Define la ruta de almacenamiento del PDF
-    pdf_path = os.path.join(pdf_dir, f'ticket_{datetime.datetime.now().strftime("%Y%m%d%H%M%S")}.pdf')
+    resultados = invoker.ejecutar_comandos()
+    return resultados[-1]  # Retorna la respuesta del PDF
 
-    # Genera el PDF y guárdalo en la ruta especificada
-    with open(pdf_path, "wb") as pdf_file:
-        pisa_status = pisa.CreatePDF(io.BytesIO(html.encode("UTF-8")), dest=pdf_file, encoding='UTF-8')
-
-    # Configura la respuesta como un PDF
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="ticket.pdf"'
-
-    # Genera el PDF
-    pisa_status = pisa.CreatePDF(io.BytesIO(html.encode("UTF-8")), dest=response, encoding='UTF-8')
-    
-    # ejecutar funcion para eliminar carrito actual
-    # eliminar_carrito_actual(request)
-
-    # Verifica si hay errores
-    if pisa_status.err:
-        return HttpResponse("Hubo un error al generar el PDF", status=500)
-    
-    return response
+# Fin vista refactorizada
 
 @login_required
 def caja2(request):
